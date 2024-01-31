@@ -2,7 +2,6 @@
 
 namespace Yukiko{
 
-App::App(){};
-App::~App(){};
+
 
 }

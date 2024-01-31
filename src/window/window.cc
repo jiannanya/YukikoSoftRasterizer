@@ -3,7 +3,7 @@
 
 namespace Yukiko{
 
-Window::Window(unsigned w, unsigned h):witdh{w},height{h}{
+Window::Window(std::string title, unsigned w, unsigned h):_witdh{w},_height{h}{
 
 }
 
@@ -17,7 +17,7 @@ bool Window::onInit(){
         return -1;
 
     
-    _window = glfwCreateWindow(witdh, height, "YukikoSoftRasterizer", NULL, NULL);
+    _window = glfwCreateWindow(_witdh, _height, _title.c_str(), NULL, NULL);
     if (!_window)
     {
         
@@ -30,7 +30,14 @@ bool Window::onInit(){
     return true;
 }
 
+void Window::onFrame(){
+    unsigned char* p = _buffer.data();
+    glDrawPixels(_witdh, _height,GL_RGBA, GL_UNSIGNED_BYTE, p);
+    glfwSwapBuffers(_window);
+}
+
 void Window::onUpdate(){
+    glfwPollEvents();
     
 }
 
@@ -39,7 +46,7 @@ void Window::onDestory(){
 }
 
 void Window::surfaceData(const std::vector<unsigned char> & data){
-    
+    _buffer = data;
 }
 
 void Window::processInput()

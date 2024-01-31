@@ -4,15 +4,16 @@
 #include "glfw/glfw3.h"
 
 #include <vector>
-
+#include <string>
 namespace Yukiko{
 
 class Window{
 public:
-    Window(unsigned w, unsigned h);
+    Window(std::string title, unsigned w, unsigned h);
     ~Window();
 
     bool onInit();
+    void onFrame();
     void onUpdate();
     void onDestory();
 
@@ -23,10 +24,11 @@ private:
     void processInput();
 
 private:
-    GLFWwindow* _window;
-
-    unsigned witdh;
-    unsigned height;
+    GLFWwindow*                 _window;
+    std::vector<unsigned char>  _buffer;
+    std::string                 _title;
+    unsigned                    _witdh;
+    unsigned                    _height;
 
 };
 
