@@ -132,11 +132,11 @@ namespace Yukiko{
     };
 
 
-    struct FragmentIndataPhong:public FragmentInData{
+    struct FragmentInDataPhong:public FragmentInData{
 
-        FragmentIndataPhong(){}
+        FragmentInDataPhong(){}
 
-        FragmentIndataPhong(glm::vec3 _W_POS, glm::vec3 _NORMAL, glm::vec3 _CAM_POS,
+        FragmentInDataPhong(glm::vec3 _W_POS, glm::vec3 _NORMAL, glm::vec3 _CAM_POS,
                             glm::vec4 _COLOR, glm::vec2 _UV,std::unique_ptr<Texture> _TEX,
                             std::unique_ptr<Material> _MATERAIL)
                             :worldPos{_W_POS},normal{_NORMAL},camPos{_CAM_POS}
@@ -145,7 +145,7 @@ namespace Yukiko{
 
                             }
 
-        FragmentIndataPhong(FragmentInData& _data){
+        FragmentInDataPhong(FragmentInData& _data){
 
         }
 
@@ -158,11 +158,11 @@ namespace Yukiko{
         std::unique_ptr<Material> material;
         
         // multiple lights
-        std::vector<std::unique_ptr<DirectionLight>> directionLights; 
-        std::vector<std::unique_ptr<PointLight>> pointLights;
+        std::vector<std::unique_ptr<DirectionLight>> directionLights{}; 
+        std::vector<std::unique_ptr<PointLight>> pointLights{};
     };
         
-    struct FragmentOutdataPhong:public FragmentOutData{
+    struct FragmentOutDataPhong:public FragmentOutData{
         //glm::vec4 color;
     };
 
@@ -174,6 +174,12 @@ namespace Yukiko{
     public:
         glm::vec4 gl_Position;
         glm::vec4 gl_FragColor;
+
+    public:
+        std::unique_ptr<VertexInData>      _vertexIn;
+        std::unique_ptr<VertexOutData>     _vertexOut;
+        std::unique_ptr<FragmentInData>    _fragmentIn;
+        std::unique_ptr<FragmentOutData>   _fragmentOut;
     };
 
     /**
@@ -215,6 +221,9 @@ namespace Yukiko{
         PhongShader();
         void  vertex(VertexInData& in, VertexOutData& out) override;
         void  fragment(FragmentInData& in, FragmentOutData& out) override;
+
+    public:
+
     };
 
 

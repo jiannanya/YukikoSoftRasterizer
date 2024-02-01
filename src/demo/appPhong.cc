@@ -1,17 +1,17 @@
-#include "appMain.hh"
+#include "appPhong.hh"
 
 
 namespace Yukiko{
 
-AppMain::AppMain(){
+AppPhong::AppPhong(){
     onInit();
 }
 
-AppMain::~AppMain(){
+AppPhong::~AppPhong(){
     onDestory();
 }
 
-void AppMain::onInit(){
+void AppPhong::onInit(){
     
     auto  ctx_framebuffer = std::make_unique<Framebuffer>(WINDOW_WIDTH,WINDOW_HEIGHT);
     auto  ctx_window = std::make_unique<Window>(TITLE, WINDOW_WIDTH,WINDOW_HEIGHT);
@@ -45,10 +45,17 @@ void AppMain::onInit(){
                                                     glm::vec3(20, 0, 0)
                                     );
 
-    auto ctx_PhongShaderFragmentIn = std::make_unique<FragmentIndataPhong>();
+    auto ctx_PhongShaderFragmentIn = std::make_unique<FragmentInDataPhong>();
 
     ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light1));
     ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light2));
+
+    auto ctx_PhongShaderFragmentOut = std::make_unique<FragmentOutDataPhong>();
+
+    ctx_shader->_vertexIn = std::move(ctx_PhongShaderVertexIn);
+    ctx_shader->_vertexOut = std::move(ctx_PhongShaderVertexOut);
+    ctx_shader->_fragmentIn = std::move(ctx_PhongShaderFragmentIn);
+    ctx_shader->_fragmentOut = std::move(ctx_PhongShaderFragmentOut);
 
     auto ctx_scene = std::make_unique<Scene>();
     ctx_scene->addMesh(std::move(ctx_model1));
@@ -64,24 +71,26 @@ void AppMain::onInit(){
     _Ctx->setDrawWireFrame(false);
     _Ctx->setClearColor(glm::vec4(0.0f,0.0f,0.0f,1.0f));
     _Ctx->setModelMatrix(ctx_model_matrix);
+    _Ctx->setViewportMatrix(mth::viewport(0,0,0,1,WINDOW_WIDTH,WINDOW_HEIGHT));
+    _Ctx->setRasterizer(std::move(std::make_unique<RasterizerPhong>()));
 
     // renderer ms_render =  renderer(ms_context);
     // ms_render.render();
     m_renderpass = std::make_unique<RenderPass>(std::move(_Ctx));
 }
-void AppMain::onUpdate(){
+void AppPhong::onUpdate(){
+    m_renderpass->onUpdate();
+}
+
+void AppPhong::onFrame(){
+    m_renderpass->onFrame();
+}
+
+void AppPhong::onDestory(){
 
 }
 
-void AppMain::onFrame(){
-
-}
-
-void AppMain::onDestory(){
-
-}
-
-void AppMain::run(){
+void AppPhong::run(){
     
 }
 

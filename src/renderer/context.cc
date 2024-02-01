@@ -54,6 +54,10 @@ void Context::setScene(std::unique_ptr<Scene> sce){
     m_scene = std::move(sce);
 }
 
+void Context::setRasterizer(std::unique_ptr<Rasterizer> rast){
+    m_rasterizer = std::move(rast);
+}
+
 // void Context::setRenderPass(std::unique_ptr<RenderPass> rp){
 //     m_renderpass = std::move(rp);
 // }
@@ -76,6 +80,10 @@ void Context::setClearColor(glm::vec4 color){
 
 void Context::setModelMatrix(glm::mat4 ma){
     m_modelMatrix = ma;
+}
+
+void Context::setViewportMatrix(glm::mat4 ma){
+    m_viewportMatrix = ma;
 }
 
 bool Context::isCtxOk(){
@@ -103,10 +111,10 @@ void Context::draw(){
 
 }
 
-void onUpdate(){
+void Context::onUpdate(){
 
 }
-void onFrame(){
+void Context::onFrame(){
     
 }
 

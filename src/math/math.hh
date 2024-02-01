@@ -37,6 +37,16 @@ inline float square_distance(glm::vec3 p1, glm::vec3 p2) {
 	return glm::length(p1-p2) * glm::length(p1-p2);
 }
 
+inline glm::vec3 barycentric3(glm::vec3& A, glm::vec3& B, glm::vec3& C, glm::vec3& p) {
+    glm::vec3 xvec(C.x - A.x, B.x - A.x, A.x - p.x);
+    glm::vec3 yvec(C.y - A.y, B.y - A.y, A.y - p.y);
+    glm::vec3 u = glm::cross(xvec, yvec);
+    if(std::abs(u.z) < 1e-2f)
+        return glm::vec3(-1.0f, 1.0f, 1.0f); 
+
+    return glm::vec3(1.f - (u.x + u.y) / u.z, u.y / u.z, u.x / u.z);
+}
+
 inline glm::mat4 perspective(float fov, float aspect, float znear, float zfar) {
     float fax = 1.0f / (float)tan(fov * 0.5f);
     glm::mat4 ret = glm::mat4(1.0f);
@@ -70,6 +80,17 @@ inline glm::mat4 lookat(glm::vec3 eye, glm::vec3 target, glm::vec3 worldup = glm
 
 
     return ret;
+}
+
+glm::mat4 viewport(float _x, float _y,float _n, float _f, float width, float height) {
+	glm::mat4 viewPortMatrix(1.0f);
+	viewPortMatrix[0][0] = width/2.0f;
+	viewPortMatrix[0][3] = _x + width/2.0f;
+	viewPortMatrix[1][1] = height/2.0f;
+	viewPortMatrix[1][3] = _y + height/2.0f;
+	viewPortMatrix[2][2] = (_f - _n)/2.0f;
+	viewPortMatrix[2][3] = (_f + _n)/2.0f;
+	return viewPortMatrix;
 }
 
 inline glm::mat4 scale(glm::vec3 scalePara) {

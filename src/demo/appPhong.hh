@@ -17,10 +17,10 @@ glm::vec3 CAM_POS_INIT = glm::vec3(1, 1, 3);
 glm::vec3 CAM_TARGET_INIT = glm::vec3(0,0,0);
 glm::vec3 CAM_UP_INIT = glm::vec3(0,1,0);
 
-class AppMain:public App{
+class AppPhong:public App{
 public:
-    AppMain();
-    virtual ~AppMain();
+    AppPhong();
+    virtual ~AppPhong();
 
 public:
     virtual void onInit()override;

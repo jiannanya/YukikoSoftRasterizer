@@ -110,8 +110,8 @@ namespace Yukiko{
 
     void PhongShader::fragment(FragmentInData& _in, FragmentOutData& _out) {
 
-        auto in = static_cast<FragmentIndataPhong>(_in);
-        auto out = static_cast<FragmentOutdataPhong>(_out);
+        auto in = static_cast<FragmentInDataPhong>(_in);
+        auto out = static_cast<FragmentOutDataPhong>(_out);
 
 
         glm::vec3 ka = in.material->ka;

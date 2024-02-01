@@ -9,21 +9,33 @@
 
 namespace Yukiko{
 
+
 class Rasterizer{
 
 public:
-    Rasterizer(){}
-    ~Rasterizer(){}
+    virtual void drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb)=0;
 
-    void drawPixel(float x, float y, const glm::vec4& color,Framebuffer& fb);
-    void drawPixel(Fragmentdata& fg,Shader& sh,Framebuffer& fb);
+};
 
-    void drawTriangleLine(Triangle &tri, const glm::vec4& color,Framebuffer& fb);
-    void drawTriangle(Triangle &tri, const glm::vec4& color,Framebuffer& fb);
-    void drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb, Camera& cam);
-    
+class RasterizerLine: public Rasterizer{
+public:
+    void drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb)override;
+private:
     void drawLine(int x1, int y1, int x2, int y2, const glm::vec4& color,Framebuffer& fb);
+};
 
+class RasterizerFill: public Rasterizer{
+public:
+    void drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb)override;
+private:
+    void drawFill(Triangle &tri,Shader& sh,Framebuffer& fb);
+};
+
+class RasterizerPhong: public Rasterizer{
+public:
+    void drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb)override;
+
+    RasterizerPhong(const Rasterizer& r);
 
 };
 

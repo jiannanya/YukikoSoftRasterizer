@@ -15,7 +15,7 @@
 namespace Yukiko{
 
 class Context{
-    friend RenderPass;
+    friend class RenderPassPhong;
 public:
     Context();
     ~Context();
@@ -30,6 +30,7 @@ public:
     void setFrameBuffer(std::unique_ptr<Framebuffer> fb);
     //void setTexture(std::unique_ptr<Texture> tex);
     void setScene(std::unique_ptr<Scene> sce);
+    void setRasterizer(std::unique_ptr<Rasterizer> rast);
     //void setRenderPass(std::unique_ptr<RenderPass> rp);
     
     
@@ -42,6 +43,7 @@ public:
     void setClearColor(glm::vec4 color);
     void setDrawWireFrame(bool flag);
     void setModelMatrix(glm::mat4 ma);
+    void setViewportMatrix(glm::mat4 ma);
     void draw();
 
     void onUpdate();
@@ -69,6 +71,7 @@ private:
     glm::vec4 m_frameColor = {1.0f,1.0f,1.0f,1.0f};
     glm::vec4 m_clearColor;
     glm::mat4 m_modelMatrix;
+    glm::mat4 m_viewportMatrix;
 
 
 

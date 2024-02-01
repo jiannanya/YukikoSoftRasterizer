@@ -7,17 +7,27 @@ namespace Yukiko{
 
 class RenderPass{
 public:
-    RenderPass();
-    RenderPass(std::unique_ptr<Context> _ctx);
-    ~RenderPass();
-    void onInit();
-    void onUpdate();
-    void onFrame();
-    void onDestory();
+    virtual void onInit()=0;
+    virtual void onUpdate()=0;
+    virtual void onFrame()=0;
+    virtual void onDestory()=0;
 
-private:
+    void setContext(std::unique_ptr<Context> _ctx);
+
+public:
 
     std::unique_ptr<Context> m_ctx;
+
+};
+
+class RenderPassPhong:public RenderPass{
+public:
+    RenderPassPhong();
+    ~RenderPassPhong();
+    void onInit() override;
+    virtual void onUpdate() override;
+    virtual void onFrame() override;
+    virtual void onDestory() override;
 
 };
 
