@@ -3,8 +3,8 @@
 
 namespace Fallment{
 
-void RenderPass::setContext(std::unique_ptr<Context> _ctx){
-     m_ctx = std::move(_ctx);
+void RenderPass::setContext(std::shared_ptr<Context> _ctx){
+     m_ctx = _ctx;
 }
 
 

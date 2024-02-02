@@ -13,8 +13,11 @@ AppPhong::~AppPhong(){
 
 bool AppPhong::onInit(){
     
-    auto  ctx_framebuffer = std::make_unique<Framebuffer>(WINDOW_WIDTH,WINDOW_HEIGHT);
-    auto  ctx_window = std::make_unique<Window>(TITLE, WINDOW_WIDTH,WINDOW_HEIGHT);
+    auto  ctx_framebuffer = std::make_shared<Framebuffer>(WINDOW_WIDTH,WINDOW_HEIGHT);
+    m_window = std::make_unique<Window>(TITLE, WINDOW_WIDTH,WINDOW_HEIGHT);
+    m_window->setFramebuffer(ctx_framebuffer);
+
+
     auto  ctx_model1 = std::make_unique<Mesh>(OBJ_PATH);
     auto  ctx_texture = std::make_unique<Texture>(std::string(OBJ_TEXTURE_PATH));
     auto  ctx_camera = std::make_unique<Camera>(FOV_INIT, float(WINDOW_WIDTH) / WINDOW_HEIGHT,CAM_POS_INIT, CAM_TARGET_INIT,CAM_UP_INIT);
@@ -60,8 +63,8 @@ bool AppPhong::onInit(){
     auto ctx_scene = std::make_unique<Scene>();
     ctx_scene->addMesh(std::move(ctx_model1));
 
-    m_ctx = std::make_unique<Context>();
-    m_ctx->setFrameBuffer(std::move(ctx_framebuffer));
+    m_ctx = std::make_shared<Context>();
+    m_ctx->setFrameBuffer(ctx_framebuffer);
     //_Ctx->setWindow(&ms_window);
     m_ctx->setCamera(std::move(ctx_camera));
     m_ctx->setScene(std::move(ctx_scene));
@@ -75,7 +78,9 @@ bool AppPhong::onInit(){
 
     // renderer ms_render =  renderer(ms_context);
     // ms_render.render();
-    m_renderpass = std::make_unique<RenderPass>(std::move(m_ctx));
+    m_renderpass = std::make_unique<RenderPass>();
+    m_renderpass->setContext(m_ctx);
+
 
     return true;
 }
@@ -103,7 +108,9 @@ void AppPhong::onDestory(){
 }
 
 void AppPhong::run(){
-    
+    while(onUpdate()){
+        onFrame();
+    }
 }
 
 }

@@ -2,11 +2,6 @@
 
 namespace Fallment{
 
-void App::run(){
-    while(onUpdate()){
-        onFrame();
-    }
-}
 
 
 }

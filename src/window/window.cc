@@ -1,6 +1,8 @@
 
 #include "window/window.hh"
 
+#include "spdlog/spdlog.h"
+
 namespace Fallment{
 
 Window::Window(std::string title, unsigned w, unsigned h):_witdh{w},_height{h}{
@@ -31,9 +33,15 @@ bool Window::onInit(){
 }
 
 void Window::onFrame(){
-    unsigned char* p = _buffer.data();
-    glDrawPixels(_witdh, _height,GL_RGBA, GL_UNSIGNED_BYTE, p);
-    glfwSwapBuffers(_window);
+    if(_framebuffer.get()){
+        std::unique_lock<std::mutex>(_framebuffer->m_color_mutex);
+        glDrawPixels(_witdh, _height,GL_RGBA, GL_UNSIGNED_BYTE, _framebuffer->getColorBuffer());
+        glfwSwapBuffers(_window);
+    }else{
+        spdlog::error("Window surface doesnt have any famebuffer data useful");
+    }
+
+
 }
 
 void Window::onUpdate(){
@@ -45,8 +53,8 @@ void Window::onDestory(){
     glfwTerminate();
 }
 
-void Window::surfaceData(const std::vector<unsigned char> & data){
-    _buffer = data;
+void Window::setFramebuffer(std::shared_ptr<Framebuffer> fb){
+    _framebuffer = fb;
 }
 
 void Window::processInput()

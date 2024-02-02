@@ -40,8 +40,8 @@ void Context::setFragmentShaderOut(std::unique_ptr<FragmentOutData> _data){
     m_fragment_out = std::move(_data);
 }
 
-void Context::setFrameBuffer(std::unique_ptr<Framebuffer> fb){
-    m_framebuffer = std::move(fb);
+void Context::setFrameBuffer(std::shared_ptr<Framebuffer> fb){
+    m_framebuffer = fb;
     m_Width = fb->getWidth();
     m_Height = fb->getHeight();
 }

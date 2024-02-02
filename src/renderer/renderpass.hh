@@ -12,11 +12,11 @@ public:
     virtual void onFrame()=0;
     virtual void onDestory()=0;
 
-    void setContext(std::unique_ptr<Context> _ctx);
+    void setContext(std::shared_ptr<Context> _ctx);
 
 public:
 
-    std::unique_ptr<Context> m_ctx;
+    std::shared_ptr<Context> m_ctx;
 
 };
 

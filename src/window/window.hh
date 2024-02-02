@@ -5,6 +5,9 @@
 
 #include <vector>
 #include <string>
+
+#include "framebuffer.hh"
+
 namespace Fallment{
 
 class Window{
@@ -17,18 +20,18 @@ public:
     void onUpdate();
     void onDestory();
 
-    void surfaceData(const std::vector<unsigned char> & data);
+    void setFramebuffer(std::shared_ptr<Framebuffer> fb);
 
 
 private:
     void processInput();
 
 private:
-    GLFWwindow*                 _window;
-    std::vector<unsigned char>  _buffer;
-    std::string                 _title;
-    unsigned                    _witdh;
-    unsigned                    _height;
+    GLFWwindow*                     _window;
+    std::shared_ptr<Framebuffer>    _framebuffer;
+    std::string                     _title;
+    unsigned                        _witdh;
+    unsigned                        _height;
 
 };
 

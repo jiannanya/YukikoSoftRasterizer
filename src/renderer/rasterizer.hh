@@ -35,7 +35,7 @@ class RasterizerPhong: public Rasterizer{
 public:
     void drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb)override;
 
-    RasterizerPhong(const Rasterizer& r);
+    RasterizerPhong(const Rasterizer& r); // 类型转换构造函数
 
 };
 

@@ -27,7 +27,7 @@ public:
     void setVertexShaderOut(std::unique_ptr<VertexOutData> _data);
     void setFragmentShaderIn(std::unique_ptr<FragmentInData> _data);
     void setFragmentShaderOut(std::unique_ptr<FragmentOutData> _data);
-    void setFrameBuffer(std::unique_ptr<Framebuffer> fb);
+    void setFrameBuffer(std::shared_ptr<Framebuffer> fb);
     //void setTexture(std::unique_ptr<Texture> tex);
     void setScene(std::unique_ptr<Scene> sce);
     void setRasterizer(std::unique_ptr<Rasterizer> rast);
@@ -61,7 +61,7 @@ private:
     std::unique_ptr<VertexOutData>      m_vertex_out;
     std::unique_ptr<FragmentInData>     m_fragment_in;
     std::unique_ptr<FragmentOutData>    m_fragment_out;
-    std::unique_ptr<Framebuffer>        m_framebuffer;
+    std::shared_ptr<Framebuffer>        m_framebuffer;
     std::unique_ptr<Rasterizer>         m_rasterizer;
     std::unique_ptr<Scene>              m_scene;
     std::unique_ptr<RenderPass>         m_renderpass;

@@ -3,6 +3,8 @@
 
 #include "math.hh"
 
+#include <mutex>
+
 namespace Fallment{
 
 class Framebuffer {
@@ -22,14 +24,20 @@ public:
     void clearZBuffer();
     void setPixelColor(unsigned int x, unsigned int y, glm::vec4 color);
 
+public:
+
+    std::mutex m_color_mutex;
+    std::mutex m_z_mutex;
+
 private:
     int m_Width;
     int m_Height;
     int m_Channel;
     int m_PixelCount;
     BYTE* m_ColorBuffer;
-//    BYTE *m_ColorBuffer1;
     float* m_ZBuffer;
+
+
 };
 
 };
