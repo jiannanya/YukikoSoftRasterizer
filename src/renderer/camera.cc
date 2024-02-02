@@ -1,7 +1,7 @@
 #include "Camera.hh"
 #include "math.hh"
 
-namespace Yukiko{
+namespace Fallment{
 
 Camera::Camera(float fovy, float aspect,glm::vec3 position, glm::vec3 target, glm::vec3 upDir)
     :m_Fovy(fovy)

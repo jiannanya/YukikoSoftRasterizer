@@ -3,7 +3,7 @@
 
 #include "glm/glm.hpp"
 
-namespace Yukiko{
+namespace Fallment{
 
 struct Material{
     glm::vec3 ka;

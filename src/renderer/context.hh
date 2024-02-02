@@ -12,7 +12,7 @@
 #include "scene.hh"
 #include "renderpass.hh"
 
-namespace Yukiko{
+namespace Fallment{
 
 class Context{
     friend class RenderPassPhong;

@@ -4,7 +4,7 @@
 
 #include "light.hh"
 
-namespace Yukiko{
+namespace Fallment{
 
 DirectionLight::DirectionLight(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, glm::vec3 direction) {
     _ambient = ambient;

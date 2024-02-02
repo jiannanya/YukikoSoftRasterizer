@@ -3,7 +3,7 @@
 
 #include "math.hh"
 
-namespace Yukiko{
+namespace Fallment{
 
 class Camera {
 public:

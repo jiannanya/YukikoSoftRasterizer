@@ -1,7 +1,7 @@
 #include "Context.hh"
 #include "Triangle.hh"
 
-namespace Yukiko{
+namespace Fallment{
 
 Context::Context(){
     //m_window = nullptr;

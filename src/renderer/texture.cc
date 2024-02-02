@@ -1,6 +1,6 @@
 #include "texture.hh"
 
-namespace Yukiko{
+namespace Fallment{
 
 void Texture::loadFile(const std::string& path) {
     data = stbi_load(path.c_str(), &width, &height, &channelCnt, 0);

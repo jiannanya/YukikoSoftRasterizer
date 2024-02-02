@@ -3,9 +3,9 @@
 
 #include "app/app.hh"
 
-namespace Yukiko{
+namespace Fallment{
 
-const char *TITLE = "Yukiko real time soft render";
+const char *TITLE = "Fallment real time soft render";
 const char *OBJ_PATH = "../assert/african_head.obj";
 const char *OBJ_TEXTURE_PATH =  "../assert/african_head_diffuse.tga";
 

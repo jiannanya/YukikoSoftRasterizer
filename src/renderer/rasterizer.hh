@@ -7,7 +7,7 @@
 #include "Triangle.hh"
 #include "camera.hh"
 
-namespace Yukiko{
+namespace Fallment{
 
 
 class Rasterizer{

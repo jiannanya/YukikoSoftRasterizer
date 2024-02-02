@@ -3,7 +3,7 @@
 #include <windows.h>
 #include <limits>
 
-namespace Yukiko{
+namespace Fallment{
 
 Framebuffer::Framebuffer(int width, int height){
     m_Width = width;

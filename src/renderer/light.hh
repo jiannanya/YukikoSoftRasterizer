@@ -3,7 +3,7 @@
 #include "glm/glm.hpp"
 #include <string>
 
-namespace Yukiko{
+namespace Fallment{
 
 class Light{
 public:

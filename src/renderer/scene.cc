@@ -1,7 +1,7 @@
 
 #include "Scene.hh"
 
-namespace Yukiko{
+namespace Fallment{
 
 Scene::Scene(){
     _meshList = std::vector<std::unique_ptr<Mesh>>();

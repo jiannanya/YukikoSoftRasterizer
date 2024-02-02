@@ -1,7 +1,7 @@
 
 #include "triangle.hh"
 
-namespace Yukiko{
+namespace Fallment{
 
 
 glm::vec3& Triangle::a(){

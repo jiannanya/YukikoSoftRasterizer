@@ -5,7 +5,7 @@
 #include <string>
 #include "math.hh"
 
-namespace Yukiko{
+namespace Fallment{
 
 class Mesh
 {

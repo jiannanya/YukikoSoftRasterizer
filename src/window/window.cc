@@ -1,7 +1,7 @@
 
 #include "window/window.hh"
 
-namespace Yukiko{
+namespace Fallment{
 
 Window::Window(std::string title, unsigned w, unsigned h):_witdh{w},_height{h}{
 

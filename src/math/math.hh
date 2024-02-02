@@ -4,7 +4,7 @@
 #include "glm/glm.hpp"
 #include <numbers>
 
-namespace Yukiko::mth{
+namespace Fallment::mth{
 
 constexpr const float PI = std::numbers::pi;
 

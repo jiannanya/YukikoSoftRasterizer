@@ -1,7 +1,7 @@
 
 #include "shader.hh"
 
-namespace Yukiko{
+namespace Fallment{
 
 
     /**** Simple Shader ****/

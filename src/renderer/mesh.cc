@@ -5,7 +5,7 @@
 
 #include "mesh.hh"
 
-namespace Yukiko{
+namespace Fallment{
 
 Mesh::Mesh(const std::string& filename) {
     std::ifstream in;
