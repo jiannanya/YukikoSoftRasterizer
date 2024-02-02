@@ -14,6 +14,7 @@
 #include "light.hh"
 #include "scene.hh"
 #include "context.hh"
+#include "controls.hh"
 
 namespace Fallment{
 
@@ -21,16 +22,17 @@ class App{
 
 public:
 
-    virtual void onInit() = 0;
-    virtual void onUpdate() = 0;
+    virtual bool onInit() = 0;
+    virtual bool onUpdate() = 0;
     virtual void onFrame() = 0;
     virtual void onDestory() = 0;
-    virtual void run() = 0;
+    virtual void run();
 
 public:
     
     std::unique_ptr<RenderPass> m_renderpass;
-
+    std::unique_ptr<Context>    m_ctx;
+    std::unique_ptr<Controls>   m_controls;
 };
 
 }

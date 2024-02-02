@@ -4,14 +4,14 @@
 namespace Fallment{
 
 AppPhong::AppPhong(){
-    onInit();
+
 }
 
 AppPhong::~AppPhong(){
-    onDestory();
+
 }
 
-void AppPhong::onInit(){
+bool AppPhong::onInit(){
     
     auto  ctx_framebuffer = std::make_unique<Framebuffer>(WINDOW_WIDTH,WINDOW_HEIGHT);
     auto  ctx_window = std::make_unique<Window>(TITLE, WINDOW_WIDTH,WINDOW_HEIGHT);
@@ -60,26 +60,38 @@ void AppPhong::onInit(){
     auto ctx_scene = std::make_unique<Scene>();
     ctx_scene->addMesh(std::move(ctx_model1));
 
-    auto _Ctx = std::make_unique<Context>();
-   //auto_context = context();
-    _Ctx->setFrameBuffer(std::move(ctx_framebuffer));
+    m_ctx = std::make_unique<Context>();
+    m_ctx->setFrameBuffer(std::move(ctx_framebuffer));
     //_Ctx->setWindow(&ms_window);
-    _Ctx->setCamera(std::move(ctx_camera));
-    _Ctx->setScene(std::move(ctx_scene));
+    m_ctx->setCamera(std::move(ctx_camera));
+    m_ctx->setScene(std::move(ctx_scene));
     //_Ctx->setTexture(&ms_texture);
-    _Ctx->setShader(std::move(ctx_shader));
-    _Ctx->setDrawWireFrame(false);
-    _Ctx->setClearColor(glm::vec4(0.0f,0.0f,0.0f,1.0f));
-    _Ctx->setModelMatrix(ctx_model_matrix);
-    _Ctx->setViewportMatrix(mth::viewport(0,0,0,1,WINDOW_WIDTH,WINDOW_HEIGHT));
-    _Ctx->setRasterizer(std::move(std::make_unique<RasterizerPhong>()));
+    m_ctx->setShader(std::move(ctx_shader));
+    m_ctx->setDrawWireFrame(false);
+    m_ctx->setClearColor(glm::vec4(0.0f,0.0f,0.0f,1.0f));
+    m_ctx->setModelMatrix(ctx_model_matrix);
+    m_ctx->setViewportMatrix(mth::viewport(0,0,0,1,WINDOW_WIDTH,WINDOW_HEIGHT));
+    m_ctx->setRasterizer(std::move(std::make_unique<RasterizerPhong>()));
 
     // renderer ms_render =  renderer(ms_context);
     // ms_render.render();
-    m_renderpass = std::make_unique<RenderPass>(std::move(_Ctx));
+    m_renderpass = std::make_unique<RenderPass>(std::move(m_ctx));
+
+    return true;
 }
-void AppPhong::onUpdate(){
-    m_renderpass->onUpdate();
+bool AppPhong::onUpdate(){
+    if(m_controls.get()){
+        m_controls->onUpdate();
+    }
+    if(m_ctx.get()&&m_renderpass.get()){
+        m_ctx->onUpdate();
+        m_renderpass->onUpdate();
+    }else{
+        spdlog::error("Apps context and renderpass are not useful!");
+        return false;
+    }
+    
+    
 }
 
 void AppPhong::onFrame(){

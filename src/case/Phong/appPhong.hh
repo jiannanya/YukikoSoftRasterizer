@@ -23,8 +23,8 @@ public:
     virtual ~AppPhong();
 
 public:
-    virtual void onInit()override;
-    virtual void onUpdate()override;
+    virtual bool onInit()override;
+    virtual bool onUpdate()override;
     virtual void onFrame()override;
     virtual void onDestory()override;
     virtual void run()override;
