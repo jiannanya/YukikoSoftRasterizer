@@ -21,16 +21,16 @@ public:
     ~Context();
 
     //void setWindow(std::unique_ptr<Window> window);
-    void setCamera(std::unique_ptr<Camera> camera);
-    void setShader(std::unique_ptr<Shader> shader);
-    void setVertexShaderIn(std::unique_ptr<VertexInData> _data);
-    void setVertexShaderOut(std::unique_ptr<VertexOutData> _data);
-    void setFragmentShaderIn(std::unique_ptr<FragmentInData> _data);
-    void setFragmentShaderOut(std::unique_ptr<FragmentOutData> _data);
-    void setFrameBuffer(std::shared_ptr<Framebuffer> fb);
+    void setCamera(std::unique_ptr<Camera>&& camera);
+    void setShader(std::unique_ptr<Shader>&& shader);
+    void setVertexShaderIn(std::unique_ptr<VertexInData>&& _data);
+    void setVertexShaderOut(std::unique_ptr<VertexOutData>&& _data);
+    void setFragmentShaderIn(std::unique_ptr<FragmentInData>&& _data);
+    void setFragmentShaderOut(std::unique_ptr<FragmentOutData>&& _data);
+    void setFrameBuffer(std::shared_ptr<Framebuffer>&& fb);
     //void setTexture(std::unique_ptr<Texture> tex);
-    void setScene(std::unique_ptr<Scene> sce);
-    void setRasterizer(std::unique_ptr<Rasterizer> rast);
+    void setScene(std::unique_ptr<Scene>&& sce);
+    void setRasterizer(std::unique_ptr<Rasterizer>&& rast);
     //void setRenderPass(std::unique_ptr<RenderPass> rp);
     
     
@@ -64,7 +64,7 @@ private:
     std::shared_ptr<Framebuffer>        m_framebuffer;
     std::unique_ptr<Rasterizer>         m_rasterizer;
     std::unique_ptr<Scene>              m_scene;
-    std::unique_ptr<RenderPass>         m_renderpass;
+    std::unique_ptr<RenderPassPhong>         m_renderpass;
 
     bool m_isDrawWireFrame;
     int m_Width, m_Height;

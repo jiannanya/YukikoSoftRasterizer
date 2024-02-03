@@ -171,6 +171,8 @@ namespace Fallment{
         virtual void  vertex(VertexInData& in, VertexOutData& out)=0; 
         virtual void  fragment(FragmentInData& in, FragmentOutData& out)=0;
 
+        virtual ~Shader(){}
+
     public:
         glm::vec4 gl_Position;
         glm::vec4 gl_FragColor;
@@ -191,6 +193,8 @@ namespace Fallment{
         SimpleShader();
         void  vertex(VertexInData& in, VertexOutData& out) override;
         void  fragment(FragmentInData& in, FragmentOutData& out) override;
+
+        virtual ~SimpleShader(){}
     };
 
     /**
@@ -201,6 +205,8 @@ namespace Fallment{
         TransformShader();
         void  vertex(VertexInData& in, VertexOutData& out) override;
         void  fragment(FragmentInData& in, FragmentOutData& out) override;
+
+        virtual ~TransformShader(){}
     };
 
     /**
@@ -211,6 +217,8 @@ namespace Fallment{
         GouraudShader();
         void  vertex(VertexInData& in, VertexOutData& out) override;
         void  fragment(FragmentInData& in, FragmentOutData& out) override;
+
+        virtual ~GouraudShader(){}
     };
 
     /**
@@ -222,8 +230,7 @@ namespace Fallment{
         void  vertex(VertexInData& in, VertexOutData& out) override;
         void  fragment(FragmentInData& in, FragmentOutData& out) override;
 
-    public:
-
+        virtual ~PhongShader(){}
     };
 
 

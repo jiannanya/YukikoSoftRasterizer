@@ -8,14 +8,14 @@ public:
     virtual bool onInit() = 0;
     virtual bool onUpdate() = 0;
     virtual void onDestory() = 0;
+    virtual ~Controls(){}
 };
 
 
 class OrbitControls:public Controls{
 public:
     OrbitControls();
-    ~OrbitControls();
-
+    virtual ~OrbitControls(){}
 public:
     bool onInit() override;
     bool onUpdate() override;

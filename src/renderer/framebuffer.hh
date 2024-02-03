@@ -13,7 +13,7 @@ public:
     Framebuffer(int width, int height);
     ~Framebuffer();
 
-    BYTE*& getColorBuffer();//需要返回引用用来创建windows窗口
+    unsigned char*& getColorBuffer();//需要返回引用用来创建windows窗口
     float *getZBuffer();
     float getZ(unsigned int x, unsigned int y);
     void setZ(unsigned int x, unsigned int y, float value);
@@ -34,7 +34,7 @@ private:
     int m_Height;
     int m_Channel;
     int m_PixelCount;
-    BYTE* m_ColorBuffer;
+    unsigned char* m_ColorBuffer;
     float* m_ZBuffer;
 
 

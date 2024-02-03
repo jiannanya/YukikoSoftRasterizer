@@ -1,7 +1,7 @@
 #ifndef CAMERA_HH
 #define CAMERA_HH
 
-#include "math.hh"
+#include "math/math.hh"
 
 namespace Fallment{
 

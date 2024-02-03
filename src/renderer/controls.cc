@@ -6,9 +6,6 @@ OrbitControls::OrbitControls(){
 
 }
 
-OrbitControls::~OrbitControls(){
-
-}
 
 bool OrbitControls::onInit(){
 

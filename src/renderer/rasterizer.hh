@@ -4,7 +4,7 @@
 #include "math.hh"
 #include "framebuffer.hh"
 #include "shader.hh"
-#include "Triangle.hh"
+#include "triangle.hh"
 #include "camera.hh"
 
 namespace Fallment{
@@ -14,12 +14,14 @@ class Rasterizer{
 
 public:
     virtual void drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb)=0;
+    virtual ~Rasterizer(){}
 
 };
 
 class RasterizerLine: public Rasterizer{
 public:
     void drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb)override;
+    virtual ~RasterizerLine(){}
 private:
     void drawLine(int x1, int y1, int x2, int y2, const glm::vec4& color,Framebuffer& fb);
 };
@@ -27,14 +29,16 @@ private:
 class RasterizerFill: public Rasterizer{
 public:
     void drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb)override;
+    virtual ~RasterizerFill(){}
 private:
     void drawFill(Triangle &tri,Shader& sh,Framebuffer& fb);
 };
 
 class RasterizerPhong: public Rasterizer{
 public:
+    RasterizerPhong(){}
     void drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb)override;
-
+    virtual ~RasterizerPhong(){}
     RasterizerPhong(const Rasterizer& r); // 类型转换构造函数
 
 };

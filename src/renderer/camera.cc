@@ -1,4 +1,4 @@
-#include "Camera.hh"
+#include "camera.hh"
 #include "math.hh"
 
 namespace Fallment{

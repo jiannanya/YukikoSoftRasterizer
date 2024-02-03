@@ -28,7 +28,7 @@ void RenderPassPhong::onFrame(){
 
     glm::mat4 n_matrix = transpose(inverse(m_ctx->m_modelMatrix));// normal transform matrix
     
-    auto mesh_list = m_ctx->m_scene->getMeshList();
+    auto& mesh_list = m_ctx->m_scene->getMeshList();
 
     //render per face
     for(auto&mesh: mesh_list)

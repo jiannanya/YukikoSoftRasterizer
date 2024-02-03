@@ -64,7 +64,7 @@ bool AppPhong::onInit(){
     ctx_scene->addMesh(std::move(ctx_model1));
 
     m_ctx = std::make_shared<Context>();
-    m_ctx->setFrameBuffer(ctx_framebuffer);
+    m_ctx->setFrameBuffer(std::move(ctx_framebuffer));
     //_Ctx->setWindow(&ms_window);
     m_ctx->setCamera(std::move(ctx_camera));
     m_ctx->setScene(std::move(ctx_scene));
@@ -74,13 +74,12 @@ bool AppPhong::onInit(){
     m_ctx->setClearColor(glm::vec4(0.0f,0.0f,0.0f,1.0f));
     m_ctx->setModelMatrix(ctx_model_matrix);
     m_ctx->setViewportMatrix(mth::viewport(0,0,0,1,WINDOW_WIDTH,WINDOW_HEIGHT));
-    m_ctx->setRasterizer(std::move(std::make_unique<RasterizerPhong>()));
+    m_ctx->setRasterizer(std::move(std::unique_ptr<Rasterizer>(new RasterizerPhong)));
 
     // renderer ms_render =  renderer(ms_context);
     // ms_render.render();
-    m_renderpass = std::make_unique<RenderPass>();
+    m_renderpass = std::unique_ptr<RenderPassPhong>(new RenderPassPhong);
     m_renderpass->setContext(m_ctx);
-
 
     return true;
 }

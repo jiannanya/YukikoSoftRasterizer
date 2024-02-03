@@ -1,7 +1,7 @@
 #ifndef __TRIANGLE_H
 #define __TRIANGLE_H
 
-#include "math.hh"
+#include "math/math.hh"
 
 namespace Fallment{
 

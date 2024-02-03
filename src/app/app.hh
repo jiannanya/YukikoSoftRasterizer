@@ -30,7 +30,7 @@ public:
 
 public:
     
-    std::unique_ptr<RenderPass> m_renderpass;
+    std::unique_ptr<RenderPassPhong> m_renderpass;
     std::unique_ptr<Controls>   m_controls;
     std::unique_ptr<Window>     m_window;
     std::shared_ptr<Context>    m_ctx;

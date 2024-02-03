@@ -1,7 +1,7 @@
 #ifndef __WINDOW_H
 #define __WINDOW_H
 
-#include "glfw/glfw3.h"
+#include "GLFW/glfw3.h"
 
 #include <vector>
 #include <string>

@@ -1,5 +1,5 @@
 #ifndef __LIGHT_H
-#define __LLIGHT_H
+#define __LIGHT_H
 #include "glm/glm.hpp"
 #include <string>
 

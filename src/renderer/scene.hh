@@ -10,8 +10,8 @@ namespace Fallment{
 class Scene{
 public:
     Scene();
-    void addMesh(std::unique_ptr<Mesh> m);
-    auto getMeshList();
+    void addMesh(std::unique_ptr<Mesh>&& m);
+    std::vector<std::unique_ptr<Mesh>>& getMeshList();
 
 private:
 

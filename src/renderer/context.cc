@@ -1,5 +1,5 @@
-#include "Context.hh"
-#include "Triangle.hh"
+#include "context.hh"
+#include "triangle.hh"
 
 namespace Fallment{
 
@@ -19,28 +19,28 @@ Context::~Context(){}
 //     m_window = window;
 // }
 
-void Context::setCamera(std::unique_ptr<Camera> camera){
+void Context::setCamera(std::unique_ptr<Camera>&& camera){
     m_camera = std::move(camera);
 }
 
-void Context::setShader(std::unique_ptr<Shader> shader){
+void Context::setShader(std::unique_ptr<Shader>&& shader){
     m_shader = std::move(shader);
 }
 
-void Context::setVertexShaderIn(std::unique_ptr<VertexInData> _data){
+void Context::setVertexShaderIn(std::unique_ptr<VertexInData>&& _data){
     m_vertex_in = std::move(_data);
 }
-void Context::setVertexShaderOut(std::unique_ptr<VertexOutData> _data){
+void Context::setVertexShaderOut(std::unique_ptr<VertexOutData>&& _data){
     m_vertex_out = std::move(_data);
 }
-void Context::setFragmentShaderIn(std::unique_ptr<FragmentInData> _data){
+void Context::setFragmentShaderIn(std::unique_ptr<FragmentInData>&& _data){
     m_fragment_in = std::move(_data);
 }
-void Context::setFragmentShaderOut(std::unique_ptr<FragmentOutData> _data){
+void Context::setFragmentShaderOut(std::unique_ptr<FragmentOutData>&& _data){
     m_fragment_out = std::move(_data);
 }
 
-void Context::setFrameBuffer(std::shared_ptr<Framebuffer> fb){
+void Context::setFrameBuffer(std::shared_ptr<Framebuffer>&& fb){
     m_framebuffer = fb;
     m_Width = fb->getWidth();
     m_Height = fb->getHeight();
@@ -50,11 +50,11 @@ void Context::setFrameBuffer(std::shared_ptr<Framebuffer> fb){
 //     m_texture = tex;
 // }
 
-void Context::setScene(std::unique_ptr<Scene> sce){
+void Context::setScene(std::unique_ptr<Scene>&& sce){
     m_scene = std::move(sce);
 }
 
-void Context::setRasterizer(std::unique_ptr<Rasterizer> rast){
+void Context::setRasterizer(std::unique_ptr<Rasterizer>&& rast){
     m_rasterizer = std::move(rast);
 }
 
