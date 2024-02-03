@@ -6,7 +6,6 @@ namespace Fallment{
 
 
 void RasterizerLine::drawLine(int x1, int y1, int x2, int y2, const glm::vec4& color,Framebuffer& fb) {
-    //std::cout << "drawLine :(" << x1 << "," << y1 << ") to (" << x2 << "," << y2 << ")" << std::endl;
 
     bool steep = false;
     // traverse by X or Y
@@ -15,7 +14,6 @@ void RasterizerLine::drawLine(int x1, int y1, int x2, int y2, const glm::vec4& c
         std::swap(x2, y2);
         steep = true;
     }
-
     // traverse from smaller value
     if(x2 < x1){
         std::swap(x1, x2);
@@ -131,35 +129,29 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
             if(bc.x < 0 || bc.y < 0 || bc.z < 0) 
                 continue;
 
+            
+             //透视矫正插值 https://www.researchgate.net/publication/2893969_Perspective-Correct_Interpolation
+            float z_reciprocal = bc.x*(1.0f/v1.z) + bc.y*(1.0f/v2.z) + v3.z*(1.0f/v3.z); 
+            p.z = 1.0f/z_reciprocal;
+
             //depth test
-            p.z = v1.z*bc.x + v2.z*bc.y + v3.z*bc.z;
             if(p.z<(fb.getZ(p.x,p.y)))
                 continue;
             else 
                 fb.setZ(p.x,p.y,p.z);
 
-            //interpolate
+           
+            glm::vec3 vw = mth::interpolate(vw1,vw2,vw3,bc,v1.z,v2.z,v3.z,z_reciprocal);
+            glm::vec2 uv = mth::interpolate(uv1,uv2,uv3,bc,v1.z,v2.z,v3.z,z_reciprocal);
+            glm::vec3 nw = mth::interpolate(nw1,nw2,nw3,bc,v1.z,v2.z,v3.z,z_reciprocal);
+            glm::vec4 c  = mth::interpolate(c1,c2,c3,bc,v1.z,v2.z,v3.z,z_reciprocal);
+               
+            auto in = static_cast<FragmentInDataPhong>(*sh._fragmentIn);
 
-            glm::vec3 vw;
-            vw.x = vw1.x*bc.x + vw2.x*bc.y + vw3.x*bc.z;
-            vw.y = vw1.y*bc.x + vw2.y*bc.y + vw3.y*bc.z;
-            vw.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
-
-            glm::vec2 uv;
-            uv.x = uv1.x*bc.x + uv2.x*bc.y + uv3.x*bc.z;
-            uv.y = uv1.y*bc.x + uv2.y*bc.y + uv3.y*bc.z;
-
-            glm::vec3 nw;
-            nw.x = nw1.x*bc.x + nw2.x*bc.y + nw3.x*bc.z;
-            nw.y = nw1.y*bc.x + nw2.y*bc.y + nw3.y*bc.z;
-            nw.z = nw1.z*bc.x + nw2.z*bc.y + nw3.z*bc.z;
-
-            glm::vec4 c;
-            c.x = c1.x*bc.x + c2.x*bc.y + c3.x*bc.z;
-            c.y = c1.y*bc.x + c2.y*bc.y + c3.y*bc.z;
-            c.z = c1.z*bc.x + c2.z*bc.y + c3.z*bc.z;
-            c.z = c1.w*bc.x + c2.w*bc.y + c3.w*bc.z;
-            
+            in.worldPos = vw;
+            in.uv = uv;
+            in.normal = nw;
+            in.color = c;
 
             sh.fragment(*sh._fragmentIn,*sh._fragmentOut);
             fb.setPixelColor(p.x,p.y,sh.gl_FragColor);

@@ -76,6 +76,10 @@ void RenderPassPhong::onFrame(){
         if(discardCount==3)
             continue;
 
+
+        auto in = static_cast<FragmentInDataPhong>(*m_ctx->m_shader->_fragmentIn);
+        in.camPos = m_ctx->m_camera->getPos();
+
         // render primitive
         auto rasterizer = static_cast<RasterizerPhong>(*m_ctx->m_rasterizer);
         rasterizer.drawTriangle(tri,*m_ctx->m_shader,*m_ctx->m_framebuffer);

@@ -47,6 +47,31 @@ inline glm::vec3 barycentric3(glm::vec3& A, glm::vec3& B, glm::vec3& C, glm::vec
     return glm::vec3(1.f - (u.x + u.y) / u.z, u.y / u.z, u.x / u.z);
 }
 
+// barycentric interpolate with perspective correction
+inline glm::vec2 interpolate(glm::vec2 a, glm::vec2 b, glm::vec2 c,glm::vec3 bc,float z1, float z2, float z3,float z_reciprocal){
+	glm::vec2 res;
+	res.x = (bc.x*(a.x/z1) + bc.y*(b.x/z2) + bc.z*(c.x/z3))/z_reciprocal;
+	res.y = (bc.x*(a.y/z1) + bc.y*(b.y/z2) + bc.z*(c.y/z3))/z_reciprocal;
+	return res;
+}
+
+inline glm::vec3 interpolate(glm::vec3 a, glm::vec3 b, glm::vec3 c,glm::vec3 bc, float z1, float z2, float z3, float z_reciprocal){
+	glm::vec3 res;
+	res.x = (bc.x*(a.x/z1) + bc.y*(b.x/z2) + bc.z*(c.x/z3))/z_reciprocal;
+	res.y = (bc.x*(a.y/z1) + bc.y*(b.y/z2) + bc.z*(c.y/z3))/z_reciprocal;
+	res.z = (bc.x*(a.z/z1) + bc.y*(b.z/z2) + bc.z*(c.z/z3))/z_reciprocal;
+	return res;
+}
+
+inline glm::vec4 interpolate(glm::vec4 a, glm::vec4 b, glm::vec4 c,glm::vec3 bc, float z1, float z2, float z3, float z_reciprocal){
+	glm::vec4 res;
+	res.x = (bc.x*(a.x/z1) + bc.y*(b.x/z2) + bc.z*(c.x/z3))/z_reciprocal;
+	res.y = (bc.x*(a.y/z1) + bc.y*(b.y/z2) + bc.z*(c.y/z3))/z_reciprocal;
+	res.z = (bc.x*(a.z/z1) + bc.y*(b.z/z2) + bc.z*(c.z/z3))/z_reciprocal;
+	res.w = (bc.x*(a.w/z1) + bc.y*(b.w/z2) + bc.z*(c.w/z3))/z_reciprocal;
+	return res;
+}
+
 inline glm::mat4 perspective(float fov, float aspect, float znear, float zfar) {
     float fax = 1.0f / (float)tan(fov * 0.5f);
     glm::mat4 ret = glm::mat4(1.0f);
