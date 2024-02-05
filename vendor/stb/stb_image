@@ -1513,7 +1513,7 @@ STBIDEF stbi_inline float *stbi_loadf_from_file(FILE *f, int *x, int *y, int *co
 // defined, for API simplicity; if STBI_NO_LINEAR is defined, it always
 // reports false!
 
-STBIDEF stbi_inline int stbi_is_hdr_from_memory(stbi_uc const *buffer, int len)
+STBIDEF stbi_inline stbi_inline int stbi_is_hdr_from_memory(stbi_uc const *buffer, int len)
 {
    #ifndef STBI_NO_HDR
    stbi__context s;

@@ -9,4 +9,6 @@ file(GLOB_RECURSE APP_SRC ${CMAKE_SOURCE_DIR}/src/*.hh ${CMAKE_SOURCE_DIR}/src/*
 
 # message("APP_SRC: ${APP_SRC}")
 
+# add_definitions(-D_MSC_VER)
+
 add_subdirectory("case/Phong")

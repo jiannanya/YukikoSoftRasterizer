@@ -18,3 +18,5 @@ target_include_directories( ${PROJECT_NAME}_phong
 
 target_link_libraries(${PROJECT_NAME}_phong PUBLIC glfw3)
 target_link_directories(${PROJECT_NAME}_phong PUBLIC  ${CMAKE_SOURCE_DIR}/vendor/glfw/lib)
+
+target_link_libraries(${PROJECT_NAME}_phong PUBLIC opengl32)

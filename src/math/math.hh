@@ -107,7 +107,7 @@ inline glm::mat4 lookat(glm::vec3 eye, glm::vec3 target, glm::vec3 worldup = glm
     return ret;
 }
 
-glm::mat4 viewport(float _x, float _y,float _n, float _f, float width, float height) {
+inline glm::mat4 viewport(float _x, float _y,float _n, float _f, float width, float height) {
 	glm::mat4 viewPortMatrix(1.0f);
 	viewPortMatrix[0][0] = width/2.0f;
 	viewPortMatrix[0][3] = _x + width/2.0f;

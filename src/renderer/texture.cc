@@ -1,5 +1,6 @@
 #include "texture.hh"
-
+// #define STB_IMAGE_IMPLEMENTATION
+// #include "stb/stb_image.h"
 namespace Fallment{
 
 void Texture::loadFile(const std::string& path) {
@@ -59,5 +60,7 @@ glm::vec4 Texture::getColor(int x, int y) {
 
     return ret;
 }
+
+// Texture::~Texture() { stbi_image_free(data); }
 
 };
