@@ -5,6 +5,8 @@
 
 namespace Fallment{
 
+class Context;
+
 class RenderPass{
 public:
     virtual void onInit()=0;
