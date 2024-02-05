@@ -16,8 +16,8 @@ public:
     ~Window();
 
     bool onInit();
+    bool onUpdate();
     void onFrame();
-    void onUpdate();
     void onDestory();
 
     void setFramebuffer(std::shared_ptr<Framebuffer> fb);

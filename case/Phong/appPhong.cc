@@ -4,8 +4,8 @@
 namespace Fallment{
 
 const char *TITLE = "Fallment real time soft render";
-const char *OBJ_PATH = "../assert/african_head.obj";
-const char *OBJ_TEXTURE_PATH =  "../assert/african_head_diffuse.tga";
+const char *OBJ_PATH = "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\african_head0.obj";
+const char *OBJ_TEXTURE_PATH =  "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\floor_diffuse.tga";
 
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
@@ -16,7 +16,7 @@ glm::vec3 CAM_TARGET_INIT = glm::vec3(0,0,0);
 glm::vec3 CAM_UP_INIT = glm::vec3(0,1,0);
 
 AppPhong::AppPhong(){
-    AppPhong::onInit();
+
 }
 
 AppPhong::~AppPhong(){
@@ -24,13 +24,30 @@ AppPhong::~AppPhong(){
 }
 
 bool AppPhong::onInit(){
-    
+    spdlog::set_level(spdlog::level::debug);
+    spdlog::info("App start init");
     auto  ctx_framebuffer = std::make_shared<Framebuffer>(WINDOW_WIDTH,WINDOW_HEIGHT);
+
+    if(!ctx_framebuffer.get()){
+        spdlog::error("Apps framebuffer are not useful on init !");
+        return false;
+    }
+
     m_window = std::make_unique<Window>(TITLE, WINDOW_WIDTH,WINDOW_HEIGHT);
+    if(!m_window->onInit()){
+        spdlog::error("Apps window are not useful on init !");
+        return false;
+    }
     m_window->setFramebuffer(ctx_framebuffer);
 
 
+
     auto  ctx_model1 = std::make_unique<Mesh>(OBJ_PATH);
+
+    if(!ctx_model1.get()){
+        spdlog::error("Apps mesh model are not useful on init !");
+        return false;
+    }
     auto  ctx_texture = std::make_unique<Texture>(std::string(OBJ_TEXTURE_PATH));
     auto  ctx_camera = std::make_unique<Camera>(FOV_INIT, float(WINDOW_WIDTH) / WINDOW_HEIGHT,CAM_POS_INIT, CAM_TARGET_INIT,CAM_UP_INIT);
     auto  ctx_model_matrix = glm::mat4{1.0f};
@@ -72,8 +89,18 @@ bool AppPhong::onInit(){
     ctx_shader->_fragmentIn = std::move(ctx_PhongShaderFragmentIn);
     ctx_shader->_fragmentOut = std::move(ctx_PhongShaderFragmentOut);
 
+    if(!ctx_shader.get()){
+        spdlog::error("Apps shader are not useful on init !");
+        return false;
+    }
+
     auto ctx_scene = std::make_unique<Scene>();
     ctx_scene->addMesh(std::move(ctx_model1));
+
+    if(!ctx_scene.get()){
+       spdlog::error("Apps scene are not useful on init !");
+        return false;
+    }
 
     m_ctx = std::make_shared<Context>();
     m_ctx->setFrameBuffer(std::move(ctx_framebuffer));
@@ -88,61 +115,60 @@ bool AppPhong::onInit(){
     m_ctx->setViewportMatrix(mth::viewport(0,0,0,1,WINDOW_WIDTH,WINDOW_HEIGHT));
     m_ctx->setRasterizer(std::move(std::unique_ptr<Rasterizer>(new RasterizerPhong)));
 
+    if(!m_ctx.get()){
+        spdlog::error("Apps context are not useful on init !");
+        return false;
+    }
+
     // renderer ms_render =  renderer(ms_context);
     // ms_render.render();
     m_renderpass = std::unique_ptr<RenderPassPhong>(new RenderPassPhong);
     m_renderpass->setContext(m_ctx);
 
-
-    if(!ctx_framebuffer.get()){
-        spdlog::error("Apps framebuffer are not useful on init !");
-        return false;
-    }
-
-    if(!m_window.get()){
-        spdlog::error("Apps window are not useful on init !");
-        return false;
-    }
-
-    if(!ctx_model1.get()){
-        spdlog::error("Apps mesh model are not useful on init !");
-        return false;
-    }
-
-    if(!ctx_scene.get()){
-       spdlog::error("Apps scene are not useful on init !");
-        return false;
-    }
-
-    if(!m_ctx.get()){
-       spdlog::error("Apps context are not useful on init !");
-        return false;
-    }
-
     if(!m_renderpass.get()){
        spdlog::error("Apps context are not useful on init !");
         return false;
     }
-
+    spdlog::info("init ok");
     return true;
 }
 bool AppPhong::onUpdate(){
+    //spdlog::debug("on update");
+
+    if(m_window.get()){
+        if(!m_window->onUpdate())return false;
+    }else{
+        spdlog::error("Apps window does not useful! on update");
+        return false;
+    }
+
     if(m_controls.get()){
         m_controls->onUpdate();
     }
     if(m_ctx.get()&&m_renderpass.get()){
         m_ctx->onUpdate();
         m_renderpass->onUpdate();
+        
     }else{
-        spdlog::error("Apps context and renderpass are not useful! on update");
+        spdlog::error("Apps context,window and renderpass do not useful! on update");
         return false;
     }
+    
+
+    return true;
     
     
 }
 
 void AppPhong::onFrame(){
-    m_renderpass->onFrame();
+    //spdlog::debug("on frame");
+    if(m_window.get()&&m_renderpass.get()){
+        m_renderpass->onFrame();
+        m_window->onFrame();
+    }else{
+        spdlog::error("Apps window and renderpass are not useful! on frame");
+    }
+
 }
 
 void AppPhong::onDestory(){
@@ -150,6 +176,7 @@ void AppPhong::onDestory(){
 }
 
 void AppPhong::run(){
+    spdlog::info("App start run");
     while(onUpdate()){
         onFrame();
     }

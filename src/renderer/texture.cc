@@ -1,6 +1,6 @@
 #include "texture.hh"
-// #define STB_IMAGE_IMPLEMENTATION
-// #include "stb/stb_image.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
 namespace Fallment{
 
 void Texture::loadFile(const std::string& path) {
@@ -10,7 +10,7 @@ void Texture::loadFile(const std::string& path) {
     {
         spdlog::error("Texture load failed at path: {}" , path);
     }else{
-        spdlog::error("lod texture: {}, channel count: {}" , path,channelCnt);
+        spdlog::info("load texture: {}, channel count: {}" , path,channelCnt);
     }
 }
 

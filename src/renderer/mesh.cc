@@ -60,8 +60,8 @@ Mesh::Mesh(const std::string& filename) {
     in.close();
 
     spdlog::info("mesh \"{}\" load finished ",filename);
-    spdlog::info("v#-{}  f#-{}  vt#-{} vn#-{} ",vertexs.size(),facet_vert.size() / 3,texcoords.size(),normals.size());
     spdlog::info("mesh face num: {}",faceNum());
+    spdlog::info("v#-{}  f#-{}  vt#-{} vn#-{} ",vertexs.size(),facet_vert.size() / 3,texcoords.size(),normals.size());
 }
 
 int Mesh::faceNum() const {

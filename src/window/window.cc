@@ -6,7 +6,6 @@
 namespace Fallment{
 
 Window::Window(std::string title, unsigned w, unsigned h):_witdh{w},_height{h}{
-
 }
 
 Window::~Window(){
@@ -44,8 +43,11 @@ void Window::onFrame(){
 
 }
 
-void Window::onUpdate(){
+bool Window::onUpdate(){
+    if(glfwWindowShouldClose(_window))return false;
     glfwPollEvents();
+
+    return true;
     
 }
 
