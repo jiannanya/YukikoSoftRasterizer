@@ -16,7 +16,7 @@ glm::vec3 CAM_TARGET_INIT = glm::vec3(0,0,0);
 glm::vec3 CAM_UP_INIT = glm::vec3(0,1,0);
 
 AppPhong::AppPhong(){
-
+    AppPhong::onInit();
 }
 
 AppPhong::~AppPhong(){
@@ -93,6 +93,37 @@ bool AppPhong::onInit(){
     m_renderpass = std::unique_ptr<RenderPassPhong>(new RenderPassPhong);
     m_renderpass->setContext(m_ctx);
 
+
+    if(!ctx_framebuffer.get()){
+        spdlog::error("Apps framebuffer are not useful on init !");
+        return false;
+    }
+
+    if(!m_window.get()){
+        spdlog::error("Apps window are not useful on init !");
+        return false;
+    }
+
+    if(!ctx_model1.get()){
+        spdlog::error("Apps mesh model are not useful on init !");
+        return false;
+    }
+
+    if(!ctx_scene.get()){
+       spdlog::error("Apps scene are not useful on init !");
+        return false;
+    }
+
+    if(!m_ctx.get()){
+       spdlog::error("Apps context are not useful on init !");
+        return false;
+    }
+
+    if(!m_renderpass.get()){
+       spdlog::error("Apps context are not useful on init !");
+        return false;
+    }
+
     return true;
 }
 bool AppPhong::onUpdate(){
@@ -103,7 +134,7 @@ bool AppPhong::onUpdate(){
         m_ctx->onUpdate();
         m_renderpass->onUpdate();
     }else{
-        spdlog::error("Apps context and renderpass are not useful!");
+        spdlog::error("Apps context and renderpass are not useful! on update");
         return false;
     }
     

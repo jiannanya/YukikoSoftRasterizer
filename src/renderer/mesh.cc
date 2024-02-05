@@ -5,13 +5,14 @@
 
 #include "mesh.hh"
 
+#include "spdlog/spdlog.h"
 namespace Fallment{
 
 Mesh::Mesh(const std::string& filename) {
     std::ifstream in;
     in.open(filename, std::ifstream::in);
     if(in.fail()) {
-        std::cerr << "ERROR: open file stream failed" << std::endl;
+        spdlog::error("Apps open file stream failed on init !");
         return;
     }
     std::string line;
@@ -57,9 +58,10 @@ Mesh::Mesh(const std::string& filename) {
     }
 
     in.close();
-    std::cerr << "mesh " << filename << " load finished" << std::endl; 
-    std::cerr << "v# " << vertexs.size() << " f# " << facet_vert.size() / 3 << " vt# " << texcoords.size() << " vn# " << normals.size() << std::endl;
-    std::cout <<"mesh face num: "<<faceNum()<<std::endl;
+
+    spdlog::info("mesh \"{}\" load finished ",filename);
+    spdlog::info("v#-{}  f#-{}  vt#-{} vn#-{} ",vertexs.size(),facet_vert.size() / 3,texcoords.size(),normals.size());
+    spdlog::info("mesh face num: {}",faceNum());
 }
 
 int Mesh::faceNum() const {
