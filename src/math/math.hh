@@ -74,15 +74,15 @@ inline glm::vec4 interpolate(glm::vec4 a, glm::vec4 b, glm::vec4 c,glm::vec3 bc,
 }
 
 inline glm::mat4 perspective(float fov, float aspect, float znear, float zfar) {
-    float fax = 1.0f / (float)std::tan(fov * 0.5f);
     glm::mat4 ret = glm::mat4(1.0f);
-    ret[0][0] = fax / aspect;
-    ret[1][1] = fax;
-    ret[2][2] = zfar / (zfar - znear);
-    ret[3][2] = -znear * zfar / (zfar - znear);
-    ret[2][3] = 1.f;
+	// float fax = 1.0f / (float)std::tan(fov * 0.5f);
+    // ret[0][0] = fax / aspect;
+    // ret[1][1] = fax;
+    // ret[2][2] = zfar / (zfar - znear);
+    // ret[3][2] = -znear * zfar / (zfar - znear);
+    // ret[2][3] = 1.f;
 
-	//ret = glm::perspective(fov,aspect,znear,zfar);
+	ret = glm::perspective(fov,aspect,znear,zfar);
     return ret;
 
 	// glm::mat4 pMat = glm::mat4(1.0f);
@@ -97,27 +97,27 @@ inline glm::mat4 perspective(float fov, float aspect, float znear, float zfar) {
 	// return pMat;
 }
 
-inline glm::mat4 lookat(glm::vec3 eye, glm::vec3 target, glm::vec3 worldup = glm::vec3(0,0,1)) {
-    glm::mat4 ret = glm::mat4(1.0f);
-    glm::vec3 forward = glm::normalize(eye - target);
-    glm::vec3 left = glm::normalize(glm::cross(worldup,forward));
-    glm::vec3 realup = glm::normalize(cross(forward,left));
+inline glm::mat4 lookat(glm::vec3 eye, glm::vec3 target, glm::vec3 worldup = glm::vec3(0,1,0)) {
+     glm::mat4 ret = glm::mat4(1.0f);
+    // glm::vec3 forward = glm::normalize(eye - target);
+    // glm::vec3 left = glm::normalize(glm::cross(worldup,forward));
+    // glm::vec3 realup = glm::normalize(cross(forward,left));
 
-    ret[0][0] = left.x;
-    ret[1][0] = left.y;
-    ret[2][0] = left.z;
-    ret[0][1] = realup.x;
-    ret[1][1] = realup.y;
-    ret[2][1] = realup.z;
-    ret[0][2] = forward.x;
-    ret[1][2] = forward.y;
-    ret[2][2] = forward.z;
+    // ret[0][0] = left.x;
+    // ret[1][0] = left.y;
+    // ret[2][0] = left.z;
+    // ret[0][1] = realup.x;
+    // ret[1][1] = realup.y;
+    // ret[2][1] = realup.z;
+    // ret[0][2] = forward.x;
+    // ret[1][2] = forward.y;
+    // ret[2][2] = forward.z;
 
-    ret[0][3] = -left.x * eye.x - left.y * eye.y - left.z * eye.z;
-    ret[1][3] = -realup.x * eye.x - realup.y * eye.y - realup.z * eye.z;
-    ret[2][3] = -forward.x * eye.x - forward.y * eye.y - forward.z * eye.z;
+    // ret[0][3] = -left.x * eye.x - left.y * eye.y - left.z * eye.z;
+    // ret[1][3] = -realup.x * eye.x - realup.y * eye.y - realup.z * eye.z;
+    // ret[2][3] = -forward.x * eye.x - forward.y * eye.y - forward.z * eye.z;
 
-	//ret = glm::lookAt(eye,target,worldup);
+	ret = glm::lookAt(eye,target,worldup);
 
 	return ret;
 

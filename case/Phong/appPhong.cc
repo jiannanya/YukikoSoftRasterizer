@@ -4,16 +4,16 @@
 namespace Fallment{
 
 const char *TITLE = "Fallment real time soft render";
-const char *OBJ_PATH = "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\box.obj";
+const char *OBJ_PATH = "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\african_head0.obj";
 const char *OBJ_TEXTURE_PATH =  "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\floor_diffuse.tga";
 
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
 constexpr float FOV_INIT = mth::PI/4.0f;
 
-glm::vec3 CAM_POS_INIT = glm::vec3(0, 0, 6);
+glm::vec3 CAM_POS_INIT = glm::vec3(0, 0, 3);
 glm::vec3 CAM_TARGET_INIT = glm::vec3(0,0,0);
-glm::vec3 CAM_UP_INIT = glm::vec3(0,1,0);
+glm::vec3 CAM_UP_INIT = glm::vec3(0,-1,0);
 
 AppPhong::AppPhong(){
 
@@ -55,8 +55,8 @@ bool AppPhong::onInit(){
     auto  ctx_PhongShaderVertexIn = std::make_unique<VertexInDataPhong>(
         ctx_model_matrix,
         ctx_camera->getViewMatrix(),
-        ctx_camera->getProjectionMatrix(),
-        ctx_camera->getPos()
+        ctx_camera->getProjectionMatrix()
+        //ctx_camera->getPos()
     );
 
     auto  ctx_PhongShaderVertexOut = std::make_unique<VertexOutDataPhong>();

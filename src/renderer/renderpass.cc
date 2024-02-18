@@ -70,7 +70,7 @@ void RenderPassPhong::onFrame(){
             // spdlog::info("drawTriangle 11 {} {} {}", vin.position.x, vin.position.y, vin.position.z);
              // 3. clip
             float w = vertexClip.w;
-            if(vertexClip.z < -w || vertexClip.z > 0.f || vertexClip.x < -w || vertexClip.x > w || vertexClip.y < -w || vertexClip.y > w)
+            if(vertexClip.z < -w || vertexClip.z > w || vertexClip.x < -w || vertexClip.x > w || vertexClip.y < -w || vertexClip.y > w)
             {
                 discardCount++;
                 

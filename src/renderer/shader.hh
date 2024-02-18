@@ -94,11 +94,11 @@ namespace Fallment{
 
         }
 
-        VertexInDataPhong(glm::mat4 _M, glm::mat4 _V, glm::mat4 _P, glm::vec3 _POS)
+        VertexInDataPhong(glm::mat4 _M, glm::mat4 _V, glm::mat4 _P)
         :   modelMatrix{_M},
             viewMatrix{_V},
-            projectionMatrix{_P},
-            position{_POS}{
+            projectionMatrix{_P}
+            {
             
         }
 
