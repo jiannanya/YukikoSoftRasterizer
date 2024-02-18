@@ -41,7 +41,7 @@ void RasterizerLine::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
     glm::vec3 v2 = tri.bvp();
     glm::vec3 v3 = tri.cvp();
 
-    sh.fragment(*sh._fragmentIn,*sh._fragmentOut);
+    // sh.fragment(*sh._fragmentIn,*sh._fragmentOut);
     auto color = sh.gl_FragColor;
 
     drawLine(round(v1.x), round(v1.y), round(v2.x), round(v2.y), color, fb);
@@ -91,7 +91,7 @@ void RasterizerFill::drawFill(Triangle &tri,Shader& sh,Framebuffer& fb) {
 }
 
 void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
-
+    // spdlog::info("drawTriangle 3");
     glm::vec3 v1 = tri.avp();
     glm::vec3 v2 = tri.bvp();
     glm::vec3 v3 = tri.cvp();
@@ -112,7 +112,7 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
     glm::vec4 c2 = tri.bco();
     glm::vec4 c3 = tri.cco();
 
-
+    spdlog::info("drawTriangle 4 {} {} {}", c1.x,c1.y,c1.z);
     glm::vec2 bboxmin(fb.getWidth() - 1, fb.getHeight() - 1);
     glm::vec2 bboxmax(0, 0);
 
@@ -120,7 +120,7 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
     bboxmin.y = std::max(0.f, std::min(v1.y, std::min(v2.y, v3.y)));
     bboxmax.x = std::min((float)(fb.getWidth() - 1), std::max(v1.x, std::max(v2.x, v3.x)));
     bboxmax.y = std::min((float)(fb.getHeight() - 1), std::max(v1.y, std::max(v2.y, v3.y)));
-
+    //spdlog::info("drawTriangle 5");
     glm::vec3 p;
     for(p.x = bboxmin.x; p.x <= bboxmax.x; p.x++){
         for(p.y = bboxmin.y; p.y <= bboxmax.y; p.y++){
@@ -146,7 +146,7 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
             glm::vec3 nw = mth::interpolate(nw1,nw2,nw3,bc,v1.z,v2.z,v3.z,z_reciprocal);
             glm::vec4 c  = mth::interpolate(c1,c2,c3,bc,v1.z,v2.z,v3.z,z_reciprocal);
                
-            auto in = static_cast<FragmentInDataPhong>(*sh._fragmentIn);
+            auto& in = static_cast<FragmentInDataPhong&>(*sh._fragmentIn);
 
             in.worldPos = vw;
             in.uv = uv;
@@ -154,6 +154,7 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
             in.color = c;
 
             sh.fragment(*sh._fragmentIn,*sh._fragmentOut);
+            //spdlog::info("drawTriangle 4 {} {} {} {}",sh.gl_FragColor.x, sh.gl_FragColor.y, sh.gl_FragColor.z,sh.gl_FragColor.w);
             fb.setPixelColor(p.x,p.y,sh.gl_FragColor);
         }
     }

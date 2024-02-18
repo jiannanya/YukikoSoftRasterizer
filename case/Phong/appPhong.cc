@@ -11,7 +11,7 @@ constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
 constexpr float FOV_INIT = 45.0f;
 
-glm::vec3 CAM_POS_INIT = glm::vec3(1, 1, 3);
+glm::vec3 CAM_POS_INIT = glm::vec3(0, 0, 3);
 glm::vec3 CAM_TARGET_INIT = glm::vec3(0,0,0);
 glm::vec3 CAM_UP_INIT = glm::vec3(0,1,0);
 
@@ -81,6 +81,7 @@ bool AppPhong::onInit(){
 
     ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light1));
     ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light2));
+    ctx_PhongShaderFragmentIn->material = std::make_unique<Material>();
 
     auto ctx_PhongShaderFragmentOut = std::make_unique<FragmentOutDataPhong>();
 
@@ -113,7 +114,7 @@ bool AppPhong::onInit(){
     m_ctx->setClearColor(glm::vec4(0.0f,0.0f,0.0f,1.0f));
     m_ctx->setModelMatrix(ctx_model_matrix);
     m_ctx->setViewportMatrix(mth::viewport(0,0,0,1,WINDOW_WIDTH,WINDOW_HEIGHT));
-    m_ctx->setRasterizer(std::move(std::unique_ptr<Rasterizer>(new RasterizerPhong)));
+    m_ctx->setRasterizer(std::move(std::unique_ptr<Rasterizer>(new RasterizerLine)));
 
     if(!m_ctx.get()){
         spdlog::error("Apps context are not useful on init !");

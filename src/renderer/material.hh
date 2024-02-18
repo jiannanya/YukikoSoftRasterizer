@@ -10,7 +10,7 @@ struct Material{
     glm::vec3 kd;
     glm::vec3 ks;
     float shininess;
-    // default initialize
+
     Material(){
         ka = glm::vec3(0.2f,0.2f,0.2f);
         kd= glm::vec3(1.0f,0.5f,0.5f);
@@ -22,9 +22,16 @@ struct Material{
         kd = _kd;
         ks = _ks;
         shininess = _shininess;
-}
-
+    }
 };
+
+// struct PhongMaterial:public Material{
+
+// };
+
+// struct GouraudMaterial:public Material{
+
+// };
 
 }
 

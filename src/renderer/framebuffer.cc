@@ -92,10 +92,10 @@ void Framebuffer::setPixelColor(unsigned int x, unsigned int y, glm::vec4 color)
 
     UINT index = y * m_Width * m_Channel + x * m_Channel;
 
-    // BGRA for windows creation
-    m_ColorBuffer[index + 0] = static_cast<BYTE>(color.z * 255);
+    // RGBA for windows creation
+    m_ColorBuffer[index + 0] = static_cast<BYTE>(color.x * 255);
     m_ColorBuffer[index + 1] = static_cast<BYTE>(color.y * 255);
-    m_ColorBuffer[index + 2] = static_cast<BYTE>(color.x * 255);
+    m_ColorBuffer[index + 2] = static_cast<BYTE>(color.z * 255);
     m_ColorBuffer[index + 3] = static_cast<BYTE>(color.w * 255);
 }
 

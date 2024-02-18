@@ -9,15 +9,15 @@ namespace Fallment{
     
     void SimpleShader::vertex(VertexInData& _in, VertexOutData& _out) {
 
-        auto in = static_cast<VertexInDataSimple>(_in);
-        auto out = static_cast<VertexOutDataSimple>(_out);
+        auto& in = static_cast<VertexInDataSimple&>(_in);
+        auto& out = static_cast<VertexOutDataSimple&>(_out);
         out.color = in.color;
         gl_Position = glm::vec4(in.position,1.0f);
         return;
     }
 
     void SimpleShader::fragment(FragmentInData& _in, FragmentOutData& _out) {
-        auto in = static_cast<FragmentInDataSimple>(_in);
+        auto& in = static_cast<FragmentInDataSimple&>(_in);
         //auto out = static_cast<FragmentOutdataSimple>(FragmentOutData);
         gl_FragColor = in.color;
         return;
@@ -28,15 +28,15 @@ namespace Fallment{
     TransformShader::TransformShader():Shader{}{}
 
     void TransformShader::vertex(VertexInData& _in, VertexOutData& _out) {
-        auto in = static_cast<VertexInDataTransform>(_in);
-        auto out = static_cast<VertexOutDataTransform>(_out);
+        auto& in = static_cast<VertexInDataTransform&>(_in);
+        auto& out = static_cast<VertexOutDataTransform&>(_out);
         out.color = in.color;
         gl_Position = in.projectionMatrix * in.viewMatrix * in.modelMatrix * glm::vec4(in.position,1.0f); 
         return;
     }
 
     void TransformShader::fragment(FragmentInData& _in, FragmentOutData& _out) {
-        auto in = static_cast<FragmentInDataTransform>(_in);
+        auto& in = static_cast<FragmentInDataTransform&>(_in);
         gl_FragColor = in.color;
         return;
     }
@@ -45,8 +45,8 @@ namespace Fallment{
     GouraudShader::GouraudShader():Shader{}{}
 
     void GouraudShader::vertex(VertexInData& _in, VertexOutData& _out) {
-        auto in = static_cast<VertexInDataGouraud>(_in);
-        auto out = static_cast<VertexOutDataGouraud>(_out);
+        auto& in = static_cast<VertexInDataGouraud&>(_in);
+        auto& out = static_cast<VertexOutDataGouraud&>(_out);
 
         gl_Position = in.projectionMatrix * in.viewMatrix * in.modelMatrix * glm::vec4(in.position,1.0f); //mvp transformation
 
@@ -89,7 +89,7 @@ namespace Fallment{
     }
 
     void GouraudShader::fragment(FragmentInData& _in, FragmentOutData& _out) {
-        auto in = static_cast<FragmentInDataGouraud>(_in);
+        auto& in = static_cast<FragmentInDataGouraud&>(_in);
         gl_FragColor = in.color;
         return;
     }
@@ -98,8 +98,8 @@ namespace Fallment{
     PhongShader::PhongShader():Shader{}{}
 
     void PhongShader::vertex(VertexInData& _in, VertexOutData& _out) {
-        auto in = static_cast<VertexInDataPhong>(_in);
-        auto out = static_cast<VertexOutDataPhong>(_out);
+        auto& in = static_cast<VertexInDataPhong&>(_in);
+        auto& out = static_cast<VertexOutDataPhong&>(_out);
 
         gl_Position = in.projectionMatrix * in.viewMatrix * in.modelMatrix * glm::vec4(in.position,1.0f); //mvp transformation
         out.worldPos = in.modelMatrix * glm::vec4(in.position,1.0f);  // vec3 = vec4...
@@ -110,8 +110,8 @@ namespace Fallment{
 
     void PhongShader::fragment(FragmentInData& _in, FragmentOutData& _out) {
 
-        auto in = static_cast<FragmentInDataPhong>(_in);
-        auto out = static_cast<FragmentOutDataPhong>(_out);
+        auto& in = static_cast<FragmentInDataPhong&>(_in);
+        auto& out = static_cast<FragmentOutDataPhong&>(_out);
 
 
         glm::vec3 ka = in.material->ka;
