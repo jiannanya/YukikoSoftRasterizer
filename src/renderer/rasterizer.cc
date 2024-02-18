@@ -44,9 +44,9 @@ void RasterizerLine::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
     // sh.fragment(*sh._fragmentIn,*sh._fragmentOut);
     auto color = sh.gl_FragColor;
 
-    drawLine(round(v1.x), round(v1.y), round(v2.x), round(v2.y), color, fb);
-    drawLine(round(v1.x), round(v1.y), round(v3.x), round(v3.y), color, fb);
-    drawLine(round(v3.x), round(v3.y), round(v2.x), round(v2.y), color, fb);
+    drawLine(std::round(v1.x), std::round(v1.y), std::round(v2.x), std::round(v2.y), color, fb);
+    drawLine(std::round(v1.x), std::round(v1.y), std::round(v3.x), std::round(v3.y), color, fb);
+    drawLine(std::round(v3.x), std::round(v3.y), std::round(v2.x), std::round(v2.y), color, fb);
 }
 
 void RasterizerFill::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
@@ -140,12 +140,12 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
             else 
                 fb.setZ(p.x,p.y,p.z);
 
-           
+
             glm::vec3 vw = mth::interpolate(vw1,vw2,vw3,bc,v1.z,v2.z,v3.z,z_reciprocal);
             glm::vec2 uv = mth::interpolate(uv1,uv2,uv3,bc,v1.z,v2.z,v3.z,z_reciprocal);
             glm::vec3 nw = mth::interpolate(nw1,nw2,nw3,bc,v1.z,v2.z,v3.z,z_reciprocal);
             glm::vec4 c  = mth::interpolate(c1,c2,c3,bc,v1.z,v2.z,v3.z,z_reciprocal);
-               
+
             auto& in = static_cast<FragmentInDataPhong&>(*sh._fragmentIn);
 
             in.worldPos = vw;

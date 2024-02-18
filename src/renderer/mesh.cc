@@ -23,7 +23,7 @@ Mesh::Mesh(const std::string& filename) {
         if (!line.compare(0, 2, "v ")) {
             iss >> trash;
             glm::vec3 v;
-            for(int i = 0; i < 3; ++i) iss >> v[i];
+            for(int i = 0; i < 3; ++i)iss >> v[i];
             vertexs.push_back(v);
         }
         else if (!line.compare(0, 3, "vn ")) {

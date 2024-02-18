@@ -52,8 +52,16 @@ void RenderPassPhong::onFrame(){
             auto& PhongVertexIn = static_cast<VertexInDataPhong&>(*(m_ctx->m_shader->_vertexIn));
             auto& PhongVertexOut = static_cast<VertexOutDataPhong&>(*(m_ctx->m_shader->_vertexOut));
             PhongVertexIn.position = tri._ve[k];
+            // PhongVertexIn.modelMatrix = glm::mat4(1.0f);
+            // PhongVertexIn.viewMatrix = m_ctx->m_camera->getViewMatrix();
+            // PhongVertexIn.projectionMatrix = m_ctx->m_camera->getProjectionMatrix();
+            // spdlog::debug("phong vertex in: {} {} {} {}", PhongVertexIn.modelMatrix[0][0], PhongVertexIn.modelMatrix[0][1], PhongVertexIn.modelMatrix[0][2],PhongVertexIn.modelMatrix[0][3]);
+            // spdlog::debug("phong vertex in: {} {} {} {}", PhongVertexIn.modelMatrix[1][0], PhongVertexIn.modelMatrix[1][1], PhongVertexIn.modelMatrix[1][2],PhongVertexIn.modelMatrix[1][3]);
+            // spdlog::debug("phong vertex in: {} {} {} {}", PhongVertexIn.modelMatrix[2][0], PhongVertexIn.modelMatrix[2][1], PhongVertexIn.modelMatrix[2][2],PhongVertexIn.modelMatrix[2][3]);
+            // spdlog::debug("phong vertex in: {} {} {} {}", PhongVertexIn.modelMatrix[3][0], PhongVertexIn.modelMatrix[3][1], PhongVertexIn.modelMatrix[3][2],PhongVertexIn.modelMatrix[3][3]);
 
             // 2. transform to clip coordinates using vertex shader
+            //auto& PS = static_cast<PhongShader&>(*(m_ctx->m_shader));
             m_ctx->m_shader->vertex(*(m_ctx->m_shader->_vertexIn),*(m_ctx->m_shader->_vertexOut));
 
             glm::vec4& vertexClip = m_ctx->m_shader->gl_Position;
@@ -72,6 +80,10 @@ void RenderPassPhong::onFrame(){
 
             // 4. viewport transform
             tri._vp[k] = m_ctx->m_viewportMatrix * vertexClip;
+
+            tri._vp[k].x = int((vertexClip.x + 1.f) * m_ctx->m_framebuffer->getWidth() * 0.5f); //need cast to int for preventing gap between triangles
+            tri._vp[k].y = int((1.f - vertexClip.y) * m_ctx->m_framebuffer->getHeight() * 0.5f);
+            tri._vp[k].z = vertexClip.z;
 
             tri._vw[k] = PhongVertexOut.worldPos;
 

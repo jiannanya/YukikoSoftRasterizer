@@ -1,6 +1,8 @@
 
 #include "shader.hh"
 
+#include "spdlog/spdlog.h"
+
 namespace Fallment{
 
 
@@ -100,10 +102,10 @@ namespace Fallment{
     void PhongShader::vertex(VertexInData& _in, VertexOutData& _out) {
         auto& in = static_cast<VertexInDataPhong&>(_in);
         auto& out = static_cast<VertexOutDataPhong&>(_out);
-
+        //spdlog::debug("phong shader vertex");
         gl_Position = in.projectionMatrix * in.viewMatrix * in.modelMatrix * glm::vec4(in.position,1.0f); //mvp transformation
-        out.worldPos = in.modelMatrix * glm::vec4(in.position,1.0f);  // vec3 = vec4...
-
+        auto worldPos = in.modelMatrix * glm::vec4(in.position,1.0f);  // vec3 = vec4...
+        out.worldPos = worldPos / worldPos.w;
 
         return;
     }
