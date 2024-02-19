@@ -78,7 +78,7 @@ bool AppPhong::onInit(){
                                     );
 
     auto ctx_PhongShaderFragmentIn = std::make_unique<FragmentInDataPhong>();
-
+    ctx_PhongShaderFragmentIn->texture = std::move(ctx_texture);
     ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light1));
     ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light2));
     ctx_PhongShaderFragmentIn->material = std::make_unique<Material>();
@@ -114,7 +114,7 @@ bool AppPhong::onInit(){
     m_ctx->setClearColor(glm::vec4(0.0f,0.0f,0.0f,1.0f));
     m_ctx->setModelMatrix(ctx_model_matrix);
     m_ctx->setViewportMatrix(mth::viewport(0,0,0,1,WINDOW_WIDTH,WINDOW_HEIGHT));
-    m_ctx->setRasterizer(std::move(std::unique_ptr<Rasterizer>(new RasterizerLine)));
+    m_ctx->setRasterizer(std::move(std::unique_ptr<Rasterizer>(new RasterizerPhong)));
 
     if(!m_ctx.get()){
         spdlog::error("Apps context are not useful on init !");

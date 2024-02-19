@@ -119,6 +119,7 @@ namespace Fallment{
         glm::vec3 ka = in.material->ka;
         glm::vec3 kd = in.material->kd;
         if(in.texture){
+            //spdlog::debug("shader in has texture");
             kd = in.texture->sample(in.uv);
         }
         glm::vec3 ks = in.material->ks;
@@ -130,10 +131,10 @@ namespace Fallment{
             glm::vec3 lightDir = glm::normalize(-light->_direction); // pos -> light
             glm::vec3 viewDir = glm::normalize(in.camPos - in.worldPos); // pos -> view
             glm::vec3 half = glm::normalize(lightDir + viewDir); // 半程向量
-            glm::vec3 L_a = light->_ambient * kd;
+            glm::vec3 L_a = light->_ambient * ka;
             glm::vec3 L_d = light->_diffuse * kd * std::max(0.0f,glm::dot(in.normal,lightDir));
             glm::vec3 L_s = light->_specular * ks * pow(std::max(0.0f,glm::dot(in.normal,half)),in.material->shininess);
-            color += (L_a + L_d + L_s)*255.0f;
+            color += (L_a + L_d + L_s);
         }
 
         //point lights
@@ -143,17 +144,21 @@ namespace Fallment{
             glm::vec3 half = glm::normalize(lightDir + viewDir); // 半程向量
 
             float distance = mth::square_distance(in.worldPos,light->_position);
-
+            //glm::vec3 L_a = light->_ambient * ka;
             glm::vec3 L_d = light->_diffuse * kd * std::max(0.0f,glm::dot(in.normal,lightDir));
-            glm::vec3 L_s = light->_specular * ks * pow(std::max(0.0f,glm::dot(in.normal,half)),in.material->shininess);
+            glm::vec3 L_s = light->_specular * ks * std::pow(std::max(0.0f,glm::dot(in.normal,half)),in.material->shininess);
 
 
-            color += (L_d/distance + L_s/distance)*255.0f;
+            color += ( L_d + L_s);
+            
         }
+        //spdlog::debug("shader in {} {} {}",in.normal.x,in.normal.y,in.normal.z);
+        
+        //spdlog::debug("shader in {} {} {}",color.x,color.y,color.z);
 
 
-        gl_FragColor = glm::vec4(glm::clamp(color,glm::vec3(0,0,0),glm::vec3(255,255,255)),1.0f);
-
+        gl_FragColor = glm::vec4(glm::clamp(color,glm::vec3(0.0f,0.0f,0.0f),glm::vec3(1.0f,1.0f,1.0f)),1.0f);
+        //gl_FragColor = glm::vec4(0.5f,0.5f,0.5f,1.0f);
         return ;
     }
 
