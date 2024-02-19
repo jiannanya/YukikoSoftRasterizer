@@ -38,6 +38,25 @@ private:
     void updateViewProjectionMatrix();
 };
 
+class OrthographicCam:public Camera{
+public:
+    OrthographicCam(float left,float right,float bottom,float top,float znear,float zfar)
+    :m_left{left},m_right{right},m_bottom{bottom},m_top{top},m_znear{znear},m_zfar{zfar}{
+
+    }
+
+
+private:
+
+    float m_left;
+    float m_right;
+    float m_bottom;
+    float m_top;
+    float m_znear;
+    float m_zfar;
+
+};
+
 };
 
 #endif

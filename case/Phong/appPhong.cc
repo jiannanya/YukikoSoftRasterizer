@@ -56,7 +56,7 @@ bool AppPhong::onInit(){
         ctx_model_matrix,
         ctx_camera->getViewMatrix(),
         ctx_camera->getProjectionMatrix()
-        //ctx_camera->getPos()
+        //mth::orthographic(-2.0f,2.0f,-2.0f,2.0f,0.1f,3.0f)
     );
 
     auto  ctx_PhongShaderVertexOut = std::make_unique<VertexOutDataPhong>();
