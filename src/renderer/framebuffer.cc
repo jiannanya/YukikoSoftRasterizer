@@ -87,8 +87,11 @@ void Framebuffer::setPixelColor(unsigned int x, unsigned int y, glm::vec4 color)
     if(x < 0 || x >= m_Width || y < 0 || y >= m_Height)
         return;
 
+    // flip image
+    x = m_Width - x;
+    y = m_Height - y;
+
     std::unique_lock<std::mutex>(m_color_mutex);
-    //std::cerr<<"set pixel color: "<<x<<", "<<y<<": "<< color.x<<", "<<color.y<<", "<<color.z<<", "<<color.w<<std::endl;
 
     UINT index = y * m_Width * m_Channel + x * m_Channel;
 

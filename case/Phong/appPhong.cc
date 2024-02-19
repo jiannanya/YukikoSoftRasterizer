@@ -13,7 +13,7 @@ constexpr float FOV_INIT = mth::PI/4.0f;
 
 glm::vec3 CAM_POS_INIT = glm::vec3(0, 0, 3);
 glm::vec3 CAM_TARGET_INIT = glm::vec3(0,0,0);
-glm::vec3 CAM_UP_INIT = glm::vec3(0,-1,0);
+glm::vec3 CAM_UP_INIT = glm::vec3(0,1,0);
 
 AppPhong::AppPhong(){
 
