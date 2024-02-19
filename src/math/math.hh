@@ -74,67 +74,41 @@ inline glm::vec4 interpolate(glm::vec4 a, glm::vec4 b, glm::vec4 c,glm::vec3 bc,
 }
 
 inline glm::mat4 perspective(float fov, float aspect, float znear, float zfar) {
-    glm::mat4 ret = glm::mat4(1.0f);
-	// float fax = 1.0f / (float)std::tan(fov * 0.5f);
-    // ret[0][0] = fax / aspect;
-    // ret[1][1] = fax;
-    // ret[2][2] = zfar / (zfar - znear);
-    // ret[3][2] = -znear * zfar / (zfar - znear);
-    // ret[2][3] = 1.f;
-
-	ret = glm::perspective(fov,aspect,znear,zfar);
+    glm::mat4 ret{1.0f};
+	float f = 1.0f / (float)std::tan(fov * 0.5f);
+    ret[0][0] = f / aspect;
+    ret[1][1] = f;
+    ret[2][2] = - (zfar + znear) / (zfar - znear);
+	ret[2][3] = - 1.0f;
+    ret[3][2] = - (2.0f * znear * zfar) / (zfar - znear);
+	//ret = glm::perspective(fov,aspect,znear,zfar);
     return ret;
-
-	// glm::mat4 pMat = glm::mat4(1.0f);
-
-	// float rFovy = fov * 3.14159265358979323846 / 180;
-	// const float tanHalfFovy = std::tan(rFovy * 0.5f);
-	// float f_n = zfar - znear;
-	// pMat[0][0] = 1.0f / (aspect*tanHalfFovy); pMat[0][1] = 0.0f;				pMat[0][2] = 0.0f;					pMat[0][3] = 0.0f;
-	// pMat[1][0] = 0.0f;						  pMat[1][1] = 1.0f / tanHalfFovy;  pMat[1][2] = 0.0f;					pMat[1][3] = 0.0f;
-	// pMat[2][0] = 0.0f;						  pMat[2][1] = 0.0f;			    pMat[2][2] = -(zfar + znear) / f_n;	pMat[2][3] = -1.0f;
-	// pMat[3][0] = 0.0f;						  pMat[3][1] = 0.0f;				pMat[3][2] = -2.0f*znear*zfar / f_n;	pMat[3][3] = 0.0f;
-	// return pMat;
 }
 
-inline glm::mat4 lookat(glm::vec3 eye, glm::vec3 target, glm::vec3 worldup = glm::vec3(0,1,0)) {
-     glm::mat4 ret = glm::mat4(1.0f);
-    // glm::vec3 forward = glm::normalize(eye - target);
-    // glm::vec3 left = glm::normalize(glm::cross(worldup,forward));
-    // glm::vec3 realup = glm::normalize(cross(forward,left));
+inline glm::mat4 lookat(glm::vec3 camera, glm::vec3 target, glm::vec3 up = glm::vec3(0,1,0)) {
 
-    // ret[0][0] = left.x;
-    // ret[1][0] = left.y;
-    // ret[2][0] = left.z;
-    // ret[0][1] = realup.x;
-    // ret[1][1] = realup.y;
-    // ret[2][1] = realup.z;
-    // ret[0][2] = forward.x;
-    // ret[1][2] = forward.y;
-    // ret[2][2] = forward.z;
+	//ret = glm::lookAt(eye,target,up);
+    glm::vec3 forward = glm::normalize(camera- target);               
+    glm::vec3 left = glm::normalize(glm::cross(up, forward)); 
 
-    // ret[0][3] = -left.x * eye.x - left.y * eye.y - left.z * eye.z;
-    // ret[1][3] = -realup.x * eye.x - realup.y * eye.y - realup.z * eye.z;
-    // ret[2][3] = -forward.x * eye.x - forward.y * eye.y - forward.z * eye.z;
+    glm::mat4 viewMatrix{1.0f};
 
-	ret = glm::lookAt(eye,target,worldup);
+    viewMatrix[0][0] = left.x;
+    viewMatrix[0][1] = left.y;
+    viewMatrix[0][2] = left.z;
+    viewMatrix[0][1] = up.x;
+    viewMatrix[1][1] = up.y;
+    viewMatrix[2][1] = up.z;
+    viewMatrix[1][2] = forward.x;
+    viewMatrix[2][2] = forward.y;
+    viewMatrix[3][2] = forward.z;
 
-	return ret;
+    viewMatrix[3][0]= -left.x * camera.x - left.y * camera.y - left.z * camera.z;
+    viewMatrix[3][1]= -up.x * camera.x - up.y * camera.y - up.z * camera.z;
+    viewMatrix[3][2]= -forward.x * camera.x - forward.y * camera.y - forward.z * camera.z;
 
-	// glm::mat4 vMat = glm::mat4(1.0f);
-	// glm::vec3 zAxis = glm::normalize(eye - target);
-	// glm::vec3 xAxis = glm::normalize(glm::cross(worldup, zAxis));
-	// glm::vec3 yAxis = glm::normalize(glm::cross(zAxis, xAxis));
+	return viewMatrix;
 
-	// vMat[0][0] = xAxis.x; vMat[0][1] = yAxis.x; vMat[0][2] = zAxis.x; vMat[0][3] = 0.0f;
-	// vMat[1][0] = xAxis.y; vMat[1][1] = yAxis.y; vMat[1][2] = zAxis.y; vMat[1][3] = 0.0f;
-	// vMat[2][0] = xAxis.z; vMat[2][1] = yAxis.z; vMat[2][2] = zAxis.z; vMat[2][3] = 0.0f;
-	// vMat[3][0] = -glm::dot(xAxis, eye);
-	// vMat[3][1] = -glm::dot(yAxis, eye);
-	// vMat[3][2] = -glm::dot(zAxis, eye);
-	// vMat[3][3] = 1.0f;
-
-	// return vMat;
 }
 
 inline glm::mat4 viewport(float _x, float _y,float _n, float _f, float width, float height) {
