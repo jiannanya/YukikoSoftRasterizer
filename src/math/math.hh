@@ -48,6 +48,20 @@ inline glm::vec3 barycentric3(glm::vec3& A, glm::vec3& B, glm::vec3& C, glm::vec
     return glm::vec3(1.f - (u.x + u.y) / u.z, u.y / u.z, u.x / u.z);
 }
 
+inline glm::vec3 barycentric2D(glm::vec3& A, glm::vec3& B, glm::vec3& C, glm::vec3& p) {
+	// float b = ((p.y-A.y)*(C.x-A.x)-(p.x-A.x)*(C.y-A.y)) / ((B.y-A.y)*(C.x-A.x)-(B.x-A.x)*(C.y-A.y));
+	// float c = ((p.y-A.y)*(B.x-A.x)-(A.x-p.x)*(B.y-A.y)) / ((C.y-A.y)*(B.x-A.x)-(C.x-A.x)*(B.y-A.y));
+	// float a = 1-b-c;
+	float x = p.x, y=p.y;
+	float x1 = A.x, y1 = A.y;
+	float x2 = B.x, y2 = B.y;
+	float x3 = C.x, y3 = C.y;
+	float a = (x*(y2 - y3) + (x3 - x2)*y + x2*y3 - x3*y2) / (x1*(y2 - y3) + (x3 - x2)*y1 + x2*y3 - x3*y2);
+	float b = (x*(y3 - y1) + (x1 - x3)*y + x3*y1 - x1*y3) / (x2*(y3 - y1) + (x1 - x3)*y2 + x3*y1 - x1*y3);
+	float c = (x*(y1 - y2) + (x2 - x1)*y + x1*y2 - x2*y1) / (x3*(y1 - y2) + (x2 - x1)*y3 + x1*y2 - x2*y1);
+    return {a,b,c};
+}
+
 // barycentric interpolate with perspective correction
 inline glm::vec2 interpolate(glm::vec2 a, glm::vec2 b, glm::vec2 c,glm::vec3 bc,float z1, float z2, float z3,float z_reciprocal){
 	glm::vec2 res;

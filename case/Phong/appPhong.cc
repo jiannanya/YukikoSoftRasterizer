@@ -5,7 +5,7 @@ namespace Fallment{
 
 const char *TITLE = "Fallment real time soft render";
 const char *OBJ_PATH = "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\african_head0.obj";
-const char *OBJ_TEXTURE_PATH =  "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\floor_diffuse.tga";
+const char *OBJ_TEXTURE_PATH =  "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\african_head_diffuse.tga";
 
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
@@ -68,19 +68,25 @@ bool AppPhong::onInit(){
     auto p_light1 = std::make_unique<PointLight>(   glm::vec3(0.2f,0.2f,0.2f),
                                                     glm::vec3(0.5f,0.5f,0.5f),
                                                     glm::vec3(1.0f,1.0f,1.0f),
-                                                    glm::vec3(0, 20, 0)
+                                                    glm::vec3(0, 3, 0)
                                                 );
 
     auto p_light2 = std::make_unique<PointLight>(   glm::vec3(0.2f,0.2f,0.2f),
                                                     glm::vec3(0.5f,0.5f,0.5f),
                                                     glm::vec3(1.0f,1.0f,1.0f),
-                                                    glm::vec3(20, 0, 0)
+                                                    glm::vec3(3, 0, 0)
+                                    );
+    auto p_light3 = std::make_unique<PointLight>(   glm::vec3(0.2f,0.2f,0.2f),
+                                                    glm::vec3(0.5f,0.5f,0.5f),
+                                                    glm::vec3(1.0f,1.0f,1.0f),
+                                                    glm::vec3(0, 0, 3)
                                     );
 
     auto ctx_PhongShaderFragmentIn = std::make_unique<FragmentInDataPhong>();
     ctx_PhongShaderFragmentIn->texture = std::move(ctx_texture);
     ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light1));
     ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light2));
+    ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light3));
     ctx_PhongShaderFragmentIn->material = std::make_unique<Material>();
 
     auto ctx_PhongShaderFragmentOut = std::make_unique<FragmentOutDataPhong>();

@@ -125,16 +125,17 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
     for(p.x = bboxmin.x; p.x <= bboxmax.x; p.x++){
         for(p.y = bboxmin.y; p.y <= bboxmax.y; p.y++){
 
-            glm::vec3 bc = mth::barycentric3(v1, v2, v3, p);
+            //glm::vec3 bc = mth::barycentric3(v1, v2, v3, p);
+            glm::vec3 bc = mth::barycentric2D(v1,v2,v3,p);
             //bc = glm::bar
             if(bc.x < 0 || bc.y < 0 || bc.z < 0) 
                 continue;
 
             
              //透视矫正插值 https://www.researchgate.net/publication/2893969_Perspective-Correct_Interpolation
-            float z_reciprocal = bc.x*(1.0f/v1.z) + bc.y*(1.0f/v2.z) + v3.z*(1.0f/v3.z); 
-            p.z = 1.0f/z_reciprocal;
-
+            //float z_reciprocal = bc.x*(1.0f/vw1.z) + bc.y*(1.0f/vw2.z) + bc.z*(1.0f/vw3.z); 
+            //p.z = 1.0f/z_reciprocal;
+            p.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
             //depth test
             if(p.z<(fb.getZ(p.x,p.y)))
                 continue;
@@ -142,30 +143,30 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
                 fb.setZ(p.x,p.y,p.z);
 
 
-            glm::vec3 vw = mth::interpolate(vw1,vw2,vw3,bc,v1.z,v2.z,v3.z,z_reciprocal);
-            glm::vec2 uv = mth::interpolate(uv1,uv2,uv3,bc,v1.z,v2.z,v3.z,z_reciprocal);
-            glm::vec3 nw = mth::interpolate(nw1,nw2,nw3,bc,v1.z,v2.z,v3.z,z_reciprocal);
-            glm::vec4 c  = mth::interpolate(c1,c2,c3,bc,v1.z,v2.z,v3.z,z_reciprocal);
+            //glm::vec3 vw = mth::interpolate(vw1,vw2,vw3,bc,v1.z,v2.z,v3.z,z_reciprocal);
+            //glm::vec2 uv = mth::interpolate(uv1,uv2,uv3,bc,v1.z,v2.z,v3.z,z_reciprocal);
+            //glm::vec3 nw = mth::interpolate(nw1,nw2,nw3,bc,v1.z,v2.z,v3.z,z_reciprocal);
+            //glm::vec4 c  = mth::interpolate(c1,c2,c3,bc,v1.z,v2.z,v3.z,z_reciprocal);
 
-            // //vec3 vw;
-            // vw.x = vw1.x*bc.x + vw2.x*bc.y + vw3.x*bc.z;
-            // vw.y = vw1.y*bc.x + vw2.y*bc.y + vw3.y*bc.z;
-            // vw.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
+            glm::vec3 vw;
+            vw.x = vw1.x*bc.x + vw2.x*bc.y + vw3.x*bc.z;
+            vw.y = vw1.y*bc.x + vw2.y*bc.y + vw3.y*bc.z;
+            vw.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
 
-            // //vec2 uv;
-            // uv.x = uv1.x*bc.x + uv2.x*bc.y + uv3.x*bc.z;
-            // uv.y = uv1.y*bc.x + uv2.y*bc.y + uv3.y*bc.z;
+            glm::vec2 uv;
+            uv.x = uv1.x*bc.x + uv2.x*bc.y + uv3.x*bc.z;
+            uv.y = uv1.y*bc.x + uv2.y*bc.y + uv3.y*bc.z;
 
-            // //vec3 nw;
-            // nw.x = nw1.x*bc.x + nw2.x*bc.y + nw3.x*bc.z;
-            // nw.y = nw1.y*bc.x + nw2.y*bc.y + nw3.y*bc.z;
-            // nw.z = nw1.z*bc.x + nw2.z*bc.y + nw3.z*bc.z;
+            glm::vec3 nw;
+            nw.x = nw1.x*bc.x + nw2.x*bc.y + nw3.x*bc.z;
+            nw.y = nw1.y*bc.x + nw2.y*bc.y + nw3.y*bc.z;
+            nw.z = nw1.z*bc.x + nw2.z*bc.y + nw3.z*bc.z;
 
-            // //vec4 c;
-            // c.x = c1.x*bc.x + c2.x*bc.y + c3.x*bc.z;
-            // c.y = c1.y*bc.x + c2.y*bc.y + c3.y*bc.z;
-            // c.z = c1.z*bc.x + c2.z*bc.y + c3.z*bc.z;
-            // c.w = c1.w*bc.x + c2.w*bc.y + c3.w*bc.z;
+            glm::vec4 c;
+            c.x = c1.x*bc.x + c2.x*bc.y + c3.x*bc.z;
+            c.y = c1.y*bc.x + c2.y*bc.y + c3.y*bc.z;
+            c.z = c1.z*bc.x + c2.z*bc.y + c3.z*bc.z;
+            c.w = c1.w*bc.x + c2.w*bc.y + c3.w*bc.z;
 
             auto& in = static_cast<FragmentInDataPhong&>(*sh._fragmentIn);
 

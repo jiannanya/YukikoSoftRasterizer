@@ -10,7 +10,7 @@ void Texture::loadFile(const std::string& path) {
     {
         spdlog::error("Texture load failed at path: {}" , path);
     }else{
-        spdlog::info("load texture: {}, channel count: {}" , path,channelCnt);
+        spdlog::info("load texture: {}, channel count: {}, width: {}, height: {}" , path,channelCnt,width,height);
     }
 }
 

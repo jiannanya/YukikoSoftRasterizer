@@ -144,12 +144,12 @@ namespace Fallment{
             glm::vec3 half = glm::normalize(lightDir + viewDir); // 半程向量
 
             float distance = mth::square_distance(in.worldPos,light->_position);
-            //glm::vec3 L_a = light->_ambient * ka;
-            glm::vec3 L_d = light->_diffuse * kd * std::max(0.0f,glm::dot(in.normal,lightDir));
-            glm::vec3 L_s = light->_specular * ks * std::pow(std::max(0.0f,glm::dot(in.normal,half)),in.material->shininess);
+            glm::vec3 L_a = light->_ambient * ka;
+            glm::vec3 L_d = kd * std::max(0.0f,glm::dot(in.normal,lightDir));
+            glm::vec3 L_s = ks * std::pow(std::max(0.0f,glm::dot(in.normal,half)),in.material->shininess);
 
 
-            color += ( L_d + L_s);
+            color += (L_a + L_d + L_s / distance);
             
         }
         //spdlog::debug("shader in {} {} {}",in.normal.x,in.normal.y,in.normal.z);
@@ -158,7 +158,7 @@ namespace Fallment{
 
 
         gl_FragColor = glm::vec4(glm::clamp(color,glm::vec3(0.0f,0.0f,0.0f),glm::vec3(1.0f,1.0f,1.0f)),1.0f);
-        //gl_FragColor = glm::vec4(0.5f,0.5f,0.5f,1.0f);
+        //gl_FragColor = in.texture->sample(in.uv);
         return ;
     }
 
