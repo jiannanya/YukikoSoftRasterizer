@@ -1,11 +1,11 @@
-#include "appPhong.hh"
+#include "appLine.hh"
 
 
 namespace Fallment{
 
 const char *TITLE = "Fallment real time soft render";
 const char *OBJ_PATH = "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\african_head0.obj";
-const char *OBJ_TEXTURE_PATH =  "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\african_head_diffuse.tga";
+//const char *OBJ_TEXTURE_PATH =  "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\african_head_diffuse.tga";
 
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
@@ -15,15 +15,15 @@ glm::vec3 CAM_POS_INIT = glm::vec3(0, 0, 3);
 glm::vec3 CAM_TARGET_INIT = glm::vec3(0,0,0);
 glm::vec3 CAM_UP_INIT = glm::vec3(0,1,0);
 
-AppPhong::AppPhong(){
+AppLine::AppLine(){
 
 }
 
-AppPhong::~AppPhong(){
+AppLine::~AppLine(){
 
 }
 
-bool AppPhong::onInit(){
+bool AppLine::onInit(){
     spdlog::set_level(spdlog::level::debug);
     spdlog::info("App start init");
     auto  ctx_framebuffer = std::make_shared<Framebuffer>(WINDOW_WIDTH,WINDOW_HEIGHT);
@@ -48,50 +48,25 @@ bool AppPhong::onInit(){
         spdlog::error("Apps mesh model are not useful on init !");
         return false;
     }
-    auto  ctx_texture = std::make_unique<Texture>(std::string(OBJ_TEXTURE_PATH));
+    //auto  ctx_texture = std::make_unique<Texture>(std::string(OBJ_TEXTURE_PATH));
     auto  ctx_camera = std::make_unique<Camera>(FOV_INIT, float(WINDOW_WIDTH) / float(WINDOW_HEIGHT),CAM_POS_INIT, CAM_TARGET_INIT,CAM_UP_INIT);
     auto  ctx_model_matrix = glm::mat4{1.0f};
-    auto  ctx_shader = std::make_unique<PhongShader>();
-    auto  ctx_PhongShaderVertexIn = std::make_unique<VertexInDataPhong>(
+    
+    auto  ctx_shader = std::make_unique<TransformShader>();
+    auto  ctx_TransformShaderVertexIn = std::make_unique<VertexInDataTransform>(
         ctx_model_matrix,
         ctx_camera->getViewMatrix(),
         ctx_camera->getProjectionMatrix()
         //mth::orthographic(-2.0f,2.0f,-2.0f,2.0f,0.1f,3.0f)
     );
+    auto  ctx_TransformShaderVertexOut = std::make_unique<VertexOutDataTransform>();
+    auto ctx_TransformShaderFragmentIn = std::make_unique<FragmentInDataTransform>();
+    auto ctx_TransformShaderFragmentOut = std::make_unique<FragmentOutDataTransform>();
 
-    auto  ctx_PhongShaderVertexOut = std::make_unique<VertexOutDataPhong>();
-
-
-    auto p_light1 = std::make_unique<PointLight>(   glm::vec3(0.2f,0.2f,0.2f),
-                                                    glm::vec3(0.5f,0.5f,0.5f),
-                                                    glm::vec3(1.0f,1.0f,1.0f),
-                                                    glm::vec3(0, 3, 0)
-                                                );
-
-    auto p_light2 = std::make_unique<PointLight>(   glm::vec3(0.2f,0.2f,0.2f),
-                                                    glm::vec3(0.5f,0.5f,0.5f),
-                                                    glm::vec3(1.0f,1.0f,1.0f),
-                                                    glm::vec3(3, 0, 0)
-                                    );
-    auto p_light3 = std::make_unique<PointLight>(   glm::vec3(0.2f,0.2f,0.2f),
-                                                    glm::vec3(0.5f,0.5f,0.5f),
-                                                    glm::vec3(1.0f,1.0f,1.0f),
-                                                    glm::vec3(0, 0, 3)
-                                    );
-
-    auto ctx_PhongShaderFragmentIn = std::make_unique<FragmentInDataPhong>();
-    ctx_PhongShaderFragmentIn->texture = std::move(ctx_texture);
-    ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light1));
-    ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light2));
-    ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light3));
-    ctx_PhongShaderFragmentIn->material = std::make_unique<Material>();
-
-    auto ctx_PhongShaderFragmentOut = std::make_unique<FragmentOutDataPhong>();
-
-    ctx_shader->_vertexIn = std::move(ctx_PhongShaderVertexIn);
-    ctx_shader->_vertexOut = std::move(ctx_PhongShaderVertexOut);
-    ctx_shader->_fragmentIn = std::move(ctx_PhongShaderFragmentIn);
-    ctx_shader->_fragmentOut = std::move(ctx_PhongShaderFragmentOut);
+    ctx_shader->_vertexIn = std::move(ctx_TransformShaderVertexIn);
+    ctx_shader->_vertexOut = std::move(ctx_TransformShaderVertexOut);
+    ctx_shader->_fragmentIn = std::move(ctx_TransformShaderFragmentIn);
+    ctx_shader->_fragmentOut = std::move(ctx_TransformShaderFragmentOut);
 
     if(!ctx_shader.get()){
         spdlog::error("Apps shader are not useful on init !");
@@ -102,7 +77,7 @@ bool AppPhong::onInit(){
     ctx_scene->addMesh(std::move(ctx_model1));
 
     if(!ctx_scene.get()){
-       spdlog::error("Apps scene are not useful on init !");
+        spdlog::error("Apps scene are not useful on init !");
         return false;
     }
 
@@ -117,24 +92,24 @@ bool AppPhong::onInit(){
     m_ctx->setClearColor(glm::vec4(0.0f,0.0f,0.0f,1.0f));
     m_ctx->setModelMatrix(ctx_model_matrix);
     m_ctx->setViewportMatrix(mth::viewport(0,0,0,1,WINDOW_WIDTH,WINDOW_HEIGHT));
-    m_ctx->setRasterizer(std::move(std::make_unique<RasterizerPhong>()));
+    m_ctx->setRasterizer(std::move(std::unique_ptr<Rasterizer>(new RasterizerLine)));
 
     if(!m_ctx.get()){
         spdlog::error("Apps context are not useful on init !");
         return false;
     }
 
-    m_renderpass = std::make_unique<RenderPassPhong>();
+    m_renderpass = std::unique_ptr<RenderPassLine>(new RenderPassLine);
     m_renderpass->setContext(m_ctx);
 
     if(!m_renderpass.get()){
-       spdlog::error("Apps context are not useful on init !");
+        spdlog::error("Apps context are not useful on init !");
         return false;
     }
     spdlog::info("init ok");
     return true;
 }
-bool AppPhong::onUpdate(){
+bool AppLine::onUpdate(){
     //spdlog::debug("on update");
 
     if(m_window.get()){
@@ -162,7 +137,7 @@ bool AppPhong::onUpdate(){
     
 }
 
-void AppPhong::onFrame(){
+void AppLine::onFrame(){
     //spdlog::debug("on frame");
     if(m_window.get()&&m_renderpass.get()){
         m_renderpass->onFrame();
@@ -173,11 +148,11 @@ void AppPhong::onFrame(){
 
 }
 
-void AppPhong::onDestory(){
+void AppLine::onDestory(){
 
 }
 
-void AppPhong::run(){
+void AppLine::run(){
     spdlog::info("App start run");
     while(onUpdate()){
         onFrame();

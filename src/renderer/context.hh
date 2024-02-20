@@ -16,6 +16,7 @@ namespace Fallment{
 
 class Context{
     friend class RenderPassPhong;
+    friend class RenderPassLine;
 public:
     Context();
     ~Context();

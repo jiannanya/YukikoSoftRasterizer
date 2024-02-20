@@ -33,6 +33,17 @@ public:
 
 };
 
+class RenderPassLine:public RenderPass{
+public:
+    RenderPassLine();
+    ~RenderPassLine();
+    void onInit() override;
+    virtual void onUpdate() override;
+    virtual void onFrame() override;
+    virtual void onDestory() override;
+
+};
+
 }
 
 

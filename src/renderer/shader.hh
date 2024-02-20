@@ -44,6 +44,14 @@ namespace Fallment{
         glm::mat4 projectionMatrix;
         glm::vec3 position;
         glm::vec4 color;
+
+        VertexInDataTransform(glm::mat4 _M, glm::mat4 _V, glm::mat4 _P)
+        :   modelMatrix{_M},
+            viewMatrix{_V},
+            projectionMatrix{_P}
+        {
+            
+        }
     };
 
     struct VertexOutDataTransform:public VertexOutData{
