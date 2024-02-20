@@ -14,10 +14,10 @@ Framebuffer::Framebuffer(int width, int height)
     m_PixelCount = width * height;
 
     m_ColorBuffer = new BYTE[m_PixelCount*m_Channel];
-    std::unique_lock<std::mutex>(m_color_mutex);
+    //std::unique_lock<std::mutex>(m_color_mutex);
     memset(m_ColorBuffer,0,m_PixelCount*m_Channel);
 
-    std::unique_lock<std::mutex>(m_z_mutex);
+    //std::unique_lock<std::mutex>(m_z_mutex);
     m_ZBuffer = new float[m_PixelCount];
     memset(m_ZBuffer,0,m_PixelCount);
 
@@ -42,7 +42,7 @@ float Framebuffer::getZ(unsigned int x, unsigned int y){
 }
 
 void Framebuffer::setZ(unsigned int x, unsigned int y, float value){
-    std::unique_lock<std::mutex>(m_z_mutex);
+    //std::unique_lock<std::mutex>(m_z_mutex);
     UINT index = y * m_Width + x;
     m_ZBuffer[index] = value;
 }
@@ -54,7 +54,7 @@ int Framebuffer::getChannelNums()const{
 
 void Framebuffer::clearColorBuffer(glm::vec4 color) {
     //std::cerr<<"clearColorBuffer: "<< color.x<<", "<<color.y<<", "<<color.z<<", "<<color.w<<std::endl;
-    std::unique_lock<std::mutex>(m_color_mutex);
+    //std::unique_lock<std::mutex>(m_color_mutex);
     UINT index_limit = m_PixelCount * m_Channel;
     for(UINT index=0;index<index_limit;index+=m_Channel){
         m_ColorBuffer[index+0] = static_cast<BYTE>(color.x * 255);
@@ -66,7 +66,7 @@ void Framebuffer::clearColorBuffer(glm::vec4 color) {
 };
 
 void Framebuffer::clearZBuffer(){
-    std::unique_lock<std::mutex>(m_z_mutex);
+    //std::unique_lock<std::mutex>(m_z_mutex);
     memset(m_ZBuffer,std::numeric_limits<float>::lowest(),m_PixelCount);
     // for (int i=m_PixelCount-1;i>=0 ;i--)
     //     m_ZBuffer[i] = -(std::numeric_limits<float>::max)() ;
@@ -84,14 +84,17 @@ int Framebuffer::getHeight()const {
 
 
 void Framebuffer::setPixelColor(unsigned int x, unsigned int y, glm::vec4 color) {
-    if(x < 0 || x >= m_Width || y < 0 || y >= m_Height)
+    if(x <= 0 || x >= m_Width || y <= 0 || y >= m_Height)
         return;
 
     // flip image
     x = m_Width - x;
     y = m_Height - y;
 
-    std::unique_lock<std::mutex>(m_color_mutex);
+    if(x <= 0 || x >= m_Width || y <= 0 || y >= m_Height)
+        return;
+
+    //std::unique_lock<std::mutex>(m_color_mutex);
 
     UINT index = y * m_Width * m_Channel + x * m_Channel;
 

@@ -26,7 +26,7 @@ inline glm::vec3 reflect(const glm::vec3& I, const glm::vec3& N)
 {
 	//公式 R = I - 2(I·N)N
 	return I - 2.f * glm::dot(I ,N) * N;
-	 
+
 }
 
 template<typename T>
@@ -49,9 +49,7 @@ inline glm::vec3 barycentric3(glm::vec3& A, glm::vec3& B, glm::vec3& C, glm::vec
 }
 
 inline glm::vec3 barycentric2D(glm::vec3& A, glm::vec3& B, glm::vec3& C, glm::vec3& p) {
-	// float b = ((p.y-A.y)*(C.x-A.x)-(p.x-A.x)*(C.y-A.y)) / ((B.y-A.y)*(C.x-A.x)-(B.x-A.x)*(C.y-A.y));
-	// float c = ((p.y-A.y)*(B.x-A.x)-(A.x-p.x)*(B.y-A.y)) / ((C.y-A.y)*(B.x-A.x)-(C.x-A.x)*(B.y-A.y));
-	// float a = 1-b-c;
+
 	float x = p.x, y=p.y;
 	float x1 = A.x, y1 = A.y;
 	float x2 = B.x, y2 = B.y;

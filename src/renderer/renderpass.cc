@@ -174,6 +174,7 @@ void RenderPassLine::onFrame(){
         // render primitive
         auto& rasterizer = static_cast<RasterizerLine&>(*m_ctx->m_rasterizer);
         m_ctx->m_shader->gl_FragColor = glm::vec4(1.0f,1.0f,1.0f,1.0f);
+        //spdlog::info("go");
         rasterizer.drawTriangle(tri,*m_ctx->m_shader,*m_ctx->m_framebuffer);
         
 

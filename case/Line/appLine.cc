@@ -4,7 +4,7 @@
 namespace Fallment{
 
 const char *TITLE = "Fallment real time soft render";
-const char *OBJ_PATH = "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\african_head0.obj";
+const char *OBJ_PATH = "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\bunny.obj";
 //const char *OBJ_TEXTURE_PATH =  "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\african_head_diffuse.tga";
 
 constexpr int WINDOW_WIDTH = 800;
