@@ -43,12 +43,32 @@ Mesh::Mesh(const std::string& filename) {
             int f, t, n;
             iss >> trash;
             int cnt = 0;
-            while(iss >> f >> trash >> t >> trash >> n) {
-                facet_vert.push_back(--f);
-                facet_texcoord.push_back(--t);
-                facet_norm.push_back(--n);
-                ++cnt;
+            if(texcoords.size()>0&&normals.size()>0){
+                while(iss >> f >> trash >> t >> trash >> n) {
+                    facet_vert.push_back(--f);
+                    facet_texcoord.push_back(--t);
+                    facet_norm.push_back(--n);
+                    ++cnt;
+                }
+            }else if(texcoords.size()>0&&normals.size()==0){
+                while(iss >> f >> trash >> t >> trash) {
+                    facet_vert.push_back(--f);
+                    facet_texcoord.push_back(--t);
+                    ++cnt;
+                }                
+            }else if(texcoords.size()==0&&normals.size()>0){
+                while(iss >> f >> trash >> trash >> n) {
+                    facet_vert.push_back(--f);
+                    facet_norm.push_back(--n);
+                    ++cnt;
+                }   
+            }else if(texcoords.size()==0&&normals.size()==0){
+                while(iss >> f) {
+                    facet_vert.push_back(--f);
+                    ++cnt;
+                }   
             }
+
             if(cnt != 3) {
                 std::cerr << "Error: the obj file is supposed to be triangulated" << std::endl;
                 in.close();
