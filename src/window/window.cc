@@ -28,6 +28,18 @@ bool Window::onInit(){
     /* Make the window's context current */
     glfwMakeContextCurrent(_window);
 
+    glfwSetWindowSizeCallback(_window, fnptr<void(GLFWwindow*,int,int)>(
+        [this](GLFWwindow* window, int width, int height){this->window_size_callback(window,width,height);}
+    ));
+    glfwSetCursorPosCallback(_window, fnptr<void(GLFWwindow*,double,double)>(
+        [this](GLFWwindow* window, double xpos, double ypos){this->mouse_callback(window,xpos,ypos);}
+    ));
+    glfwSetScrollCallback(_window, fnptr<void(GLFWwindow*,double,double)>(
+        [this](GLFWwindow* window, double xoffset, double yoffset){this->scroll_callback(window,xoffset,yoffset);}
+    ));
+
+    _dispatcher = std::make_unique<EventDispatcher>();
+
     return true;
 }
 
@@ -66,6 +78,18 @@ void Window::processInput()
 
     if (glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(_window, true);
+}
+
+void Window::window_size_callback(GLFWwindow* window, int width, int height){
+    spdlog::info("window_size_callback");
+}
+void Window::mouse_callback(GLFWwindow* window, double xpos, double ypos){
+
+    spdlog::info("mouse_callback");
+
+}
+void Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
+    spdlog::info("scroll_callback");
 }
 
 }

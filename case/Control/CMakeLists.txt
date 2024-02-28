@@ -7,6 +7,7 @@ target_include_directories( ${PROJECT_NAME}_control
                             PUBLIC ${CMAKE_SOURCE_DIR}/vendor/
                             PUBLIC ${CMAKE_SOURCE_DIR}/src
                             PUBLIC ${CMAKE_SOURCE_DIR}/src/app 
+                            PUBLIC ${CMAKE_SOURCE_DIR}/src/control
                             PUBLIC ${CMAKE_SOURCE_DIR}/src/math
                             PUBLIC ${CMAKE_SOURCE_DIR}/src/renderer
                             PUBLIC ${CMAKE_SOURCE_DIR}/src/window
