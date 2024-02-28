@@ -12,4 +12,5 @@ file(GLOB_RECURSE APP_SRC ${CMAKE_SOURCE_DIR}/src/*.hh ${CMAKE_SOURCE_DIR}/src/*
 # add_definitions(-D_MSC_VER)
 
 # add_subdirectory("case/Phong")
-add_subdirectory("case/Line")
+# add_subdirectory("case/Line")
+add_subdirectory("case/Control")
