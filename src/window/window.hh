@@ -48,6 +48,8 @@ public:
 
     void setFramebuffer(std::shared_ptr<Framebuffer> fb);
 
+    EventDispatcher* getEventDispatcher();
+
 
 private:
     void processInput();

@@ -81,15 +81,21 @@ void Window::processInput()
 }
 
 void Window::window_size_callback(GLFWwindow* window, int width, int height){
-    spdlog::info("window_size_callback");
+    
+
+    //spdlog::info("window_size_callback");
 }
 void Window::mouse_callback(GLFWwindow* window, double xpos, double ypos){
 
-    spdlog::info("mouse_callback");
+    //spdlog::info("mouse_callback");
 
 }
 void Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
-    spdlog::info("scroll_callback");
+    //spdlog::info("scroll_callback");
+}
+
+EventDispatcher* Window::getEventDispatcher(){
+    return _dispatcher.get();
 }
 
 }

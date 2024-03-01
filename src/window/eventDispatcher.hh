@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <functional>
+#include <vector>
 
 namespace Fallment{
 
@@ -14,16 +15,16 @@ class EventDispatcher
     
 
 public:
-    EventDispatcher()=default;
+    EventDispatcher();
     ~EventDispatcher()=default;
 
-    EventDispatcher(std::unique_ptr<Event>&& Event);
 
-    void SetEventCallback(const EventCallbackFn& callback);
+    void addEventCallback(const EventCallbackFnType& callback,const EventType& eventtype);
+    void removeEventCallback(const EventCallbackFnType& callback,const EventType& eventtype);
 
 private:
 
-    EventCallbackFn EventCallback;
+     std::vector<std::vector<EventCallbackFnType>> EventCallbacks;
 
 };
 
