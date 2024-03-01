@@ -4,6 +4,8 @@
 
 #include "controls.hh"
 #include "renderer/camera.hh"
+#include "window/event.hh"
+#include "window/eventDispatcher.hh"
 
 #include <memory>
 
@@ -21,8 +23,13 @@ public:
     bool onInit() override;
     bool onUpdate() override;
     void onDestory() override;
+    void onEvent(const Event& e) override;
 
 private:
+
+    void onMousePosEvent(const Event& e);
+    void onMouseScrollEvent(const Event& e);
+    void onWindowSizeEvent(const Event& e);
 
     std::unique_ptr<Camera>  m_camera;
 };
