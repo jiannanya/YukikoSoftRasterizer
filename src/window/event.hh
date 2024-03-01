@@ -86,7 +86,7 @@ using EventCallbackFn = std::function<void(const Event&)>;
 static int EventCallbackTypeId = 0;
 struct EventCallbackFnType{
 
-    EventCallbackFnType(EventCallbackFn f):fn{f},id{id++}{}
+    EventCallbackFnType(EventCallbackFn f):fn{f},id{EventCallbackTypeId++}{}
 
     EventCallbackFn fn;
     int id;
