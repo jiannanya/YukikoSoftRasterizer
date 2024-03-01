@@ -36,6 +36,8 @@ public:
     WindowSizeEvent() = default;
     ~WindowSizeEvent() = default;
 
+    WindowSizeEvent(int w, int h):width{w},height{h}{}
+
 public:
 
     int width;
@@ -52,6 +54,8 @@ class MouseScrollEvent: public Event{
 public:
     MouseScrollEvent() = default;
     ~MouseScrollEvent() = default;
+
+    MouseScrollEvent(double x, double y):xoffset{x},yoffset{y}{}
 public:
     double xoffset;
     double yoffset;
@@ -77,7 +81,7 @@ public:
 };
 
 
-using EventCallbackFn = std::function<void(Event&)>;
+using EventCallbackFn = std::function<void(const Event&)>;
 
 static int EventCallbackTypeId = 0;
 struct EventCallbackFnType{

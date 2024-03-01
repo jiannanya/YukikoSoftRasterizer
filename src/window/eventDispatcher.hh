@@ -18,6 +18,7 @@ public:
     EventDispatcher();
     ~EventDispatcher()=default;
 
+    void dispatch(const Event& e);
 
     void addEventCallback(const EventCallbackFnType& callback);
     void removeEventCallback(const EventCallbackFnType& callback);

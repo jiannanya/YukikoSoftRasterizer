@@ -32,4 +32,10 @@ void EventDispatcher::removeEventCallback(const EventCallbackFnType& callback){
     );
 }
 
+void EventDispatcher::dispatch(const Event& e){
+    for(auto&cb: EventCallbacks){
+        cb.fn(e);
+    }
+}
+
 }
