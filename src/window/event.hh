@@ -12,7 +12,11 @@ enum class EventType{
     WindowSize      =1,
     WindowClose     =2,
     MouseScroll     =3,
-    MousePos        =4
+    MousePos        =4,
+    MousePush       =5,
+    MouseRelease    =6,
+    MouseDrag       =7,
+    KeyBoard        =8,
 
 };
 
@@ -61,6 +65,15 @@ public:
     double xpos;
     double ypos;
     
+};
+
+class KeyEvent: public Event{
+public:
+    KeyEvent() = default;
+    ~KeyEvent() = default;
+
+public:
+    int key;
 };
 
 

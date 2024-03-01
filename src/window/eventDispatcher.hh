@@ -19,12 +19,12 @@ public:
     ~EventDispatcher()=default;
 
 
-    void addEventCallback(const EventCallbackFnType& callback,const EventType& eventtype);
-    void removeEventCallback(const EventCallbackFnType& callback,const EventType& eventtype);
+    void addEventCallback(const EventCallbackFnType& callback);
+    void removeEventCallback(const EventCallbackFnType& callback);
 
 private:
 
-     std::vector<std::vector<EventCallbackFnType>> EventCallbacks;
+     std::vector<EventCallbackFnType> EventCallbacks;
 
 };
 
