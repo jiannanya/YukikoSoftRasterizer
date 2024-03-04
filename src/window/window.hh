@@ -23,6 +23,8 @@ auto fnptr_(Callable&& c, Ret(*)(Args...))
 {
 
     static storage<Callable> s;
+    using type = decltype(s.callable);
+    new (&s.callable) type(std::forward<Callable>(c));
 
     return [](Args... args) -> Ret {
         return Ret(s.callable(std::forward<Args>(args)...));
@@ -66,6 +68,7 @@ private:
 
 private:
     std::unique_ptr<EventDispatcher>    _dispatcher;
+
 };
 
 

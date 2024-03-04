@@ -18,7 +18,7 @@ public:
     FpsControls() = default;
     virtual ~FpsControls() = default;
 
-    FpsControls(std::unique_ptr<Camera>&& camera);
+    FpsControls(std::shared_ptr<Camera> camera);
 
 public:
     bool onInit() override;
@@ -32,7 +32,7 @@ private:
     void onMouseScrollEvent(const Event& e);
     void onWindowSizeEvent(const Event& e);
 
-    std::unique_ptr<Camera>  m_camera;
+    std::shared_ptr<Camera>  m_camera;
 };
 
 

@@ -22,7 +22,7 @@ public:
     ~Context();
 
     //void setWindow(std::unique_ptr<Window> window);
-    void setCamera(std::unique_ptr<Camera>&& camera);
+    void setCamera(std::shared_ptr<Camera> camera);
     void setShader(std::unique_ptr<Shader>&& shader);
     void setVertexShaderIn(std::unique_ptr<VertexInData>&& _data);
     void setVertexShaderOut(std::unique_ptr<VertexOutData>&& _data);
@@ -56,7 +56,7 @@ private:
     bool isCtxOk();
 
     //std::unique_ptr<Window> m_window;
-    std::unique_ptr<Camera>             m_camera;
+    std::shared_ptr<Camera>             m_camera;
     std::unique_ptr<Shader>             m_shader;
     std::unique_ptr<VertexInData>       m_vertex_in;
     std::unique_ptr<VertexOutData>      m_vertex_out;

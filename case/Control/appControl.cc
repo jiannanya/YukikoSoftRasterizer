@@ -39,8 +39,8 @@ bool AppControl::onInit(){
         return false;
     }
     m_window->setFramebuffer(ctx_framebuffer);
-
-    m_controls = std::make_unique<FpsControls>();
+    auto  ctx_camera = std::make_shared<Camera>(FOV_INIT, float(WINDOW_WIDTH) / float(WINDOW_HEIGHT),CAM_POS_INIT, CAM_TARGET_INIT,CAM_UP_INIT);
+    m_controls = std::make_unique<FpsControls>(ctx_camera);
     //std::function<void(const Event&)> f = std::bind(&Controls::onEvent,*m_controls,std::placeholders::_1);
 
     if(m_window->getEventDispatcher()){
@@ -58,7 +58,7 @@ bool AppControl::onInit(){
         return false;
     }
     auto  ctx_texture = std::make_unique<Texture>(std::string(OBJ_TEXTURE_PATH));
-    auto  ctx_camera = std::make_unique<Camera>(FOV_INIT, float(WINDOW_WIDTH) / float(WINDOW_HEIGHT),CAM_POS_INIT, CAM_TARGET_INIT,CAM_UP_INIT);
+    
     auto  ctx_model_matrix = glm::mat4{1.0f};
     auto  ctx_shader = std::make_unique<PhongShader>();
     auto  ctx_PhongShaderVertexIn = std::make_unique<VertexInDataPhong>(
@@ -118,7 +118,7 @@ bool AppControl::onInit(){
     m_ctx = std::make_shared<Context>();
     m_ctx->setFrameBuffer(std::move(ctx_framebuffer));
 
-    m_ctx->setCamera(std::move(ctx_camera));
+    m_ctx->setCamera(ctx_camera);
     m_ctx->setScene(std::move(ctx_scene));
 
     m_ctx->setShader(std::move(ctx_shader));

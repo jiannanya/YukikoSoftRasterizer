@@ -29,13 +29,14 @@ bool Window::onInit(){
     glfwMakeContextCurrent(_window);
 
     glfwSetWindowSizeCallback(_window, fnptr<void(GLFWwindow*,int,int)>(
-        [this](GLFWwindow* window, int width, int height){this->window_size_callback(window,width,height);}
+        [this](GLFWwindow* window, int width, int height){this->window_size_callback(window, width,height);}
     ));
     glfwSetCursorPosCallback(_window, fnptr<void(GLFWwindow*,double,double)>(
-        [this](GLFWwindow* window, double xpos, double ypos){this->mouse_callback(window,xpos,ypos);}
+        [this](GLFWwindow* window, double xpos, double ypos){this->mouse_callback(window, xpos,ypos);}
     ));
+
     glfwSetScrollCallback(_window, fnptr<void(GLFWwindow*,double,double)>(
-        [this](GLFWwindow* window, double xoffset, double yoffset){this->scroll_callback(window,xoffset,yoffset);}
+        [this](GLFWwindow* window, double xoffset, double yoffset){this->scroll_callback(window, xoffset,yoffset);}
     ));
 
     _dispatcher = std::make_unique<EventDispatcher>();
@@ -82,7 +83,7 @@ void Window::processInput()
 
 void Window::window_size_callback(GLFWwindow* window, int width, int height){
     
-    WindowSizeEvent e(width,height);
+    WindowSizeEvent e(width,height,EventType::WindowSize, false);
     if(_dispatcher.get()){
         _dispatcher->dispatch(e);
     }
@@ -90,16 +91,15 @@ void Window::window_size_callback(GLFWwindow* window, int width, int height){
     //spdlog::info("window_size_callback");
 }
 void Window::mouse_callback(GLFWwindow* window, double xpos, double ypos){
-
+    
 
     //spdlog::info("mouse_callback");
 
 }
 void Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
-    spdlog::info("scroll_callback");
-    MouseScrollEvent e(xoffset,yoffset);
+    //spdlog::info("scroll_callback");
+    MouseScrollEvent e(xoffset,yoffset,EventType::MouseScroll,false);
     if(_dispatcher.get()){
-        spdlog::info("scroll_callback 2");
         _dispatcher->dispatch(e);
     }
     

@@ -2,8 +2,8 @@
 
 namespace Fallment{
 
-FpsControls::FpsControls(std::unique_ptr<Camera>&& camera){
-    m_camera = std::move(camera);
+FpsControls::FpsControls(std::shared_ptr<Camera> camera){
+    m_camera = camera;
 }
 
 
@@ -14,7 +14,6 @@ bool FpsControls::onUpdate(){
 
     while (!control_operation_queue.empty())
     {
-        spdlog::debug("fps control on update 2");
         auto op = std::move(control_operation_queue.front());
         (*op)();
         control_operation_queue.pop();
@@ -31,7 +30,7 @@ void FpsControls::onDestory(){
 
 void FpsControls::onEvent(const Event& e){
 
-    spdlog::debug("fps controls on event");
+    //spdlog::debug("fps controls on event {}",static_cast<int>(e.m_Type));
 
     switch (e.m_Type)
     {
@@ -80,6 +79,8 @@ void FpsControls::onMousePosEvent(const Event& e){
     auto& ev = static_cast<MousePosEvent&>(const_cast<Event&>(e));
     if(m_camera.get()){
         this->control_operation_queue.emplace(std::make_unique<MousePosOperation>(*m_camera,ev.xpos,ev.ypos));
+    }else{
+        spdlog::error("fps control has no useful camera to use");
     }
 }
 
@@ -89,7 +90,7 @@ void FpsControls::onMouseScrollEvent(const Event& e){
         MouseScrollOperation(const Camera& cam, double xoffset, double yoffset  ):
         m_cam{cam},m_xoffset{xoffset},m_yoffset{yoffset}{}
         void operator()() override{
-            
+            spdlog::debug("fps mouse scroll operation");
         }
     private:
         const Camera& m_cam;
@@ -100,6 +101,8 @@ void FpsControls::onMouseScrollEvent(const Event& e){
     auto& ev = static_cast<MouseScrollEvent&>(const_cast<Event&>(e));
     if(m_camera.get()){
         this->control_operation_queue.emplace(std::make_unique<MouseScrollOperation>(*m_camera,ev.xoffset,ev.yoffset));
+    }else{
+        spdlog::error("fps control has no useful camera to use");
     }
 }
 
@@ -120,6 +123,8 @@ void FpsControls::onWindowSizeEvent(const Event& e){
     auto& ev = static_cast<WindowSizeEvent&>(const_cast<Event&>(e));
     if(m_camera.get()){
         this->control_operation_queue.emplace(std::make_unique<WindowSizeOperation>(*m_camera,ev.width,ev.height));
+    }else{
+        spdlog::error("fps control has no useful camera to use");
     }
 }
 

@@ -19,8 +19,8 @@ Context::~Context(){}
 //     m_window = window;
 // }
 
-void Context::setCamera(std::unique_ptr<Camera>&& camera){
-    m_camera = std::move(camera);
+void Context::setCamera(std::shared_ptr<Camera> camera){
+    m_camera = camera;
 }
 
 void Context::setShader(std::unique_ptr<Shader>&& shader){

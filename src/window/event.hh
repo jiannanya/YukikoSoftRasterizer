@@ -25,6 +25,8 @@ public:
     Event() = default;
     ~Event() = default;
 
+    Event(EventType et = EventType::None, bool handled = false):m_Type{et},m_Handled{handled}{}
+
 public:
 	bool m_Handled;	
     EventType m_Type;
@@ -36,7 +38,7 @@ public:
     WindowSizeEvent() = default;
     ~WindowSizeEvent() = default;
 
-    WindowSizeEvent(int w, int h):width{w},height{h}{}
+    WindowSizeEvent(int w, int h,EventType et, bool handled):width{w},height{h},Event{et,handled}{}
 
 public:
 
@@ -55,7 +57,7 @@ public:
     MouseScrollEvent() = default;
     ~MouseScrollEvent() = default;
 
-    MouseScrollEvent(double x, double y):xoffset{x},yoffset{y}{}
+    MouseScrollEvent(double x, double y,EventType et, bool handled):xoffset{x},yoffset{y},Event{et,handled}{}
 public:
     double xoffset;
     double yoffset;
