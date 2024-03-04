@@ -1,6 +1,8 @@
 #ifndef __CONTROLLER_H
 #define __CONTROLLER_H
 
+#include "window/event.hh"
+
 #include <queue>
 namespace Fallment{
 

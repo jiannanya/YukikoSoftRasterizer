@@ -16,6 +16,7 @@ EventDispatcher::EventDispatcher(){
 }
 
 void EventDispatcher::addEventCallback(const EventCallbackFnType& callback){
+    spdlog::debug("window add event call back");
     EventCallbacks.emplace_back(callback);
 }
 
@@ -33,6 +34,7 @@ void EventDispatcher::removeEventCallback(const EventCallbackFnType& callback){
 }
 
 void EventDispatcher::dispatch(const Event& e){
+    spdlog::debug("dispatcher on dispatch");
     for(auto&cb: EventCallbacks){
         cb.fn(e);
     }

@@ -6,6 +6,7 @@
 #include "renderer/camera.hh"
 #include "window/event.hh"
 #include "window/eventDispatcher.hh"
+#include "spdlog/spdlog.h"
 
 #include <memory>
 

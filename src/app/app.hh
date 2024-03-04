@@ -15,6 +15,7 @@
 #include "scene.hh"
 #include "context.hh"
 #include "controls.hh"
+#include "fpsControl.hh"
 
 namespace Fallment{
 

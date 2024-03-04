@@ -14,12 +14,15 @@ bool FpsControls::onUpdate(){
 
     while (!control_operation_queue.empty())
     {
+        spdlog::debug("fps control on update 2");
         auto op = std::move(control_operation_queue.front());
         (*op)();
         control_operation_queue.pop();
     }
     
 
+
+    return true;
 }
 
 void FpsControls::onDestory(){
@@ -27,6 +30,9 @@ void FpsControls::onDestory(){
 }
 
 void FpsControls::onEvent(const Event& e){
+
+    spdlog::debug("fps controls on event");
+
     switch (e.m_Type)
     {
     case EventType::MousePos:
@@ -63,7 +69,7 @@ void FpsControls::onMousePosEvent(const Event& e){
         MousePosOperation(const Camera& cam, double xpos, double ypos  )
         :m_cam{cam},m_xpos{xpos},m_ypos{ypos}{}
         void operator()() override{
-            
+            spdlog::debug("fps mouse pos operation");
         }
     private:
         const Camera& m_cam;
@@ -107,8 +113,8 @@ void FpsControls::onWindowSizeEvent(const Event& e){
         }
     private:
         const Camera& m_cam;
-        double m_width;
-        double m_height;
+        int m_width;
+        int m_height;
     };
 
     auto& ev = static_cast<WindowSizeEvent&>(const_cast<Event&>(e));

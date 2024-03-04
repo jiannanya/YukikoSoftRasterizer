@@ -7,6 +7,7 @@
 #include <functional>
 #include <vector>
 
+#include "spdlog/spdlog.h"
 namespace Fallment{
 
 class EventDispatcher

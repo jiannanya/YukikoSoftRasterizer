@@ -18,6 +18,9 @@ public:
     virtual void onFrame()override;
     virtual void onDestory()override;
     virtual void run()override;
+private: 
+
+    std::vector<std::unique_ptr<EventCallbackFnType>> m_ecft;
 };
 
 

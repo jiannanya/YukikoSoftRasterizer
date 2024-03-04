@@ -40,7 +40,16 @@ bool AppControl::onInit(){
     }
     m_window->setFramebuffer(ctx_framebuffer);
 
+    m_controls = std::make_unique<FpsControls>();
+    //std::function<void(const Event&)> f = std::bind(&Controls::onEvent,*m_controls,std::placeholders::_1);
 
+    if(m_window->getEventDispatcher()){
+        auto et = std::make_unique<EventCallbackFnType>(std::bind(&FpsControls::onEvent,dynamic_cast<FpsControls*>(m_controls.get()),std::placeholders::_1));
+        m_window->getEventDispatcher()->addEventCallback(*et);
+        m_ecft.emplace_back(std::move(et));
+    }else{
+        spdlog::error("window does not has event dispatcher");
+    }
 
     auto  ctx_model1 = std::make_unique<Mesh>(OBJ_PATH);
 
@@ -147,6 +156,7 @@ bool AppControl::onUpdate(){
     if(m_controls.get()){
         m_controls->onUpdate();
     }
+
     if(m_ctx.get()&&m_renderpass.get()){
         m_ctx->onUpdate();
         m_renderpass->onUpdate();
@@ -163,7 +173,6 @@ bool AppControl::onUpdate(){
 }
 
 void AppControl::onFrame(){
-    //spdlog::debug("on frame");
     if(m_window.get()&&m_renderpass.get()){
         m_renderpass->onFrame();
         m_window->onFrame();

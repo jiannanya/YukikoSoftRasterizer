@@ -96,9 +96,10 @@ void Window::mouse_callback(GLFWwindow* window, double xpos, double ypos){
 
 }
 void Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
-    //spdlog::info("scroll_callback");
+    spdlog::info("scroll_callback");
     MouseScrollEvent e(xoffset,yoffset);
     if(_dispatcher.get()){
+        spdlog::info("scroll_callback 2");
         _dispatcher->dispatch(e);
     }
     
