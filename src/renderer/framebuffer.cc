@@ -25,7 +25,15 @@ Framebuffer::Framebuffer(int width, int height)
 
 };
 
-Framebuffer::~Framebuffer() {};
+Framebuffer::~Framebuffer() {
+    if(m_ColorBuffer){
+        delete [] m_ColorBuffer;
+    }
+    if(m_ZBuffer){
+        delete [] m_ZBuffer;
+    }
+    
+};
 
 
 BYTE*& Framebuffer::getColorBuffer() {
