@@ -67,9 +67,9 @@ void Framebuffer::clearColorBuffer(glm::vec4 color) {
 
 void Framebuffer::clearZBuffer(){
     //std::unique_lock<std::mutex>(m_z_mutex);
-    memset(m_ZBuffer,std::numeric_limits<float>::lowest(),m_PixelCount);
-    // for (int i=m_PixelCount-1;i>=0 ;i--)
-    //     m_ZBuffer[i] = -(std::numeric_limits<float>::max)() ;
+    memset(m_ZBuffer,-0x3f,m_PixelCount*sizeof(float));
+    // for (int i=0;i<m_PixelCount ;++i)
+    //     m_ZBuffer[i] = std::numeric_limits<float>::lowest() ;
 }
 
 
