@@ -67,6 +67,8 @@ class MousePosEvent: public Event{
 public:
     MousePosEvent() = default;
     ~MousePosEvent() = default;
+
+   MousePosEvent(double x, double y,EventType et, bool handled):xpos{x},ypos{y},Event{et,handled}{}
 public:
     double xpos;
     double ypos;

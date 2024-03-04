@@ -68,7 +68,7 @@ void FpsControls::onMousePosEvent(const Event& e){
         MousePosOperation(const Camera& cam, double xpos, double ypos  )
         :m_cam{cam},m_xpos{xpos},m_ypos{ypos}{}
         void operator()() override{
-            spdlog::debug("fps mouse pos operation");
+            //spdlog::debug("fps mouse pos operation");
         }
     private:
         const Camera& m_cam;

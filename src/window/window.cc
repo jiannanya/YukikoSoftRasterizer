@@ -84,8 +84,8 @@ void Window::processInput()
 
 void Window::window_size_callback(GLFWwindow* window, int width, int height){
     
-    WindowSizeEvent e(width,height,EventType::WindowSize, false);
     if(_dispatcher.get()){
+        WindowSizeEvent e(width,height,EventType::WindowSize, false);
         _dispatcher->dispatch(e);
     }
 
@@ -93,14 +93,17 @@ void Window::window_size_callback(GLFWwindow* window, int width, int height){
 }
 void Window::mouse_callback(GLFWwindow* window, double xpos, double ypos){
     
-
+    if(_dispatcher.get()){
+        MousePosEvent e(xpos,ypos,EventType::MousePos, false);
+        _dispatcher->dispatch(e);
+    }
     //spdlog::info("mouse_callback");
 
 }
 void Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
     //spdlog::info("scroll_callback");
-    MouseScrollEvent e(xoffset,yoffset,EventType::MouseScroll,false);
     if(_dispatcher.get()){
+        MouseScrollEvent e(xoffset,yoffset,EventType::MouseScroll,false);
         _dispatcher->dispatch(e);
     }
     
