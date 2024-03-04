@@ -87,19 +87,28 @@ void FpsControls::onMousePosEvent(const Event& e){
 void FpsControls::onMouseScrollEvent(const Event& e){
     class MouseScrollOperation:public ControlOperation{
     public:
-        MouseScrollOperation(const Camera& cam, double xoffset, double yoffset  ):
+        MouseScrollOperation(Camera& cam, double xoffset, double yoffset  ):
         m_cam{cam},m_xoffset{xoffset},m_yoffset{yoffset}{}
         void operator()() override{
-            spdlog::debug("fps mouse scroll operation");
+            
+            m_cam.m_Fovy -= mth::degreesToRadians((float)m_yoffset);
+            if (m_cam.m_Fovy < mth::degreesToRadians(1.0f))
+                m_cam.m_Fovy = mth::degreesToRadians(1.0f);
+            if (m_cam.m_Fovy > mth::degreesToRadians(45.0f))
+                m_cam.m_Fovy = mth::degreesToRadians(45.0f);
+
+            //spdlog::debug("fps mouse scroll operation {} {} {}",m_xoffset , m_yoffset,m_cam.m_Fovy);
+            m_cam.updateProjectionMatrix();
         }
     private:
-        const Camera& m_cam;
+        Camera& m_cam;
         double m_xoffset;
         double m_yoffset;
     };
 
     auto& ev = static_cast<MouseScrollEvent&>(const_cast<Event&>(e));
     if(m_camera.get()){
+        //spdlog::info("fps camera ref count: {}",m_camera.use_count());
         this->control_operation_queue.emplace(std::make_unique<MouseScrollOperation>(*m_camera,ev.xoffset,ev.yoffset));
     }else{
         spdlog::error("fps control has no useful camera to use");

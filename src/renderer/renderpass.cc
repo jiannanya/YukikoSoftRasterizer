@@ -20,6 +20,9 @@ void RenderPassPhong::onInit(){
 
 }
 void RenderPassPhong::onUpdate(){
+    auto& PhongVertexIn = static_cast<VertexInDataPhong&>(*(m_ctx->m_shader->_vertexIn));
+    PhongVertexIn.viewMatrix = m_ctx->m_camera->getViewMatrix();
+    PhongVertexIn.projectionMatrix = m_ctx->m_camera->getProjectionMatrix();
 
 }
 void RenderPassPhong::onFrame(){
@@ -47,12 +50,11 @@ void RenderPassPhong::onFrame(){
         }
 
         unsigned discardCount = 0;
-        
+        auto& PhongVertexIn = static_cast<VertexInDataPhong&>(*(m_ctx->m_shader->_vertexIn));
+        auto& PhongVertexOut = static_cast<VertexOutDataPhong&>(*(m_ctx->m_shader->_vertexOut));        
         for(int k = 0; k < 3; ++k){
-            auto& PhongVertexIn = static_cast<VertexInDataPhong&>(*(m_ctx->m_shader->_vertexIn));
-            auto& PhongVertexOut = static_cast<VertexOutDataPhong&>(*(m_ctx->m_shader->_vertexOut));
-            PhongVertexIn.position = tri._ve[k];
 
+            PhongVertexIn.position = tri._ve[k];
 
             // 2. transform to clip coordinates using vertex shader
             m_ctx->m_shader->vertex(*(m_ctx->m_shader->_vertexIn),*(m_ctx->m_shader->_vertexOut));
@@ -116,6 +118,10 @@ void RenderPassLine::onInit(){
 }
 void RenderPassLine::onUpdate(){
 
+    auto& PhongVertexIn = static_cast<VertexInDataPhong&>(*(m_ctx->m_shader->_vertexIn));
+    PhongVertexIn.viewMatrix = m_ctx->m_camera->getViewMatrix();
+    PhongVertexIn.projectionMatrix = m_ctx->m_camera->getProjectionMatrix();
+
 }
 void RenderPassLine::onFrame(){
     m_ctx->m_framebuffer->clearColorBuffer(m_ctx->m_clearColor);
@@ -136,10 +142,10 @@ void RenderPassLine::onFrame(){
         }
 
         unsigned discardCount = 0;
-        
+        auto& PhongVertexIn = static_cast<VertexInDataPhong&>(*(m_ctx->m_shader->_vertexIn));
+        auto& PhongVertexOut = static_cast<VertexOutDataPhong&>(*(m_ctx->m_shader->_vertexOut));
         for(int k = 0; k < 3; ++k){
-            auto& PhongVertexIn = static_cast<VertexInDataPhong&>(*(m_ctx->m_shader->_vertexIn));
-            auto& PhongVertexOut = static_cast<VertexOutDataPhong&>(*(m_ctx->m_shader->_vertexOut));
+
             PhongVertexIn.position = tri._ve[k];
 
             // 2. transform to clip coordinates using vertex shader

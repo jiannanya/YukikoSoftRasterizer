@@ -34,7 +34,7 @@ void EventDispatcher::removeEventCallback(const EventCallbackFnType& callback){
 }
 
 void EventDispatcher::dispatch(const Event& e){
-    spdlog::debug("dispatcher on dispatch");
+    //spdlog::debug("dispatcher on dispatch");
     for(auto&cb: EventCallbacks){
         cb.fn(e);
     }

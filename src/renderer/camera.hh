@@ -32,7 +32,7 @@ public:
     glm::vec3 getTarget();
     glm::vec3 getUp();
 
-private:
+public:
     void updateViewMatrix();
     void updateProjectionMatrix();
     void updateViewProjectionMatrix();

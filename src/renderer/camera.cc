@@ -40,13 +40,13 @@ void Camera::updateViewMatrix() {
 }
 
 void Camera::updateProjectionMatrix() {
-    spdlog::debug("update Camera ProjectionMatrix");
+    //spdlog::debug("update Camera ProjectionMatrix");
     m_ProjectionMatrix = mth::perspective(m_Fovy, m_Aspect, 0.1f, 100.0f);
     updateViewProjectionMatrix();
 }
 
 void Camera::updateViewProjectionMatrix() {
-    spdlog::debug("update Camera ViewProjectionMatrix");
+    //spdlog::debug("update Camera ViewProjectionMatrix");
     m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 }
 

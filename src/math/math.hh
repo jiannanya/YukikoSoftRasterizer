@@ -9,6 +9,9 @@ namespace Fallment::mth{
 
 constexpr const float PI = std::numbers::pi;
 
+inline float degreesToRadians(float angle) { return angle*PI/180.0f; }
+inline float radiansToDegrees(float angle) { return angle*180.0f/PI; }
+
 inline float frac(float t) {
     float r = t - (int)t;
     if(r < 0.f)
@@ -20,6 +23,7 @@ inline float frac(float t) {
 inline float gamma(float x){
     return glm::pow(x,1.0/2.2);
 }
+
 
 //求反射向量
 inline glm::vec3 reflect(const glm::vec3& I, const glm::vec3& N)

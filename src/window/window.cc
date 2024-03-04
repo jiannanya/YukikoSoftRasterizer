@@ -58,6 +58,7 @@ void Window::onFrame(){
 
 bool Window::onUpdate(){
     if(glfwWindowShouldClose(_window))return false;
+    processInput();
     glfwPollEvents();
 
     return true;
