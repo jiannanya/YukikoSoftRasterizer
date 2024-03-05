@@ -90,6 +90,7 @@ void FpsControls::onMousePosEvent(const Event& e){
             //spdlog::debug("fps mouse pos operation {} {} {}", frontoffset.x, frontoffset.y,frontoffset.z);
 
             m_cam.updateFront(m_cam.m_Front+frontoffset*turnSpeed);
+            //m_cam.updateTarget(m_cam.m_Target+frontoffset*turnSpeed);
 
 
         }
@@ -97,7 +98,7 @@ void FpsControls::onMousePosEvent(const Event& e){
     glm::vec3 getCameraFrontOffset(float xpos, float ypos) {
 
             float xoffset = xpos - fc->lastX;
-            float yoffset = fc->lastY - ypos; // reversed since y-coordinates go from bottom to top
+            float yoffset = ypos - fc->lastY;
             fc->lastX = xpos;
             fc->lastY = ypos;
 
@@ -106,7 +107,7 @@ void FpsControls::onMousePosEvent(const Event& e){
             glm::vec3 xVec = -xoffset * right;
             //spdlog::debug("fps mouse pos operation {0} {1} {2} {3} {4} {5} {6} {7} {8}", right.x, right.y,right.z,m_cam.m_Front.x,m_cam.m_Front.y,m_cam.m_Front.z ,m_cam.m_UpWorld.x, m_cam.m_UpWorld.y,m_cam.m_UpWorld.z);
             glm::vec3 yVec = -yoffset * m_cam.m_UpDir;
-            spdlog::debug("fps mouse pos operation {0} {1} {2}",m_cam.m_UpDir.x,m_cam.m_UpDir.y,m_cam.m_UpDir.z);
+            //spdlog::debug("fps mouse pos operation {0} {1} {2}",m_cam.m_UpDir.x,m_cam.m_UpDir.y,m_cam.m_UpDir.z);
             return glm::normalize(xVec+yVec);
 
     }

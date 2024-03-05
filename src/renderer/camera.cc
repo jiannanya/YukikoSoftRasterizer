@@ -34,6 +34,7 @@ void Camera::updatePosition(glm::vec3 position) {
 }
 void Camera::updateTarget(glm::vec3 tar){
     m_Target = tar;
+    m_Front = m_Target-m_Position;
     updateViewMatrix();
 }
 
@@ -51,7 +52,7 @@ void Camera::updateViewMatrix() {
 
 void Camera::updateProjectionMatrix() {
     //spdlog::debug("update Camera ProjectionMatrix");
-    m_ProjectionMatrix = mth::perspective(m_Fovy, m_Aspect, 0.1f, 100.0f);
+    m_ProjectionMatrix = mth::perspective(m_Fovy, m_Aspect, 0.1f, 1000.0f);
     updateViewProjectionMatrix();
 }
 

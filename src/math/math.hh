@@ -97,7 +97,7 @@ inline glm::mat4 perspective(float fov, float aspect, float znear, float zfar) {
     ret[2][2] = - (zfar + znear) / (zfar - znear);
 	ret[2][3] = - 1.0f;
     ret[3][2] = - (2.0f * znear * zfar) / (zfar - znear);
-	//ret = glm::perspective(fov,aspect,znear,zfar);
+	ret = glm::perspective(fov,aspect,znear,zfar);
     return ret;
 }
 
@@ -115,7 +115,7 @@ inline glm::mat4 orthographic(float left,float right,float bottom,float top,floa
 
 inline glm::mat4 lookat(glm::vec3 camera, glm::vec3 target, glm::vec3 up = glm::vec3(0,1,0)) {
 
-	//ret = glm::lookAt(eye,target,up);
+
     glm::vec3 forward = glm::normalize(camera- target);               
     glm::vec3 left = glm::normalize(glm::cross(up, forward)); 
 
@@ -134,6 +134,8 @@ inline glm::mat4 lookat(glm::vec3 camera, glm::vec3 target, glm::vec3 up = glm::
     viewMatrix[3][0]= -left.x * camera.x - left.y * camera.y - left.z * camera.z;
     viewMatrix[3][1]= -up.x * camera.x - up.y * camera.y - up.z * camera.z;
     viewMatrix[3][2]= -forward.x * camera.x - forward.y * camera.y - forward.z * camera.z;
+	
+	viewMatrix = glm::lookAt(camera,target,up);
 
 	return viewMatrix;
 
