@@ -11,6 +11,7 @@ public:
     glm::vec3 m_Position;
     glm::vec3 m_Target;
     glm::vec3 m_UpDir;
+    glm::vec3 m_Front;
 
     glm::mat4 m_ViewMatrix;
     glm::mat4 m_ProjectionMatrix;
@@ -25,6 +26,8 @@ public:
     void updateAttitude(glm::vec3 position, glm::vec3 target, glm::vec3 upDir=glm::vec3(0,1,0));
 
     void updatePosition(glm::vec3 position);
+    void updateTarget(glm::vec3 tar);
+    void updateFront(glm::vec3 front);
 
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix();

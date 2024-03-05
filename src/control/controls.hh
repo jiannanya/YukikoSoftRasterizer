@@ -9,6 +9,7 @@ namespace Fallment{
 class ControlOperation{
 public:
     virtual void operator()() = 0;
+    virtual ~ControlOperation(){}
 };
 class Controls{
 public:

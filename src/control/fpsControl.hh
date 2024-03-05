@@ -14,6 +14,7 @@ namespace Fallment{
 
 
 class FpsControls:public Controls{
+    friend class ControlOperation;
 public:
     FpsControls() = default;
     virtual ~FpsControls() = default;
@@ -33,6 +34,14 @@ private:
     void onWindowSizeEvent(const Event& e);
 
     std::shared_ptr<Camera>  m_camera;
+
+    bool    firstMouse;
+    float   lastX;
+    float   lastY;
+    float   yaw;
+    float   pitch;
+
+
 };
 
 
