@@ -116,26 +116,27 @@ inline glm::mat4 orthographic(float left,float right,float bottom,float top,floa
 inline glm::mat4 lookat(glm::vec3 camera, glm::vec3 target, glm::vec3 up = glm::vec3(0,1,0)) {
 
 
-    glm::vec3 forward = glm::normalize(camera- target);               
-    glm::vec3 left = glm::normalize(glm::cross(up, forward)); 
+    glm::vec3 n = glm::normalize(camera- target);    // -forward           
+    glm::vec3 u = glm::normalize(glm::cross(up, n)); // right
+	glm::vec3 v = glm::normalize(glm::cross(n,u));	 // real up
 
     glm::mat4 viewMatrix{1.0f};
 
-    viewMatrix[0][0] = left.x;
-    viewMatrix[0][1] = left.y;
-    viewMatrix[0][2] = left.z;
-    viewMatrix[0][1] = up.x;
-    viewMatrix[1][1] = up.y;
-    viewMatrix[2][1] = up.z;
-    viewMatrix[1][2] = forward.x;
-    viewMatrix[2][2] = forward.y;
-    viewMatrix[3][2] = forward.z;
+    viewMatrix[0][0] = u.x;
+    viewMatrix[1][0] = u.y;
+    viewMatrix[2][0] = u.z;
+    viewMatrix[0][1] = v.x;
+    viewMatrix[1][1] = v.y;
+    viewMatrix[2][1] = v.z;
+    viewMatrix[1][2] = n.x;
+    viewMatrix[2][2] = n.y;
+    viewMatrix[3][2] = n.z;
 
-    viewMatrix[3][0]= -left.x * camera.x - left.y * camera.y - left.z * camera.z;
-    viewMatrix[3][1]= -up.x * camera.x - up.y * camera.y - up.z * camera.z;
-    viewMatrix[3][2]= -forward.x * camera.x - forward.y * camera.y - forward.z * camera.z;
+    viewMatrix[3][0]= -u.x * camera.x - u.y * camera.y - u.z * camera.z;
+    viewMatrix[3][1]= -v.x * camera.x - v.y * camera.y - v.z * camera.z;
+    viewMatrix[3][2]= -n.x * camera.x - n.y * camera.y - n.z * camera.z;
 	
-	viewMatrix = glm::lookAt(camera,target,up);
+	//viewMatrix = glm::lookAt(camera,target,up);
 
 	return viewMatrix;
 
