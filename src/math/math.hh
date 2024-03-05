@@ -145,11 +145,11 @@ inline glm::mat4 lookat(glm::vec3 camera, glm::vec3 target, glm::vec3 up = glm::
 inline glm::mat4 viewport(float _x, float _y,float _n, float _f, float width, float height) {
 	glm::mat4 viewPortMatrix(1.0f);
 	viewPortMatrix[0][0] = width/2.0f;
-	viewPortMatrix[0][3] = _x + width/2.0f;
-	viewPortMatrix[1][1] = height/2.0f;
-	viewPortMatrix[1][3] = _y + height/2.0f;
-	viewPortMatrix[2][2] = (_f - _n)/2.0f;
-	viewPortMatrix[2][3] = (_f + _n)/2.0f;
+	viewPortMatrix[3][0] = _x + width/2.0f;
+	viewPortMatrix[1][1] = - height/2.0f;
+	viewPortMatrix[3][1] = _y + height/2.0f;
+	viewPortMatrix[2][2] = _n - _f;
+	viewPortMatrix[3][2] = _n;
 	return viewPortMatrix;
 }
 

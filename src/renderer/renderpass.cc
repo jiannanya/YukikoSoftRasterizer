@@ -73,10 +73,12 @@ void RenderPassPhong::onFrame(){
 
             // 4. viewport transform
             tri._vp[k] = m_ctx->m_viewportMatrix * vertexClip;
+            tri._vp[k].x = int( tri._vp[k].x);
+            tri._vp[k].y = int( tri._vp[k].y);
 
-            tri._vp[k].x = int((vertexClip.x + 1.f) * m_ctx->m_framebuffer->getWidth() * 0.5f); //need cast to int for preventing gap between triangles
-            tri._vp[k].y = int((1.f - vertexClip.y) * m_ctx->m_framebuffer->getHeight() * 0.5f);
-            tri._vp[k].z = vertexClip.z;
+            // tri._vp[k].x = int((vertexClip.x + 1.f) * m_ctx->m_framebuffer->getWidth() * 0.5f); //need cast to int for preventing gap between triangles
+            // tri._vp[k].y = int((1.f - vertexClip.y) * m_ctx->m_framebuffer->getHeight() * 0.5f);
+            // tri._vp[k].z = vertexClip.z;
 
             tri._vw[k] = PhongVertexOut.worldPos;
 
@@ -164,10 +166,12 @@ void RenderPassLine::onFrame(){
 
             // 4. viewport transform
             tri._vp[k] = m_ctx->m_viewportMatrix * vertexClip;
-
-            tri._vp[k].x = int((vertexClip.x + 1.f) * m_ctx->m_framebuffer->getWidth() * 0.5f); //need cast to int for preventing gap between triangles
-            tri._vp[k].y = int((1.f - vertexClip.y) * m_ctx->m_framebuffer->getHeight() * 0.5f);
-            tri._vp[k].z = vertexClip.z;
+            tri._vp[k].x = int( tri._vp[k].x);
+            tri._vp[k].y = int( tri._vp[k].y);
+            
+            // tri._vp[k].x = int((vertexClip.x + 1.f) * m_ctx->m_framebuffer->getWidth() * 0.5f); //need cast to int for preventing gap between triangles
+            // tri._vp[k].y = int((1.f - vertexClip.y) * m_ctx->m_framebuffer->getHeight() * 0.5f);
+            // tri._vp[k].z = vertexClip.z;
 
             tri._vw[k] = PhongVertexOut.worldPos;
 

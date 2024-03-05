@@ -125,7 +125,7 @@ bool AppControl::onInit(){
     m_ctx->setDrawWireFrame(false);
     m_ctx->setClearColor(glm::vec4(0.0f,0.0f,0.0f,1.0f));
     m_ctx->setModelMatrix(ctx_model_matrix);
-    m_ctx->setViewportMatrix(mth::viewport(0,0,0,1,WINDOW_WIDTH,WINDOW_HEIGHT));
+    m_ctx->setViewportMatrix(mth::viewport(0,0,1,0,WINDOW_WIDTH,WINDOW_HEIGHT));
     m_ctx->setRasterizer(std::move(std::make_unique<RasterizerPhong>()));
 
     if(!m_ctx.get()){
