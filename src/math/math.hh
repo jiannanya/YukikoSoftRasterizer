@@ -105,10 +105,10 @@ inline glm::mat4 orthographic(float left,float right,float bottom,float top,floa
 	glm::mat4 ret{1.0f};
 	ret[0][0] = 2.0f / (right - left);
 	ret[1][1] = 2.0f / (top - bottom);
-	ret[2][2] = - 2.0f / (zfar - znear);
+	ret[2][2] = 2.0f / (znear - zfar);
 	ret[3][0] = - (right + left) / (right - left);
 	ret[3][1] = - (top + bottom) / (top - bottom);
-	ret[3][2] = - (zfar + znear) / (zfar - znear);
+	ret[3][2] = - (znear + zfar) / (znear - zfar);
 
 	return ret;
 }
