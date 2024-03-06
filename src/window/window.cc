@@ -85,11 +85,12 @@ void Window::processInput()
 void Window::window_size_callback(GLFWwindow* window, int width, int height){
     
     if(_dispatcher.get()){
+        //spdlog::info("window_size_callback");
         WindowSizeEvent e(width,height,EventType::WindowSize, false);
         _dispatcher->dispatch(e);
     }
 
-    //spdlog::info("window_size_callback");
+    
 }
 void Window::mouse_callback(GLFWwindow* window, double xpos, double ypos){
     

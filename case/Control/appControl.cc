@@ -47,6 +47,7 @@ bool AppControl::onInit(){
         auto et = std::make_unique<EventCallbackFnType>(std::bind(&FpsControls::onEvent,dynamic_cast<FpsControls*>(m_controls.get()),std::placeholders::_1));
         m_window->getEventDispatcher()->addEventCallback(*et);
         m_ecft.emplace_back(std::move(et));
+
     }else{
         spdlog::error("window does not has event dispatcher");
     }
@@ -127,6 +128,25 @@ bool AppControl::onInit(){
     m_ctx->setModelMatrix(ctx_model_matrix);
     m_ctx->setViewportMatrix(mth::viewport(0,0,1,0,WINDOW_WIDTH,WINDOW_HEIGHT));
     m_ctx->setRasterizer(std::move(std::make_unique<RasterizerPhong>()));
+
+    if(m_window->getEventDispatcher()){
+        //should recreate window and framebuffer size
+        auto viewport_et = std::make_unique<EventCallbackFnType>(std::bind([this](const Event& e){
+            if(e.m_Type==EventType::WindowSize){
+                auto& ev = static_cast<WindowSizeEvent&>(const_cast<Event&>(e));
+                //spdlog::debug("WindowSizeEvent {} {}",ev.width,ev.height);
+                this->m_ctx->setViewportMatrix(mth::viewport(0,0,1,0,ev.width,ev.height));
+            }
+            
+        },std::placeholders::_1));
+        m_window->getEventDispatcher()->addEventCallback(*viewport_et);
+        m_ecft.emplace_back(std::move(viewport_et));
+
+    }else{
+        spdlog::error("window does not has event dispatcher");
+    }
+    
+
 
     if(!m_ctx.get()){
         spdlog::error("Apps context are not useful on init !");
