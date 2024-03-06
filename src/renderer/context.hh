@@ -28,7 +28,7 @@ public:
     void setVertexShaderOut(std::unique_ptr<VertexOutData>&& _data);
     void setFragmentShaderIn(std::unique_ptr<FragmentInData>&& _data);
     void setFragmentShaderOut(std::unique_ptr<FragmentOutData>&& _data);
-    void setFrameBuffer(std::shared_ptr<Framebuffer>&& fb);
+    void setFrameBuffer(std::shared_ptr<Framebuffer> fb);
     //void setTexture(std::unique_ptr<Texture> tex);
     void setScene(std::unique_ptr<Scene>&& sce);
     void setRasterizer(std::unique_ptr<Rasterizer>&& rast);
@@ -38,7 +38,7 @@ public:
 
     Framebuffer* getFrameBuffer()const;
     //Window* getWindow()const;
-    //Camera* getCamera()const;
+    Camera* getCamera()const;
 
     
     void setClearColor(glm::vec4 color);

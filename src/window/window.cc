@@ -5,7 +5,7 @@
 
 namespace Fallment{
 
-Window::Window(std::string title, unsigned w, unsigned h):_witdh{w},_height{h}{
+Window::Window(std::string title, unsigned w, unsigned h):_width{w},_height{h}{
 }
 
 Window::~Window(){
@@ -18,7 +18,7 @@ bool Window::onInit(){
         return -1;
 
     
-    _window = glfwCreateWindow(_witdh, _height, _title.c_str(), NULL, NULL);
+    _window = glfwCreateWindow(_width, _height, _title.c_str(), NULL, NULL);
     if (!_window)
     {
         
@@ -44,10 +44,20 @@ bool Window::onInit(){
     return true;
 }
 
+bool Window::recreate(std::string title, unsigned w, unsigned h){
+    _width = w;
+    _height = h;
+    //spdlog::debug(" window recreate");
+    return true;
+
+}
+
 void Window::onFrame(){
+    //spdlog::debug(" Window::onFrame");
     if(_framebuffer.get()){
-        std::unique_lock<std::mutex>(_framebuffer->m_color_mutex);
-        glDrawPixels(_witdh, _height,GL_RGBA, GL_UNSIGNED_BYTE, _framebuffer->getColorBuffer());
+        //std::unique_lock<std::mutex>(_framebuffer->m_color_mutex);
+        glDrawPixels(_width, _height,GL_RGBA, GL_UNSIGNED_BYTE, _framebuffer->getColorBuffer());
+        //spdlog::debug("framebuffer{} {} {}", int(_framebuffer->getColorBuffer()),_width,_height);
         glfwSwapBuffers(_window);
     }else{
         spdlog::error("Window surface doesnt have any famebuffer data useful");

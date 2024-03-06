@@ -7,13 +7,15 @@
 
 namespace Fallment{
 
+using BYTE = unsigned char;
+
 class Framebuffer {
 public:
     Framebuffer(){}
     Framebuffer(int width, int height);
     ~Framebuffer();
 
-    unsigned char*& getColorBuffer();//需要返回引用用来创建windows窗口
+    BYTE*& getColorBuffer();
     float *getZBuffer();
     float getZ(unsigned int x, unsigned int y);
     void setZ(unsigned int x, unsigned int y, float value);
@@ -23,6 +25,8 @@ public:
     void clearColorBuffer(glm::vec4 color);
     void clearZBuffer();
     void setPixelColor(unsigned int x, unsigned int y, glm::vec4 color);
+
+    void recreate(int width, int height);
 
 public:
 
@@ -34,7 +38,7 @@ private:
     int m_Height;
     int m_Channel;
     int m_PixelCount;
-    unsigned char* m_ColorBuffer;
+    BYTE* m_ColorBuffer;
     float* m_ZBuffer;
 
 

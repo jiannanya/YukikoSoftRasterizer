@@ -2,7 +2,7 @@
 #include "framebuffer.hh"
 #include <windows.h>
 #include <limits>
-
+#include "spdlog/spdlog.h"
 namespace Fallment{
 
 Framebuffer::Framebuffer(int width, int height)
@@ -34,6 +34,31 @@ Framebuffer::~Framebuffer() {
     }
     
 };
+
+void Framebuffer::recreate(int width, int height){
+    // std::unique_lock<std::mutex>(m_color_mutex);
+    // std::unique_lock<std::mutex>(m_z_mutex);
+    //spdlog::debug("recreate framebuffer {} {}",width, height);
+    if(m_ColorBuffer){
+        delete [] m_ColorBuffer;
+    }
+    if(m_ZBuffer){
+        delete [] m_ZBuffer;
+    }
+
+    m_Width = width;
+    m_Height = height;
+    m_Channel = 4; //RGBA
+    m_PixelCount = width * height;
+
+    m_ColorBuffer = new BYTE[m_PixelCount*m_Channel];
+    //std::unique_lock<std::mutex>(m_color_mutex);
+    memset(m_ColorBuffer,0,m_PixelCount*m_Channel);
+
+    //std::unique_lock<std::mutex>(m_z_mutex);
+    m_ZBuffer = new float[m_PixelCount];
+    memset(m_ZBuffer,0,m_PixelCount);
+}
 
 
 BYTE*& Framebuffer::getColorBuffer() {

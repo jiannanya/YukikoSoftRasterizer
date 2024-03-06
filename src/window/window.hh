@@ -48,6 +48,8 @@ public:
     void onFrame();
     void onDestory();
 
+    bool recreate(std::string title, unsigned w, unsigned h);
+
     void setFramebuffer(std::shared_ptr<Framebuffer> fb);
 
     EventDispatcher* getEventDispatcher();
@@ -63,7 +65,7 @@ private:
     GLFWwindow*                     _window;
     std::shared_ptr<Framebuffer>    _framebuffer;
     std::string                     _title;
-    unsigned                        _witdh;
+    unsigned                        _width;
     unsigned                        _height;
 
 private:

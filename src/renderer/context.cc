@@ -40,10 +40,14 @@ void Context::setFragmentShaderOut(std::unique_ptr<FragmentOutData>&& _data){
     m_fragment_out = std::move(_data);
 }
 
-void Context::setFrameBuffer(std::shared_ptr<Framebuffer>&& fb){
+void Context::setFrameBuffer(std::shared_ptr<Framebuffer> fb){
     m_framebuffer = fb;
     m_Width = fb->getWidth();
     m_Height = fb->getHeight();
+}
+
+Framebuffer* Context::getFrameBuffer()const{
+    return m_framebuffer.get();
 }
 
 // void Context::setTexture(texture* tex){
@@ -70,9 +74,9 @@ void Context::setRasterizer(std::unique_ptr<Rasterizer>&& rast){
 //     return m_window;
 // }
 
-// camera* Context::getCamera()const{
-//     return m_camera;
-// }
+Camera* Context::getCamera()const{
+    return m_camera.get();
+}
 
 void Context::setClearColor(glm::vec4 color){
     m_clearColor = color;

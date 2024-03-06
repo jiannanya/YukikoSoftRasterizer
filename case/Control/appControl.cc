@@ -7,8 +7,8 @@ const char *TITLE = "Fallment real time soft render";
 const char *OBJ_PATH = "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\african_head0.obj";
 const char *OBJ_TEXTURE_PATH =  "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\african_head_diffuse.tga";
 
-constexpr int WINDOW_WIDTH = 800;
-constexpr int WINDOW_HEIGHT = 600;
+constexpr int WINDOW_WIDTH = 500;
+constexpr int WINDOW_HEIGHT = 500;
 constexpr float FOV_INIT = mth::PI/4.0f;
 
 glm::vec3 CAM_POS_INIT = glm::vec3(0, 0, 6);
@@ -117,7 +117,7 @@ bool AppControl::onInit(){
     }
 
     m_ctx = std::make_shared<Context>();
-    m_ctx->setFrameBuffer(std::move(ctx_framebuffer));
+    m_ctx->setFrameBuffer(ctx_framebuffer);
 
     m_ctx->setCamera(ctx_camera);
     m_ctx->setScene(std::move(ctx_scene));
@@ -131,11 +131,20 @@ bool AppControl::onInit(){
 
     if(m_window->getEventDispatcher()){
         //should recreate window and framebuffer size
-        auto viewport_et = std::make_unique<EventCallbackFnType>(std::bind([this](const Event& e){
+        auto viewport_et = std::make_unique<EventCallbackFnType>(std::bind(
+        [this](const Event& e){
             if(e.m_Type==EventType::WindowSize){
                 auto& ev = static_cast<WindowSizeEvent&>(const_cast<Event&>(e));
+                this->m_ctx->getFrameBuffer()->recreate(ev.width,ev.height);
+                this->m_window->recreate(TITLE,ev.width,ev.height);
                 //spdlog::debug("WindowSizeEvent {} {}",ev.width,ev.height);
+                auto cam = this->m_ctx->getCamera();
+                cam->m_Aspect = static_cast<float>(ev.width)/static_cast<float>(ev.height);
+                cam->updateProjectionMatrix();
                 this->m_ctx->setViewportMatrix(mth::viewport(0,0,1,0,ev.width,ev.height));
+
+                this->onUpdate();
+                this->onFrame();
             }
             
         },std::placeholders::_1));
