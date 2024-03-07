@@ -25,6 +25,7 @@ AppControl::~AppControl(){
 
 bool AppControl::onInit(){
     spdlog::set_level(spdlog::level::debug);
+    spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%l] %v");
     spdlog::info("App start init");
     auto  ctx_framebuffer = std::make_shared<Framebuffer>(WINDOW_WIDTH,WINDOW_HEIGHT);
 
