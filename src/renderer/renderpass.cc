@@ -309,6 +309,7 @@ void RenderPassSSAO::onFrame(){
     glm::mat4 n_matrix = transpose(inverse(m_ctx->m_modelMatrix));// normal transform matrix
     
     auto& mesh_list = m_ctx->m_scene->getMeshList();
+    std::vector<Triangle> triangles;
     //render per face
     for(auto&mesh: mesh_list)
     for(int i = 0; i < mesh->faceNum(); ++i) {
@@ -360,8 +361,14 @@ void RenderPassSSAO::onFrame(){
         //m_ctx->m_shader->gl_FragColor = glm::vec4(1.0f,1.0f,1.0f,1.0f);
         //spdlog::info("go");
         rasterizer.drawTriangle(tri,*m_ctx->m_shader,*m_ctx->m_framebuffer);
-        
 
+        triangles.emplace_back(tri);
+    }
+
+    for(auto&tri: triangles){
+        // render primitive
+        auto& rasterizer = static_cast<RasterizerSSAO&>(*m_ctx->m_rasterizer);
+        rasterizer.postprocessTriangle(tri,*m_ctx->m_shader,*m_ctx->m_framebuffer);
     }
 }
 void RenderPassSSAO::onDestory(){

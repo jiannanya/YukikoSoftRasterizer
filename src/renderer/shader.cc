@@ -51,7 +51,10 @@ namespace Fallment{
         auto& in = static_cast<VertexInDataSSAO&>(_in);
         auto& out = static_cast<VertexOutDataSSAO&>(_out);
         out.color = in.color;
-        gl_Position = in.projectionMatrix * in.viewMatrix * in.modelMatrix * glm::vec4(in.position,1.0f); 
+        gl_Position = in.projectionMatrix * in.viewMatrix * in.modelMatrix * glm::vec4(in.position,1.0f);
+        auto worldPos = in.modelMatrix * glm::vec4(in.position,1.0f);  // vec3 = vec4...
+        out.worldPos = worldPos / worldPos.w; 
+
         //spdlog::debug("x,y,z {} {} {}",in.modelMatrix[3][0],in.modelMatrix[3][1],in.modelMatrix[3][2]);
         return;
     }

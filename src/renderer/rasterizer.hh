@@ -37,9 +37,11 @@ private:
 class RasterizerSSAO: public Rasterizer{
 public:
     void drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb)override;
+    void postprocessTriangle(Triangle &tri,Shader& sh,Framebuffer& fb);
     virtual ~RasterizerSSAO(){}
 private:
     void drawFill(Triangle &tri,Shader& sh,Framebuffer& fb);
+    float maxElevationAngle(Framebuffer& fb,glm::vec2 p, glm::vec2 dir);
 };
 
 class RasterizerPhong: public Rasterizer{
