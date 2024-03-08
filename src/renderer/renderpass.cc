@@ -321,11 +321,11 @@ void RenderPassSSAO::onFrame(){
         }
 
         unsigned discardCount = 0;
-        auto& PhongVertexIn = static_cast<VertexInDataPhong&>(*(m_ctx->m_shader->_vertexIn));
-        auto& PhongVertexOut = static_cast<VertexOutDataPhong&>(*(m_ctx->m_shader->_vertexOut));
+        auto& SSAOVertexIn = static_cast<VertexInDataSSAO&>(*(m_ctx->m_shader->_vertexIn));
+        auto& SSAOVertexOut = static_cast<VertexOutDataSSAO&>(*(m_ctx->m_shader->_vertexOut));
         for(int k = 0; k < 3; ++k){
 
-            PhongVertexIn.position = tri._ve[k];
+            SSAOVertexIn.position = tri._ve[k];
 
             // 2. transform to clip coordinates using vertex shader
             m_ctx->m_shader->vertex(*(m_ctx->m_shader->_vertexIn),*(m_ctx->m_shader->_vertexOut));
@@ -347,7 +347,7 @@ void RenderPassSSAO::onFrame(){
             tri._vp[k].y = int( tri._vp[k].y);
             
 
-            tri._vw[k] = PhongVertexOut.worldPos;
+            tri._vw[k] = SSAOVertexOut.worldPos;
 
         }
 
@@ -356,8 +356,8 @@ void RenderPassSSAO::onFrame(){
             continue;
 
         // render primitive
-        auto& rasterizer = static_cast<RasterizerLine&>(*m_ctx->m_rasterizer);
-        m_ctx->m_shader->gl_FragColor = glm::vec4(1.0f,1.0f,1.0f,1.0f);
+        auto& rasterizer = static_cast<RasterizerSSAO&>(*m_ctx->m_rasterizer);
+        //m_ctx->m_shader->gl_FragColor = glm::vec4(1.0f,1.0f,1.0f,1.0f);
         //spdlog::info("go");
         rasterizer.drawTriangle(tri,*m_ctx->m_shader,*m_ctx->m_framebuffer);
         

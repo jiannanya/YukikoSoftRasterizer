@@ -56,21 +56,21 @@ bool AppSSAO::onInit(){
     
     auto  ctx_model_matrix = glm::mat4{1.0f};
 
-    auto  ctx_shader = std::make_unique<TransformShader>();
-    auto  ctx_TransformShaderVertexIn = std::make_unique<VertexInDataSSAO>(
+    auto  ctx_shader = std::make_unique<SSAOShader>();
+    auto  ctx_SSAOShaderVertexIn = std::make_unique<VertexInDataSSAO>(
         ctx_model_matrix,
         ctx_camera->getViewMatrix(),
         ctx_camera->getProjectionMatrix()
         //mth::orthographic(-2.0f,2.0f,-2.0f,2.0f,0.1f,3.0f)
     );
-    auto  ctx_TransformShaderVertexOut = std::make_unique<VertexOutDataSSAO>();
-    auto ctx_TransformShaderFragmentIn = std::make_unique<FragmentInDataSSAO>();
-    auto ctx_TransformShaderFragmentOut = std::make_unique<FragmentOutDataSSAO>();
+    auto  ctx_SSAOShaderVertexOut = std::make_unique<VertexOutDataSSAO>();
+    auto ctx_SSAOShaderFragmentIn = std::make_unique<FragmentInDataSSAO>();
+    auto ctx_SSAOShaderFragmentOut = std::make_unique<FragmentOutDataSSAO>();
 
-    ctx_shader->_vertexIn = std::move(ctx_TransformShaderVertexIn);
-    ctx_shader->_vertexOut = std::move(ctx_TransformShaderVertexOut);
-    ctx_shader->_fragmentIn = std::move(ctx_TransformShaderFragmentIn);
-    ctx_shader->_fragmentOut = std::move(ctx_TransformShaderFragmentOut);
+    ctx_shader->_vertexIn = std::move(ctx_SSAOShaderVertexIn);
+    ctx_shader->_vertexOut = std::move(ctx_SSAOShaderVertexOut);
+    ctx_shader->_fragmentIn = std::move(ctx_SSAOShaderFragmentIn);
+    ctx_shader->_fragmentOut = std::move(ctx_SSAOShaderFragmentOut);
 
     if(!ctx_shader.get()){
         spdlog::error("Apps shader are not useful on init !");
@@ -96,7 +96,7 @@ bool AppSSAO::onInit(){
     m_ctx->setClearColor(glm::vec4(0.0f,0.0f,0.0f,1.0f));
     m_ctx->setModelMatrix(ctx_model_matrix);
     m_ctx->setViewportMatrix(mth::viewport(0,0,1,0,WINDOW_WIDTH,WINDOW_HEIGHT));
-    m_ctx->setRasterizer(std::move(std::make_unique<RasterizerLine>()));
+    m_ctx->setRasterizer(std::move(std::make_unique<RasterizerSSAO>()));
 
     if(m_window->getEventDispatcher()){
         //should recreate window and framebuffer size

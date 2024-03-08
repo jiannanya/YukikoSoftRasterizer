@@ -84,6 +84,7 @@ namespace Fallment{
     };
 
     struct VertexOutDataSSAO:public VertexOutData{
+        glm::vec3 worldPos; //世界坐标
         glm::vec4 color;
     };
 

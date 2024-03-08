@@ -59,33 +59,55 @@ void RasterizerFill::drawFill(Triangle &tri,Shader& sh,Framebuffer& fb) {
     glm::vec3 v2 = tri.bvp();
     glm::vec3 v3 = tri.cvp();
 
-    glm::vec2 bboxmin,bboxmax;
+    glm::vec3 vw1 = tri.aw();
+    glm::vec3 vw2 = tri.bw();
+    glm::vec3 vw3 = tri.cw();
+
+    // spdlog::info("drawTriangle 4 vw1 {} {} {}", vw1.x,vw1.y,vw1.z);
+    // spdlog::info("drawTriangle 4 vw2 {} {} {}", vw2.x,vw2.y,vw2.z);
+    // spdlog::info("drawTriangle 4 vw3 {} {} {}", vw3.x,vw3.y,vw3.z);
+    glm::vec2 bboxmin(fb.getWidth() - 1, fb.getHeight() - 1);
+    glm::vec2 bboxmax(0, 0);
 
     bboxmin.x = std::max(0.f, std::min(v1.x, std::min(v2.x, v3.x)));
     bboxmin.y = std::max(0.f, std::min(v1.y, std::min(v2.y, v3.y)));
     bboxmax.x = std::min((float)(fb.getWidth() - 1), std::max(v1.x, std::max(v2.x, v3.x)));
     bboxmax.y = std::min((float)(fb.getHeight() - 1), std::max(v1.y, std::max(v2.y, v3.y)));
-
+    //spdlog::info("drawTriangle 5");
     glm::vec3 p;
-
     for(p.x = bboxmin.x; p.x <= bboxmax.x; p.x++){
         for(p.y = bboxmin.y; p.y <= bboxmax.y; p.y++){
 
-            glm::vec3 bc = mth::barycentric3(v1, v2, v3, p);
+            //glm::vec3 bc = mth::barycentric3(v1, v2, v3, p);
+            glm::vec3 bc = mth::barycentric2D(v1,v2,v3,p);
+            //bc = glm::bar
             if(bc.x < 0 || bc.y < 0 || bc.z < 0) 
                 continue;
 
+            
+             //透视矫正插值 https://www.researchgate.net/publication/2893969_Perspective-Correct_Interpolation
+            //float z_reciprocal = bc.x*(1.0f/vw1.z) + bc.y*(1.0f/vw2.z) + bc.z*(1.0f/vw3.z); 
+            //p.z = 1.0f/z_reciprocal;
+            p.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
             //depth test
-            p.z = v1.z*bc.x + v2.z*bc.y + v3.z*bc.z;
             if(p.z<(fb.getZ(p.x,p.y)))
                 continue;
             else 
                 fb.setZ(p.x,p.y,p.z);
 
-            sh.fragment(*sh._fragmentIn,*sh._fragmentOut);
-            auto color = sh.gl_FragColor;
+            glm::vec3 vw;
+            vw.x = vw1.x*bc.x + vw2.x*bc.y + vw3.x*bc.z;
+            vw.y = vw1.y*bc.x + vw2.y*bc.y + vw3.y*bc.z;
+            vw.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
 
-            fb.setPixelColor(p.x,p.y,color);
+
+            auto& in = static_cast<FragmentInDataTransform&>(*sh._fragmentIn);
+
+            in.color = glm::vec4(1.0f,1.0f,1.0f,1.0f);
+
+            sh.fragment(*sh._fragmentIn,*sh._fragmentOut);
+            //spdlog::info("drawTriangle ssao 4 {} {} {} {}",sh.gl_FragColor.x, sh.gl_FragColor.y, sh.gl_FragColor.z,sh.gl_FragColor.w);
+            fb.setPixelColor(p.x,p.y,sh.gl_FragColor);
         }
     }
 }
@@ -100,35 +122,58 @@ void RasterizerSSAO::drawFill(Triangle &tri,Shader& sh,Framebuffer& fb) {
     glm::vec3 v2 = tri.bvp();
     glm::vec3 v3 = tri.cvp();
 
-    glm::vec2 bboxmin,bboxmax;
+    glm::vec3 vw1 = tri.aw();
+    glm::vec3 vw2 = tri.bw();
+    glm::vec3 vw3 = tri.cw();
+
+    // spdlog::info("drawTriangle 4 vw1 {} {} {}", vw1.x,vw1.y,vw1.z);
+    // spdlog::info("drawTriangle 4 vw2 {} {} {}", vw2.x,vw2.y,vw2.z);
+    // spdlog::info("drawTriangle 4 vw3 {} {} {}", vw3.x,vw3.y,vw3.z);
+    glm::vec2 bboxmin(fb.getWidth() - 1, fb.getHeight() - 1);
+    glm::vec2 bboxmax(0, 0);
 
     bboxmin.x = std::max(0.f, std::min(v1.x, std::min(v2.x, v3.x)));
     bboxmin.y = std::max(0.f, std::min(v1.y, std::min(v2.y, v3.y)));
     bboxmax.x = std::min((float)(fb.getWidth() - 1), std::max(v1.x, std::max(v2.x, v3.x)));
     bboxmax.y = std::min((float)(fb.getHeight() - 1), std::max(v1.y, std::max(v2.y, v3.y)));
-
+    //spdlog::info("drawTriangle 5");
     glm::vec3 p;
-
     for(p.x = bboxmin.x; p.x <= bboxmax.x; p.x++){
         for(p.y = bboxmin.y; p.y <= bboxmax.y; p.y++){
 
-            glm::vec3 bc = mth::barycentric3(v1, v2, v3, p);
+            //glm::vec3 bc = mth::barycentric3(v1, v2, v3, p);
+            glm::vec3 bc = mth::barycentric2D(v1,v2,v3,p);
+            //bc = glm::bar
             if(bc.x < 0 || bc.y < 0 || bc.z < 0) 
                 continue;
 
+            
+             //透视矫正插值 https://www.researchgate.net/publication/2893969_Perspective-Correct_Interpolation
+            //float z_reciprocal = bc.x*(1.0f/vw1.z) + bc.y*(1.0f/vw2.z) + bc.z*(1.0f/vw3.z); 
+            //p.z = 1.0f/z_reciprocal;
+            p.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
             //depth test
-            p.z = v1.z*bc.x + v2.z*bc.y + v3.z*bc.z;
             if(p.z<(fb.getZ(p.x,p.y)))
                 continue;
             else 
                 fb.setZ(p.x,p.y,p.z);
 
+            glm::vec3 vw;
+            vw.x = vw1.x*bc.x + vw2.x*bc.y + vw3.x*bc.z;
+            vw.y = vw1.y*bc.x + vw2.y*bc.y + vw3.y*bc.z;
+            vw.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
+
+
             auto& in = static_cast<FragmentInDataSSAO&>(*sh._fragmentIn);
 
-            sh.fragment(*sh._fragmentIn,*sh._fragmentOut);
-            auto color = sh.gl_FragColor;
+            // in.worldPos = vw;
+            // in.uv = uv;
+            // in.normal = nw;
+            in.color = glm::vec4(1.0f,1.0f,1.0f,1.0f);
 
-            fb.setPixelColor(p.x,p.y,color);
+            sh.fragment(*sh._fragmentIn,*sh._fragmentOut);
+            //spdlog::info("drawTriangle ssao 4 {} {} {} {}",sh.gl_FragColor.x, sh.gl_FragColor.y, sh.gl_FragColor.z,sh.gl_FragColor.w);
+            fb.setPixelColor(p.x,p.y,sh.gl_FragColor);
         }
     }
 }
