@@ -1,4 +1,4 @@
-#include "appControl.hh"
+#include "appSSAO.hh"
 
 
 namespace Fallment{
@@ -15,15 +15,15 @@ glm::vec3 CAM_POS_INIT = glm::vec3(0, 0, 6);
 glm::vec3 CAM_TARGET_INIT = glm::vec3(0,0,0);
 glm::vec3 CAM_UP_INIT = glm::vec3(0,1,0);
 
-AppControl::AppControl(){
+AppSSAO::AppSSAO(){
 
 }
 
-AppControl::~AppControl(){
+AppSSAO::~AppSSAO(){
 
 }
 
-bool AppControl::onInit(){
+bool AppSSAO::onInit(){
     spdlog::set_level(spdlog::level::debug);
     spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%l] %v"); //%Y-%m-%d %H:%M:%S 代表日期和时间。 %l 代表日志级别。%v 代表实际的日志消息文本。
     //spdlog::set_formatter
@@ -47,14 +47,14 @@ bool AppControl::onInit(){
     m_controls = std::make_unique<FpsControls>(ctx_camera);
     //std::function<void(const Event&)> f = std::bind(&Controls::onEvent,*m_controls,std::placeholders::_1);
 
-    if(m_window->getEventDispatcher()){
-        auto et = std::make_unique<EventCallbackFnType>(std::bind(&FpsControls::onEvent,dynamic_cast<FpsControls*>(m_controls.get()),std::placeholders::_1));
-        m_window->getEventDispatcher()->addEventCallback(*et);
-        m_ecft.emplace_back(std::move(et));
+    // if(m_window->getEventDispatcher()){
+    //     auto et = std::make_unique<EventCallbackFnType>(std::bind(&FpsControls::onEvent,dynamic_cast<FpsControls*>(m_controls.get()),std::placeholders::_1));
+    //     m_window->getEventDispatcher()->addEventCallback(*et);
+    //     m_ecft.emplace_back(std::move(et));
 
-    }else{
-        spdlog::error("window does not has event dispatcher");
-    }
+    // }else{
+    //     spdlog::error("window does not has event dispatcher");
+    // }
 
     auto  ctx_model1 = std::make_unique<Mesh>(OBJ_PATH);
 
@@ -176,7 +176,7 @@ bool AppControl::onInit(){
     spdlog::info("init ok");
     return true;
 }
-bool AppControl::onUpdate(){
+bool AppSSAO::onUpdate(){
     //spdlog::debug("on update");
 
     if(m_window.get()){
@@ -205,7 +205,7 @@ bool AppControl::onUpdate(){
     
 }
 
-void AppControl::onFrame(){
+void AppSSAO::onFrame(){
     if(m_window.get()&&m_renderpass.get()){
         m_renderpass->onFrame();
         m_window->onFrame();
@@ -215,11 +215,11 @@ void AppControl::onFrame(){
 
 }
 
-void AppControl::onDestory(){
+void AppSSAO::onDestory(){
 
 }
 
-void AppControl::run(){
+void AppSSAO::run(){
     spdlog::info("App start run");
     while(onUpdate()){
         onFrame();
