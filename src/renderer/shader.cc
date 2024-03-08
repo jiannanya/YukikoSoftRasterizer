@@ -44,6 +44,24 @@ namespace Fallment{
         return;
     }
 
+    /**** SSAO Shader ****/
+    SSAOShader::SSAOShader():Shader{}{}
+
+    void SSAOShader::vertex(VertexInData& _in, VertexOutData& _out) {
+        auto& in = static_cast<VertexInDataTransform&>(_in);
+        auto& out = static_cast<VertexOutDataTransform&>(_out);
+        out.color = in.color;
+        gl_Position = in.projectionMatrix * in.viewMatrix * in.modelMatrix * glm::vec4(in.position,1.0f); 
+        //spdlog::debug("x,y,z {} {} {}",in.modelMatrix[3][0],in.modelMatrix[3][1],in.modelMatrix[3][2]);
+        return;
+    }
+
+    void SSAOShader::fragment(FragmentInData& _in, FragmentOutData& _out) {
+        auto& in = static_cast<FragmentInDataTransform&>(_in);
+        gl_FragColor = in.color;
+        return;
+    }
+
     /**** Gouraud Shader****/
     GouraudShader::GouraudShader():Shader{}{}
 

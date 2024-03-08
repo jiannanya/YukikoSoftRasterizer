@@ -44,6 +44,27 @@ public:
 
 };
 
+class RenderPassFill:public RenderPass{
+public:
+    RenderPassFill();
+    ~RenderPassFill();
+    void onInit() override;
+    virtual void onUpdate() override;
+    virtual void onFrame() override;
+    virtual void onDestory() override;
+
+};
+
+class RenderPassSSAO:public RenderPass{
+public:
+    RenderPassSSAO();
+    ~RenderPassSSAO();
+    void onInit() override;
+    virtual void onUpdate() override;
+    virtual void onFrame() override;
+    virtual void onDestory() override;
+};
+
 }
 
 

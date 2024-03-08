@@ -66,6 +66,35 @@ namespace Fallment{
         //glm::vec4 color;
     };
 
+    // ******** SSAO shader in out data ************
+    struct VertexInDataSSAO:public VertexInData{
+        glm::mat4 modelMatrix;
+        glm::mat4 viewMatrix;
+        glm::mat4 projectionMatrix;
+        glm::vec3 position;
+        glm::vec4 color;
+
+        VertexInDataSSAO(glm::mat4 _M, glm::mat4 _V, glm::mat4 _P)
+        :   modelMatrix{_M},
+            viewMatrix{_V},
+            projectionMatrix{_P}
+        {
+            
+        }
+    };
+
+    struct VertexOutDataSSAO:public VertexOutData{
+        glm::vec4 color;
+    };
+
+    struct FragmentInDataSSAO:public FragmentInData{
+        glm::vec4 color;
+    };
+        
+    struct FragmentOutDataSSAO:public FragmentOutData{
+        //glm::vec4 color;
+    };  
+
     // ******** Gouraud shader in out data ************
     struct VertexInDataGouraud:public VertexInData{
         glm::mat4   modelMatrix;
@@ -215,6 +244,15 @@ namespace Fallment{
         void  fragment(FragmentInData& in, FragmentOutData& out) override;
 
         virtual ~TransformShader(){}
+    };
+
+    class SSAOShader: public Shader{
+    public:
+        SSAOShader();
+        void  vertex(VertexInData& in, VertexOutData& out) override;
+        void  fragment(FragmentInData& in, FragmentOutData& out) override;
+
+        virtual ~SSAOShader(){}
     };
 
     /**

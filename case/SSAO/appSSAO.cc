@@ -11,7 +11,7 @@ constexpr int WINDOW_WIDTH = 500;
 constexpr int WINDOW_HEIGHT = 500;
 constexpr float FOV_INIT = mth::PI/4.0f;
 
-glm::vec3 CAM_POS_INIT = glm::vec3(0, 0, 6);
+glm::vec3 CAM_POS_INIT = glm::vec3(0, 0, 3);
 glm::vec3 CAM_TARGET_INIT = glm::vec3(0,0,0);
 glm::vec3 CAM_UP_INIT = glm::vec3(0,1,0);
 
@@ -45,16 +45,6 @@ bool AppSSAO::onInit(){
     m_window->setFramebuffer(ctx_framebuffer);
     auto  ctx_camera = std::make_shared<Camera>(FOV_INIT, float(WINDOW_WIDTH) / float(WINDOW_HEIGHT),CAM_POS_INIT, CAM_TARGET_INIT,CAM_UP_INIT);
     m_controls = std::make_unique<FpsControls>(ctx_camera);
-    //std::function<void(const Event&)> f = std::bind(&Controls::onEvent,*m_controls,std::placeholders::_1);
-
-    // if(m_window->getEventDispatcher()){
-    //     auto et = std::make_unique<EventCallbackFnType>(std::bind(&FpsControls::onEvent,dynamic_cast<FpsControls*>(m_controls.get()),std::placeholders::_1));
-    //     m_window->getEventDispatcher()->addEventCallback(*et);
-    //     m_ecft.emplace_back(std::move(et));
-
-    // }else{
-    //     spdlog::error("window does not has event dispatcher");
-    // }
 
     auto  ctx_model1 = std::make_unique<Mesh>(OBJ_PATH);
 
@@ -65,47 +55,22 @@ bool AppSSAO::onInit(){
     auto  ctx_texture = std::make_unique<Texture>(std::string(OBJ_TEXTURE_PATH));
     
     auto  ctx_model_matrix = glm::mat4{1.0f};
-    auto  ctx_shader = std::make_unique<PhongShader>();
-    auto  ctx_PhongShaderVertexIn = std::make_unique<VertexInDataPhong>(
+
+    auto  ctx_shader = std::make_unique<TransformShader>();
+    auto  ctx_TransformShaderVertexIn = std::make_unique<VertexInDataSSAO>(
         ctx_model_matrix,
         ctx_camera->getViewMatrix(),
         ctx_camera->getProjectionMatrix()
         //mth::orthographic(-2.0f,2.0f,-2.0f,2.0f,0.1f,3.0f)
     );
+    auto  ctx_TransformShaderVertexOut = std::make_unique<VertexOutDataSSAO>();
+    auto ctx_TransformShaderFragmentIn = std::make_unique<FragmentInDataSSAO>();
+    auto ctx_TransformShaderFragmentOut = std::make_unique<FragmentOutDataSSAO>();
 
-    auto  ctx_PhongShaderVertexOut = std::make_unique<VertexOutDataPhong>();
-
-
-    auto p_light1 = std::make_unique<PointLight>(   glm::vec3(0.2f,0.2f,0.2f),
-                                                    glm::vec3(0.5f,0.5f,0.5f),
-                                                    glm::vec3(1.0f,1.0f,1.0f),
-                                                    glm::vec3(0, 3, 0)
-                                                );
-
-    auto p_light2 = std::make_unique<PointLight>(   glm::vec3(0.2f,0.2f,0.2f),
-                                                    glm::vec3(0.5f,0.5f,0.5f),
-                                                    glm::vec3(1.0f,1.0f,1.0f),
-                                                    glm::vec3(3, 0, 0)
-                                    );
-    auto p_light3 = std::make_unique<PointLight>(   glm::vec3(0.2f,0.2f,0.2f),
-                                                    glm::vec3(0.5f,0.5f,0.5f),
-                                                    glm::vec3(1.0f,1.0f,1.0f),
-                                                    glm::vec3(0, 0, 3)
-                                    );
-
-    auto ctx_PhongShaderFragmentIn = std::make_unique<FragmentInDataPhong>();
-    ctx_PhongShaderFragmentIn->texture = std::move(ctx_texture);
-    ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light1));
-    ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light2));
-    ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light3));
-    ctx_PhongShaderFragmentIn->material = std::make_unique<Material>();
-
-    auto ctx_PhongShaderFragmentOut = std::make_unique<FragmentOutDataPhong>();
-
-    ctx_shader->_vertexIn = std::move(ctx_PhongShaderVertexIn);
-    ctx_shader->_vertexOut = std::move(ctx_PhongShaderVertexOut);
-    ctx_shader->_fragmentIn = std::move(ctx_PhongShaderFragmentIn);
-    ctx_shader->_fragmentOut = std::move(ctx_PhongShaderFragmentOut);
+    ctx_shader->_vertexIn = std::move(ctx_TransformShaderVertexIn);
+    ctx_shader->_vertexOut = std::move(ctx_TransformShaderVertexOut);
+    ctx_shader->_fragmentIn = std::move(ctx_TransformShaderFragmentIn);
+    ctx_shader->_fragmentOut = std::move(ctx_TransformShaderFragmentOut);
 
     if(!ctx_shader.get()){
         spdlog::error("Apps shader are not useful on init !");
@@ -131,7 +96,7 @@ bool AppSSAO::onInit(){
     m_ctx->setClearColor(glm::vec4(0.0f,0.0f,0.0f,1.0f));
     m_ctx->setModelMatrix(ctx_model_matrix);
     m_ctx->setViewportMatrix(mth::viewport(0,0,1,0,WINDOW_WIDTH,WINDOW_HEIGHT));
-    m_ctx->setRasterizer(std::move(std::make_unique<RasterizerPhong>()));
+    m_ctx->setRasterizer(std::move(std::make_unique<RasterizerLine>()));
 
     if(m_window->getEventDispatcher()){
         //should recreate window and framebuffer size
@@ -166,7 +131,7 @@ bool AppSSAO::onInit(){
         return false;
     }
 
-    m_renderpass = std::make_unique<RenderPassPhong>();
+    m_renderpass = std::make_unique<RenderPassSSAO>();
     m_renderpass->setContext(m_ctx);
 
     if(!m_renderpass.get()){

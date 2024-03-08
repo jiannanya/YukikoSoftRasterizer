@@ -90,6 +90,49 @@ void RasterizerFill::drawFill(Triangle &tri,Shader& sh,Framebuffer& fb) {
     }
 }
 
+void RasterizerSSAO::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
+    drawFill(tri,sh,fb);
+}
+
+void RasterizerSSAO::drawFill(Triangle &tri,Shader& sh,Framebuffer& fb) {
+
+    glm::vec3 v1 = tri.avp();
+    glm::vec3 v2 = tri.bvp();
+    glm::vec3 v3 = tri.cvp();
+
+    glm::vec2 bboxmin,bboxmax;
+
+    bboxmin.x = std::max(0.f, std::min(v1.x, std::min(v2.x, v3.x)));
+    bboxmin.y = std::max(0.f, std::min(v1.y, std::min(v2.y, v3.y)));
+    bboxmax.x = std::min((float)(fb.getWidth() - 1), std::max(v1.x, std::max(v2.x, v3.x)));
+    bboxmax.y = std::min((float)(fb.getHeight() - 1), std::max(v1.y, std::max(v2.y, v3.y)));
+
+    glm::vec3 p;
+
+    for(p.x = bboxmin.x; p.x <= bboxmax.x; p.x++){
+        for(p.y = bboxmin.y; p.y <= bboxmax.y; p.y++){
+
+            glm::vec3 bc = mth::barycentric3(v1, v2, v3, p);
+            if(bc.x < 0 || bc.y < 0 || bc.z < 0) 
+                continue;
+
+            //depth test
+            p.z = v1.z*bc.x + v2.z*bc.y + v3.z*bc.z;
+            if(p.z<(fb.getZ(p.x,p.y)))
+                continue;
+            else 
+                fb.setZ(p.x,p.y,p.z);
+
+            auto& in = static_cast<FragmentInDataSSAO&>(*sh._fragmentIn);
+
+            sh.fragment(*sh._fragmentIn,*sh._fragmentOut);
+            auto color = sh.gl_FragColor;
+
+            fb.setPixelColor(p.x,p.y,color);
+        }
+    }
+}
+
 void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
     // spdlog::info("drawTriangle 3");
     glm::vec3 v1 = tri.avp();

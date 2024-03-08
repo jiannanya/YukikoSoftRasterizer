@@ -34,6 +34,14 @@ private:
     void drawFill(Triangle &tri,Shader& sh,Framebuffer& fb);
 };
 
+class RasterizerSSAO: public Rasterizer{
+public:
+    void drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb)override;
+    virtual ~RasterizerSSAO(){}
+private:
+    void drawFill(Triangle &tri,Shader& sh,Framebuffer& fb);
+};
+
 class RasterizerPhong: public Rasterizer{
 public:
     RasterizerPhong(){}
