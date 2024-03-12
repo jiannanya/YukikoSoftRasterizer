@@ -188,18 +188,21 @@ void RasterizerSSAO::postprocessTriangle(Triangle &tri,Shader& sh,Framebuffer& f
         for(p.y = bboxmin.y; p.y <= bboxmax.y; p.y++){
 
             //glm::vec3 bc = mth::barycentric3(v1, v2, v3, p);
-            glm::vec3 bc = mth::barycentric2D(v1,v2,v3,p);
+            glm::vec3 bc = mth::barycentric2D2(v1,v2,v3,p);
             //bc = glm::bar
             if(bc.x < 0 || bc.y < 0 || bc.z < 0) 
                 continue;
 
             
              //透视矫正插值 https://www.researchgate.net/publication/2893969_Perspective-Correct_Interpolation
-            //float z_reciprocal = bc.x*(1.0f/vw1.z) + bc.y*(1.0f/vw2.z) + bc.z*(1.0f/vw3.z); 
-            //p.z = 1.0f/z_reciprocal;
-            p.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
+            float z_ = 1.0f / (bc.x*(1.0f/vw1.z) + bc.y*(1.0f/vw2.z) + bc.z*(1.0f/vw3.z)); 
+            // p.z = 1.0f/z_reciprocal;
+            //p.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
+            //p.z = v1.z*bc.x + v2.z*bc.y + v3.z*bc.z;
+            float z_interpolated = z_* (bc.x*(v1.z/vw1.z) + bc.y*(v2.z/vw2.z) + bc.z*(v3.z/vw3.z)); 
+            p.z = z_interpolated;
             //depth test
-            if(p.z<(fb.getZ(p.x,p.y)))
+            if(p.z>(fb.getZ(p.x,p.y)))
                 continue;
 
 
@@ -218,8 +221,9 @@ void RasterizerSSAO::postprocessTriangle(Triangle &tri,Shader& sh,Framebuffer& f
             total = pow(total, 100.f);
             //spdlog::info("drawTriangle ssao 4 {}",total);
             fb.setPixelColor(p.x,p.y,sh.gl_FragColor * total);
-            // float z = fb.getZ(p.x,p.y);
-            // //spdlog::info("drawTriangle ssao 4 {}",p.z);
+
+            // // float z = fb.getZ(p.x,p.y);
+            //spdlog::info("drawTriangle ssao 4 {}",p.z);
             // fb.setPixelColor(p.x,p.y, {p.z,p.z,p.z,1.0});
         }
     }

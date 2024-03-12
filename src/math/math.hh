@@ -64,6 +64,18 @@ inline glm::vec3 barycentric2D(glm::vec3& A, glm::vec3& B, glm::vec3& C, glm::ve
     return {a,b,c};
 }
 
+inline glm::vec3 barycentric2D2(glm::vec3& A, glm::vec3& B, glm::vec3& C, glm::vec3& p) {
+
+	float x = p.x, y=p.y;
+	float x0 = A.x, y0 = A.y;
+	float x1 = B.x, y1 = B.y;
+	float x2 = C.x, y2 = C.y;
+	float a = ((x-x2)*(y1-y2)-((x1-x2)*(y-y2)))/((x0-x2)*(y1-y2)-(x1-x2)*(y0-y2));
+	float b = ((x0-x2)*(y-y2)-(x-x2)*(y0-y2)) / ((x0-x2)*(y1-y2)-(x1-x2)*(y0-y2));
+	float c = 1-a-b;
+    return {a,b,c};
+}
+
 // barycentric interpolate with perspective correction
 inline glm::vec2 interpolate(glm::vec2 a, glm::vec2 b, glm::vec2 c,glm::vec3 bc,float z1, float z2, float z3,float z_reciprocal){
 	glm::vec2 res;
@@ -97,7 +109,7 @@ inline glm::mat4 perspective(float fov, float aspect, float znear, float zfar) {
     ret[2][2] = - (znear + zfar) / (znear - zfar);
 	ret[2][3] = - 1.0f;
     ret[3][2] = - (2.0f * znear * zfar) / (znear - zfar);
-	//ret = glm::perspective(fov,aspect,znear,zfar);
+	ret = glm::perspective(fov,aspect,znear,zfar);
     return ret;
 }
 
@@ -148,8 +160,8 @@ inline glm::mat4 viewport(float _x, float _y,float _n, float _f, float width, fl
 	viewPortMatrix[3][0] = _x + width/2.0f;
 	viewPortMatrix[1][1] = - height/2.0f;
 	viewPortMatrix[3][1] = _y + height/2.0f;
-	viewPortMatrix[2][2] = _n - _f;
-	viewPortMatrix[3][2] = _n;
+	viewPortMatrix[2][2] = -(_f - _n) /2.0f;
+	viewPortMatrix[3][2] = -(_n + _f)/2.0f;//(_n + _f) / 2.0f;
 	return viewPortMatrix;
 }
 

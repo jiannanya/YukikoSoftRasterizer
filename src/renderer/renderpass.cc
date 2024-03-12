@@ -342,11 +342,25 @@ void RenderPassSSAO::onFrame(){
 
             vertexClip = vertexClip / w;  
 
+            //spdlog::info("drawTriangle ssao 4 {}",SSAOVertexOut.worldPos.z);
+
             // 4. viewport transform
             tri._vp[k] = m_ctx->m_viewportMatrix * vertexClip;
             tri._vp[k].x = int( tri._vp[k].x);
             tri._vp[k].y = int( tri._vp[k].y);
-            
+
+            //tri._vp[k].z = ((1.0f/SSAOVertexOut.worldPos.z) - (1.0f/0.1f))/(((1.0f/50.0f) - (1.0f/0.1f)));
+            // float f1 = (50 - 0.1) / 2.0;
+            // float f2 = (50 + 0.1) / 2.0;
+            // tri._vp[k].z = -vertexClip.z * f1 + f2;
+            //tri._vp[k].z = ((1.0f/vertexClip.z) - (1.0f/0.1f))/(((1.0f/50.0f) - (1.0f/0.1f)));
+            //tri._vp[k].z = (SSAOVertexOut.worldPos.z-0.1f)/(50.0f-0.1f);
+            //tri._vp[k].z = (tri._vp[k].z+1.0f) / 2.0f;
+            // float f1 = (1.0f - 0.0f) / 2.0f;
+            // float f2 = (0.0f - 1.0f ) / 2.0f;
+            // tri._vp[k].z = vertexClip.z * f1 + f2;
+            //spdlog::info("drawTriangle ssao 4 {}",tri._vp[k].z);
+
 
             tri._vw[k] = SSAOVertexOut.worldPos;
 

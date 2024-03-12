@@ -95,7 +95,7 @@ bool AppSSAO::onInit(){
     m_ctx->setDrawWireFrame(false);
     m_ctx->setClearColor(glm::vec4(0.0f,0.0f,0.0f,1.0f));
     m_ctx->setModelMatrix(ctx_model_matrix);
-    m_ctx->setViewportMatrix(mth::viewport(0,0,1,0,WINDOW_WIDTH,WINDOW_HEIGHT));
+    m_ctx->setViewportMatrix(mth::viewport(0,0,0,1,WINDOW_WIDTH,WINDOW_HEIGHT));
     m_ctx->setRasterizer(std::move(std::make_unique<RasterizerSSAO>()));
 
     if(m_window->getEventDispatcher()){
@@ -110,7 +110,7 @@ bool AppSSAO::onInit(){
                 auto cam = this->m_ctx->getCamera();
                 cam->m_Aspect = static_cast<float>(ev.width)/static_cast<float>(ev.height);
                 cam->updateProjectionMatrix();
-                this->m_ctx->setViewportMatrix(mth::viewport(0,0,1,0,ev.width,ev.height));
+                this->m_ctx->setViewportMatrix(mth::viewport(0,0,0,1,ev.width,ev.height));
 
                 this->onUpdate();
                 this->onFrame();
