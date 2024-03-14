@@ -246,6 +246,17 @@ float RasterizerSSAO::maxElevationAngle(Framebuffer& fb,glm::vec2 p, glm::vec2 d
     return maxangle;    
 }
 
+
+
+  
+float LinearizeDepth(float depth) 
+{
+    float n = 0.1; 
+    float f  = 10.0; 
+    float z = depth * 2.0 - 1.0; // back to NDC 
+    return (2.0 * n * f) / (f + n - z * (f - n));	
+}
+
 void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
     // spdlog::info("drawTriangle 3");
     glm::vec3 v1 = tri.avp();
@@ -282,7 +293,7 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
         for(p.y = bboxmin.y; p.y <= bboxmax.y; p.y++){
 
             //glm::vec3 bc = mth::barycentric3(v1, v2, v3, p);
-            glm::vec3 bc = mth::barycentric2D(v1,v2,v3,p);
+            glm::vec3 bc = mth::barycentric3(v1,v2,v3,p);
             //bc = glm::bar
             if(bc.x < 0 || bc.y < 0 || bc.z < 0) 
                 continue;
@@ -291,7 +302,10 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
              //透视矫正插值 https://www.researchgate.net/publication/2893969_Perspective-Correct_Interpolation
             //float z_reciprocal = bc.x*(1.0f/vw1.z) + bc.y*(1.0f/vw2.z) + bc.z*(1.0f/vw3.z); 
             //p.z = 1.0f/z_reciprocal;
-            p.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
+            //p.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
+            float z_ = 1.0f / (bc.x/vw1.z + bc.y/vw2.z + bc.z/vw3.z); 
+            float z_interpolated = z_* (bc.x*(v1.z/vw1.z) + bc.y*(v2.z/vw2.z) + bc.z*(v3.z/vw3.z)); 
+            p.z = z_interpolated;
             //depth test
             if(p.z<(fb.getZ(p.x,p.y)))
                 continue;
@@ -324,6 +338,27 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
             c.z = c1.z*bc.x + c2.z*bc.y + c3.z*bc.z;
             c.w = c1.w*bc.x + c2.w*bc.y + c3.w*bc.z;
 
+
+            // glm::vec3 vw;
+            // vw.x = z_* (bc.x*(vw1.x/vw1.z) + bc.y*(vw2.x/vw2.z) + bc.z*(vw3.x/vw3.z));
+            // vw.y = z_* (bc.x*(vw1.y/vw1.z) + bc.y*(vw2.y/vw2.z) + bc.z*(vw3.y/vw3.z));
+            // vw.z = z_* (bc.x*(vw1.z/vw1.z) + bc.y*(vw2.z/vw2.z) + bc.z*(vw3.z/vw3.z));
+
+            // glm::vec2 uv;
+            // uv.x = z_* (bc.x*(uv1.x/vw1.z) + bc.y*(uv2.x/vw2.z) + bc.z*(uv3.x/vw3.z));
+            // uv.y = z_* (bc.x*(uv1.y/vw1.z) + bc.y*(uv2.y/vw2.z) + bc.z*(uv3.y/vw3.z));
+
+            // glm::vec3 nw;
+            // nw.x = z_* (bc.x*(nw1.x/vw1.z) + bc.y*(nw2.x/vw2.z) + bc.z*(nw3.x/vw3.z));
+            // nw.y = z_* (bc.x*(nw1.y/vw1.z) + bc.y*(nw2.y/vw2.z) + bc.z*(nw3.y/vw3.z));
+            // nw.z = z_* (bc.x*(nw1.z/vw1.z) + bc.y*(nw2.z/vw2.z) + bc.z*(nw3.z/vw3.z));
+
+            // glm::vec4 c;
+            // c.x = z_* (bc.x*(c1.x/vw1.z) + bc.y*(c2.x/vw2.z) + bc.z*(c3.x/vw3.z));
+            // c.y = z_* (bc.x*(c1.y/vw1.z) + bc.y*(c2.y/vw2.z) + bc.z*(c3.y/vw3.z));
+            // c.z = z_* (bc.x*(c1.z/vw1.z) + bc.y*(c2.z/vw2.z) + bc.z*(c3.z/vw3.z));
+            // c.w = z_* (bc.x*(c1.w/vw1.z) + bc.y*(c2.w/vw2.z) + bc.z*(c3.w/vw3.z));
+
             auto& in = static_cast<FragmentInDataPhong&>(*sh._fragmentIn);
 
             in.worldPos = vw;
@@ -333,7 +368,10 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
 
             sh.fragment(*sh._fragmentIn,*sh._fragmentOut);
             //spdlog::info("drawTriangle 4 {} {} {} {}",sh.gl_FragColor.x, sh.gl_FragColor.y, sh.gl_FragColor.z,sh.gl_FragColor.w);
-            fb.setPixelColor(p.x,p.y,sh.gl_FragColor);
+            //fb.setPixelColor(p.x,p.y,sh.gl_FragColor);
+            float z0 = LinearizeDepth(-p.z);
+            fb.setPixelColor(p.x,p.y,{z0,z0,z0,1.0f});
+            //spdlog::info("drawTriangle 4 {}", z0);
         }
     }
     

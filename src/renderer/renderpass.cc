@@ -80,6 +80,8 @@ void RenderPassPhong::onFrame(){
             // tri._vp[k].y = int((1.f - vertexClip.y) * m_ctx->m_framebuffer->getHeight() * 0.5f);
             // tri._vp[k].z = vertexClip.z;
 
+            //spdlog::info("drawTriangle 4 {}", tri._vp[k].z);
+
             tri._vw[k] = PhongVertexOut.worldPos;
 
         }
