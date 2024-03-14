@@ -109,7 +109,7 @@ inline glm::mat4 perspective(float fov, float aspect, float znear, float zfar) {
     ret[2][2] = - (znear + zfar) / (znear - zfar);
 	ret[2][3] = - 1.0f;
     ret[3][2] = - (2.0f * znear * zfar) / (znear - zfar);
-	ret = glm::perspective(fov,aspect,znear,zfar);
+	//ret = glm::perspective(fov,aspect,znear,zfar);
     return ret;
 }
 
@@ -129,8 +129,8 @@ inline glm::mat4 lookat(glm::vec3 camera, glm::vec3 target, glm::vec3 up = glm::
 
 
     glm::vec3 n = glm::normalize(camera- target);    // -forward           
-    glm::vec3 u = glm::normalize(glm::cross(up, n)); // right
-	glm::vec3 v = glm::normalize(glm::cross(n,u));	 // real up
+    glm::vec3 u = glm::normalize(glm::cross(n, up)); // right
+	glm::vec3 v = glm::normalize(glm::cross(u,n));	 // real up
 
     glm::mat4 viewMatrix{1.0f};
 
@@ -148,7 +148,7 @@ inline glm::mat4 lookat(glm::vec3 camera, glm::vec3 target, glm::vec3 up = glm::
     viewMatrix[3][1]= -v.x * camera.x - v.y * camera.y - v.z * camera.z;
     viewMatrix[3][2]= -n.x * camera.x - n.y * camera.y - n.z * camera.z;
 	
-	viewMatrix = glm::lookAt(camera,target,up);
+	//viewMatrix = glm::lookAt(camera,target,up);
 
 	return viewMatrix;
 
@@ -160,8 +160,8 @@ inline glm::mat4 viewport(float _x, float _y,float _n, float _f, float width, fl
 	viewPortMatrix[3][0] = _x + width/2.0f;
 	viewPortMatrix[1][1] = - height/2.0f;
 	viewPortMatrix[3][1] = _y + height/2.0f;
-	viewPortMatrix[2][2] = -(_f - _n) /2.0f;
-	viewPortMatrix[3][2] = -(_n + _f)/2.0f;//(_n + _f) / 2.0f;
+	viewPortMatrix[2][2] = (_f - _n) /2.0f;
+	viewPortMatrix[3][2] = (_n + _f)/2.0f;//(_n + _f) / 2.0f;
 	return viewPortMatrix;
 }
 

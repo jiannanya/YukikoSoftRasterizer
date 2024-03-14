@@ -302,10 +302,10 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
              //透视矫正插值 https://www.researchgate.net/publication/2893969_Perspective-Correct_Interpolation
             //float z_reciprocal = bc.x*(1.0f/vw1.z) + bc.y*(1.0f/vw2.z) + bc.z*(1.0f/vw3.z); 
             //p.z = 1.0f/z_reciprocal;
-            //p.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
-            float z_ = 1.0f / (bc.x/vw1.z + bc.y/vw2.z + bc.z/vw3.z); 
-            float z_interpolated = z_* (bc.x*(v1.z/vw1.z) + bc.y*(v2.z/vw2.z) + bc.z*(v3.z/vw3.z)); 
-            p.z = z_interpolated;
+            p.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
+            // float z_ = 1.0f / (bc.x/vw1.z + bc.y/vw2.z + bc.z/vw3.z); 
+            // float z_interpolated = z_* (bc.x*(v1.z/vw1.z) + bc.y*(v2.z/vw2.z) + bc.z*(v3.z/vw3.z)); 
+            // p.z = z_interpolated;
             //depth test
             if(p.z<(fb.getZ(p.x,p.y)))
                 continue;
@@ -368,9 +368,10 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
 
             sh.fragment(*sh._fragmentIn,*sh._fragmentOut);
             //spdlog::info("drawTriangle 4 {} {} {} {}",sh.gl_FragColor.x, sh.gl_FragColor.y, sh.gl_FragColor.z,sh.gl_FragColor.w);
-            //fb.setPixelColor(p.x,p.y,sh.gl_FragColor);
-            float z0 = LinearizeDepth(-p.z);
-            fb.setPixelColor(p.x,p.y,{z0,z0,z0,1.0f});
+            fb.setPixelColor(p.x,p.y,sh.gl_FragColor);
+            // float z0 = LinearizeDepth(p.z);
+            // fb.setPixelColor(p.x,p.y,{z0,z0,z0,1.0f});
+            //fb.setPixelColor(p.x,p.y,{p.z,p.z,p.z,1.0f});
             //spdlog::info("drawTriangle 4 {}", z0);
         }
     }
