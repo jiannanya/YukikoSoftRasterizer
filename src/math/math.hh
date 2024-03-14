@@ -109,7 +109,7 @@ inline glm::mat4 perspective(float fov, float aspect, float znear, float zfar) {
     ret[2][2] = - (znear + zfar) / (znear - zfar);
 	ret[2][3] = - 1.0f;
     ret[3][2] = - (2.0f * znear * zfar) / (znear - zfar);
-	ret = glm::perspective(fov,aspect,znear,zfar);
+	//ret = glm::perspective(fov,aspect,znear,zfar);
     return ret;
 }
 
