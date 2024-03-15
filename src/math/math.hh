@@ -103,12 +103,12 @@ inline glm::vec4 interpolate(glm::vec4 a, glm::vec4 b, glm::vec4 c,glm::vec3 bc,
 
 inline glm::mat4 perspective(float fov, float aspect, float znear, float zfar) {
     glm::mat4 ret{1.0f};
-	float f = 1.0f / (float)std::tan(fov * 0.5f);
-    ret[0][0] = f / aspect;
-    ret[1][1] = f;
-    ret[2][2] = - (znear + zfar) / (znear - zfar);
+	float f = (float)std::tan(fov * 0.5f);
+    ret[0][0] = 1.0f / (f * aspect);
+    ret[1][1] = 1.0f / f;
+    ret[2][2] = - (znear + zfar) / (zfar - znear);
 	ret[2][3] = - 1.0f;
-    ret[3][2] = - (2.0f * znear * zfar) / (znear - zfar);
+    ret[3][2] = - (2.0f * znear * zfar) / (zfar - znear);
 	//ret = glm::perspective(fov,aspect,znear,zfar);
     return ret;
 }
@@ -140,15 +140,15 @@ inline glm::mat4 lookat(glm::vec3 camera, glm::vec3 target, glm::vec3 up = glm::
     viewMatrix[0][1] = v.x;
     viewMatrix[1][1] = v.y;
     viewMatrix[2][1] = v.z;
-    viewMatrix[1][2] = n.x;
-    viewMatrix[2][2] = n.y;
-    viewMatrix[3][2] = n.z;
+    viewMatrix[0][2] = n.x;
+    viewMatrix[1][2] = n.y;
+    viewMatrix[2][2] = n.z;
 
     viewMatrix[3][0]= -u.x * camera.x - u.y * camera.y - u.z * camera.z;
     viewMatrix[3][1]= -v.x * camera.x - v.y * camera.y - v.z * camera.z;
     viewMatrix[3][2]= -n.x * camera.x - n.y * camera.y - n.z * camera.z;
 	
-	viewMatrix = glm::lookAt(camera,target,up);
+	//viewMatrix = glm::lookAt(camera,target,up);
 
 	return viewMatrix;
 

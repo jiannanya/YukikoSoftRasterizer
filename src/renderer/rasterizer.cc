@@ -252,7 +252,7 @@ float RasterizerSSAO::maxElevationAngle(Framebuffer& fb,glm::vec2 p, glm::vec2 d
 float LinearizeDepth(float depth) 
 {
     float n = 0.1f; 
-    float f  = 400.0f; 
+    float f  = 1000.0f; 
     float z = depth * 2.0 - 1.0; // back to NDC 
     return (2.0 * n * f) / (f + n - z * (f - n));	
 }
@@ -312,7 +312,7 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
             float z_interpolated = z_* (bc.x*(v1.z/vv1.z) + bc.y*(v2.z/vv2.z) + bc.z*(v3.z/vv3.z)); 
             p.z = z_interpolated;
             //depth test
-            if(p.z<(fb.getZ(p.x,p.y)))
+            if(p.z>(fb.getZ(p.x,p.y)))
                 continue;
             else 
                 fb.setZ(p.x,p.y,p.z);
@@ -375,7 +375,7 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
             fb.setPixelColor(p.x,p.y,sh.gl_FragColor);
             //spdlog::info("drawTriangle 4 {} {} {} {}",sh.gl_FragColor.x, sh.gl_FragColor.y, sh.gl_FragColor.z,sh.gl_FragColor.w);
             
-            // float z0 = LinearizeDepth(p.z) / 400.0f;
+            // float z0 = LinearizeDepth(p.z) / 1000.0f;
             // fb.setPixelColor(p.x,p.y,{z0,z0,z0,1.0f});
             // float z1 = (p.z+1000.0f)/1000.0f;
             // fb.setPixelColor(p.x,p.y,{z1,z1,z1,1.0f});
