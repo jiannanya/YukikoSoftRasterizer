@@ -13,6 +13,11 @@ struct Triangle{
     glm::vec3& b();
     glm::vec3& c();
 
+    // vertex view pos
+    glm::vec3& av();
+    glm::vec3& bv();
+    glm::vec3& cv();
+
     // vertex world pos
     glm::vec3& aw(); 
     glm::vec3& bw();
@@ -44,6 +49,7 @@ struct Triangle{
     glm::vec4& cco();
 
     glm::vec3 _ve[3]; //vertex local coordinate
+    glm::vec3 _vv[3]; //vertex view coordinate
     glm::vec3 _vw[3]; //vertex world coordinate
     glm::vec3 _vp[3]; //vertex viewport coordinate
     glm::vec2 _vuv[3]; //vertex texture coordinate

@@ -251,8 +251,8 @@ float RasterizerSSAO::maxElevationAngle(Framebuffer& fb,glm::vec2 p, glm::vec2 d
   
 float LinearizeDepth(float depth) 
 {
-    float n = 0.1; 
-    float f  = 10.0; 
+    float n = 0.1f; 
+    float f  = 100.0f; 
     float z = depth * 2.0 - 1.0; // back to NDC 
     return (2.0 * n * f) / (f + n - z * (f - n));	
 }
@@ -262,6 +262,10 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
     glm::vec3 v1 = tri.avp();
     glm::vec3 v2 = tri.bvp();
     glm::vec3 v3 = tri.cvp();
+
+    glm::vec3 vv1 = tri.av();
+    glm::vec3 vv2 = tri.bv();
+    glm::vec3 vv3 = tri.cv();
 
     glm::vec3 vw1 = tri.aw();
     glm::vec3 vw2 = tri.bw();
@@ -302,10 +306,11 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
              //透视矫正插值 https://www.researchgate.net/publication/2893969_Perspective-Correct_Interpolation
             //float z_reciprocal = bc.x*(1.0f/vw1.z) + bc.y*(1.0f/vw2.z) + bc.z*(1.0f/vw3.z); 
             //p.z = 1.0f/z_reciprocal;
-            p.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
-            // float z_ = 1.0f / (bc.x/vw1.z + bc.y/vw2.z + bc.z/vw3.z); 
-            // float z_interpolated = z_* (bc.x*(v1.z/vw1.z) + bc.y*(v2.z/vw2.z) + bc.z*(v3.z/vw3.z)); 
-            // p.z = z_interpolated;
+            //p.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
+            //p.z = vv1.z*bc.x + vv2.z*bc.y + vv3.z*bc.z;
+            float z_ = 1.0f / (bc.x/vv1.z + bc.y/vv2.z + bc.z/vv3.z); 
+            float z_interpolated = z_* (bc.x*(v1.z/vv1.z) + bc.y*(v2.z/vv2.z) + bc.z*(v3.z/vv3.z)); 
+            p.z = z_interpolated;
             //depth test
             if(p.z<(fb.getZ(p.x,p.y)))
                 continue;
@@ -318,46 +323,46 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
             //glm::vec3 nw = mth::interpolate(nw1,nw2,nw3,bc,v1.z,v2.z,v3.z,z_reciprocal);
             //glm::vec4 c  = mth::interpolate(c1,c2,c3,bc,v1.z,v2.z,v3.z,z_reciprocal);
 
-            glm::vec3 vw;
-            vw.x = vw1.x*bc.x + vw2.x*bc.y + vw3.x*bc.z;
-            vw.y = vw1.y*bc.x + vw2.y*bc.y + vw3.y*bc.z;
-            vw.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
-
-            glm::vec2 uv;
-            uv.x = uv1.x*bc.x + uv2.x*bc.y + uv3.x*bc.z;
-            uv.y = uv1.y*bc.x + uv2.y*bc.y + uv3.y*bc.z;
-
-            glm::vec3 nw;
-            nw.x = nw1.x*bc.x + nw2.x*bc.y + nw3.x*bc.z;
-            nw.y = nw1.y*bc.x + nw2.y*bc.y + nw3.y*bc.z;
-            nw.z = nw1.z*bc.x + nw2.z*bc.y + nw3.z*bc.z;
-
-            glm::vec4 c;
-            c.x = c1.x*bc.x + c2.x*bc.y + c3.x*bc.z;
-            c.y = c1.y*bc.x + c2.y*bc.y + c3.y*bc.z;
-            c.z = c1.z*bc.x + c2.z*bc.y + c3.z*bc.z;
-            c.w = c1.w*bc.x + c2.w*bc.y + c3.w*bc.z;
-
-
             // glm::vec3 vw;
-            // vw.x = z_* (bc.x*(vw1.x/vw1.z) + bc.y*(vw2.x/vw2.z) + bc.z*(vw3.x/vw3.z));
-            // vw.y = z_* (bc.x*(vw1.y/vw1.z) + bc.y*(vw2.y/vw2.z) + bc.z*(vw3.y/vw3.z));
-            // vw.z = z_* (bc.x*(vw1.z/vw1.z) + bc.y*(vw2.z/vw2.z) + bc.z*(vw3.z/vw3.z));
+            // vw.x = vw1.x*bc.x + vw2.x*bc.y + vw3.x*bc.z;
+            // vw.y = vw1.y*bc.x + vw2.y*bc.y + vw3.y*bc.z;
+            // vw.z = vw1.z*bc.x + vw2.z*bc.y + vw3.z*bc.z;
 
             // glm::vec2 uv;
-            // uv.x = z_* (bc.x*(uv1.x/vw1.z) + bc.y*(uv2.x/vw2.z) + bc.z*(uv3.x/vw3.z));
-            // uv.y = z_* (bc.x*(uv1.y/vw1.z) + bc.y*(uv2.y/vw2.z) + bc.z*(uv3.y/vw3.z));
+            // uv.x = uv1.x*bc.x + uv2.x*bc.y + uv3.x*bc.z;
+            // uv.y = uv1.y*bc.x + uv2.y*bc.y + uv3.y*bc.z;
 
             // glm::vec3 nw;
-            // nw.x = z_* (bc.x*(nw1.x/vw1.z) + bc.y*(nw2.x/vw2.z) + bc.z*(nw3.x/vw3.z));
-            // nw.y = z_* (bc.x*(nw1.y/vw1.z) + bc.y*(nw2.y/vw2.z) + bc.z*(nw3.y/vw3.z));
-            // nw.z = z_* (bc.x*(nw1.z/vw1.z) + bc.y*(nw2.z/vw2.z) + bc.z*(nw3.z/vw3.z));
+            // nw.x = nw1.x*bc.x + nw2.x*bc.y + nw3.x*bc.z;
+            // nw.y = nw1.y*bc.x + nw2.y*bc.y + nw3.y*bc.z;
+            // nw.z = nw1.z*bc.x + nw2.z*bc.y + nw3.z*bc.z;
 
             // glm::vec4 c;
-            // c.x = z_* (bc.x*(c1.x/vw1.z) + bc.y*(c2.x/vw2.z) + bc.z*(c3.x/vw3.z));
-            // c.y = z_* (bc.x*(c1.y/vw1.z) + bc.y*(c2.y/vw2.z) + bc.z*(c3.y/vw3.z));
-            // c.z = z_* (bc.x*(c1.z/vw1.z) + bc.y*(c2.z/vw2.z) + bc.z*(c3.z/vw3.z));
-            // c.w = z_* (bc.x*(c1.w/vw1.z) + bc.y*(c2.w/vw2.z) + bc.z*(c3.w/vw3.z));
+            // c.x = c1.x*bc.x + c2.x*bc.y + c3.x*bc.z;
+            // c.y = c1.y*bc.x + c2.y*bc.y + c3.y*bc.z;
+            // c.z = c1.z*bc.x + c2.z*bc.y + c3.z*bc.z;
+            // c.w = c1.w*bc.x + c2.w*bc.y + c3.w*bc.z;
+
+
+            glm::vec3 vw;
+            vw.x = z_* (bc.x*(vw1.x/vv1.z) + bc.y*(vw2.x/vv2.z) + bc.z*(vw3.x/vv3.z));
+            vw.y = z_* (bc.x*(vw1.y/vv1.z) + bc.y*(vw2.y/vv2.z) + bc.z*(vw3.y/vv3.z));
+            vw.z = z_* (bc.x*(vw1.z/vv1.z) + bc.y*(vw2.z/vv2.z) + bc.z*(vw3.z/vv3.z));
+
+            glm::vec2 uv;
+            uv.x = z_* (bc.x*(uv1.x/vv1.z) + bc.y*(uv2.x/vv2.z) + bc.z*(uv3.x/vv3.z));
+            uv.y = z_* (bc.x*(uv1.y/vv1.z) + bc.y*(uv2.y/vv2.z) + bc.z*(uv3.y/vv3.z));
+
+            glm::vec3 nw;
+            nw.x = z_* (bc.x*(nw1.x/vv1.z) + bc.y*(nw2.x/vv2.z) + bc.z*(nw3.x/vv3.z));
+            nw.y = z_* (bc.x*(nw1.y/vv1.z) + bc.y*(nw2.y/vv2.z) + bc.z*(nw3.y/vv3.z));
+            nw.z = z_* (bc.x*(nw1.z/vv1.z) + bc.y*(nw2.z/vv2.z) + bc.z*(nw3.z/vv3.z));
+
+            glm::vec4 c;
+            c.x = z_* (bc.x*(c1.x/vv1.z) + bc.y*(c2.x/vv2.z) + bc.z*(c3.x/vv3.z));
+            c.y = z_* (bc.x*(c1.y/vv1.z) + bc.y*(c2.y/vv2.z) + bc.z*(c3.y/vv3.z));
+            c.z = z_* (bc.x*(c1.z/vv1.z) + bc.y*(c2.z/vv2.z) + bc.z*(c3.z/vv3.z));
+            c.w = z_* (bc.x*(c1.w/vv1.z) + bc.y*(c2.w/vv2.z) + bc.z*(c3.w/vv3.z));
 
             auto& in = static_cast<FragmentInDataPhong&>(*sh._fragmentIn);
 
@@ -367,12 +372,14 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
             in.color = c;
 
             sh.fragment(*sh._fragmentIn,*sh._fragmentOut);
-            //spdlog::info("drawTriangle 4 {} {} {} {}",sh.gl_FragColor.x, sh.gl_FragColor.y, sh.gl_FragColor.z,sh.gl_FragColor.w);
             fb.setPixelColor(p.x,p.y,sh.gl_FragColor);
+            //spdlog::info("drawTriangle 4 {} {} {} {}",sh.gl_FragColor.x, sh.gl_FragColor.y, sh.gl_FragColor.z,sh.gl_FragColor.w);
+            
             // float z0 = LinearizeDepth(p.z);
             // fb.setPixelColor(p.x,p.y,{z0,z0,z0,1.0f});
-            //fb.setPixelColor(p.x,p.y,{p.z,p.z,p.z,1.0f});
-            //spdlog::info("drawTriangle 4 {}", z0);
+            // float z1 = (p.z+100.0f)/200.0f;
+            // fb.setPixelColor(p.x,p.y,{z1,z1,z1,1.0f});
+            //spdlog::info("drawTriangle 4 {}", z1);
         }
     }
     

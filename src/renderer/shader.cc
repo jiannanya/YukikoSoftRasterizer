@@ -125,9 +125,13 @@ namespace Fallment{
         auto& in = static_cast<VertexInDataPhong&>(_in);
         auto& out = static_cast<VertexOutDataPhong&>(_out);
         //spdlog::debug("phong shader vertex");
-        gl_Position = in.projectionMatrix * in.viewMatrix * in.modelMatrix * glm::vec4(in.position,1.0f); //mvp transformation
+        //gl_Position = in.projectionMatrix * in.viewMatrix * in.modelMatrix * glm::vec4(in.position,1.0f); //mvp transformation
         auto worldPos = in.modelMatrix * glm::vec4(in.position,1.0f);  // vec3 = vec4...
+        auto viewPos = in.viewMatrix * worldPos;
         out.worldPos = worldPos / worldPos.w;
+        out.viewPos = viewPos / viewPos.w;
+
+        gl_Position = in.projectionMatrix * viewPos; 
 
         return;
     }

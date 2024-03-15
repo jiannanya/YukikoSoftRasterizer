@@ -11,7 +11,7 @@ constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
 constexpr float FOV_INIT = mth::PI/4.0f;
 
-glm::vec3 CAM_POS_INIT = glm::vec3(0, 0, 3);
+glm::vec3 CAM_POS_INIT = glm::vec3(0, 0, 500);
 glm::vec3 CAM_TARGET_INIT = glm::vec3(0,0,0);
 glm::vec3 CAM_UP_INIT = glm::vec3(0,1,0);
 
@@ -53,7 +53,7 @@ bool AppPhong::onInit(){
     auto  ctx_model_matrix = glm::mat4{1.0f};
     auto  ctx_shader = std::make_unique<PhongShader>();
     auto  ctx_PhongShaderVertexIn = std::make_unique<VertexInDataPhong>(
-        ctx_model_matrix,
+        glm::scale(ctx_model_matrix,glm::vec3(100,100,100)),
         ctx_camera->getViewMatrix(),
         ctx_camera->getProjectionMatrix()
         //mth::orthographic(-2.0f,2.0f,-2.0f,2.0f,0.1f,3.0f)
@@ -64,19 +64,19 @@ bool AppPhong::onInit(){
 
     auto p_light1 = std::make_unique<PointLight>(   glm::vec3(0.2f,0.2f,0.2f),
                                                     glm::vec3(0.5f,0.5f,0.5f),
-                                                    glm::vec3(1.0f,1.0f,1.0f),
-                                                    glm::vec3(0, 3, 0)
+                                                    glm::vec3(.0f,1.0f,1.0f),
+                                                    glm::vec3(0, 300.0f, 0)
                                                 );
 
     auto p_light2 = std::make_unique<PointLight>(   glm::vec3(0.2f,0.2f,0.2f),
                                                     glm::vec3(0.5f,0.5f,0.5f),
                                                     glm::vec3(1.0f,1.0f,1.0f),
-                                                    glm::vec3(3, 0, 0)
+                                                    glm::vec3(300.0f, 0, 0)
                                     );
     auto p_light3 = std::make_unique<PointLight>(   glm::vec3(0.2f,0.2f,0.2f),
                                                     glm::vec3(0.5f,0.5f,0.5f),
                                                     glm::vec3(1.0f,1.0f,1.0f),
-                                                    glm::vec3(0, 0, 3)
+                                                    glm::vec3(0, 0, 300.0f)
                                     );
 
     auto ctx_PhongShaderFragmentIn = std::make_unique<FragmentInDataPhong>();

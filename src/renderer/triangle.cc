@@ -16,6 +16,18 @@ glm::vec3& Triangle::c(){
     return _ve[2];
 }
 
+glm::vec3& Triangle::av(){
+    return _vv[0];
+}
+
+glm::vec3& Triangle::bv(){
+    return _vv[1];
+}
+
+glm::vec3& Triangle::cv(){
+    return _vv[2];
+}
+
 glm::vec3& Triangle::aw(){
     return _vw[0];
 }

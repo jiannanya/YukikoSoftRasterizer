@@ -83,6 +83,9 @@ void RenderPassPhong::onFrame(){
             //spdlog::info("drawTriangle 4 {}", tri._vp[k].z);
 
             tri._vw[k] = PhongVertexOut.worldPos;
+            tri._vv[k] = PhongVertexOut.viewPos;
+
+            //spdlog::info("drawTriangle 4 {}", (tri._vv[k].z+1000.0f)/1000.0f);
 
         }
 
