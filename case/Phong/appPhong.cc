@@ -9,7 +9,7 @@ const char *OBJ_TEXTURE_PATH =  "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\b
 
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
-constexpr float FOV_INIT = mth::PI/4.0f;
+constexpr float FOV_INIT = 45.0f/180.0f * mth::PI;
 
 glm::vec3 CAM_POS_INIT = glm::vec3(0, 0, 300);
 glm::vec3 CAM_TARGET_INIT = glm::vec3(0,0,0);
