@@ -36,7 +36,7 @@
             "name": "MSVC Debug", //with msvc tool kit
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}\\build\\case\\Control\\fallment_soft_rasterizer_control.exe",
+            "program": "${workspaceFolder}\\build\\case\\Phong\\fallment_soft_rasterizer_phong.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

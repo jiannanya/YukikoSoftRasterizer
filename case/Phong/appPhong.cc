@@ -4,14 +4,14 @@
 namespace Fallment{
 
 const char *TITLE = "Fallment real time soft render";
-const char *OBJ_PATH = "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\african_head0.obj";
+const char *OBJ_PATH = "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\box.obj";
 const char *OBJ_TEXTURE_PATH =  "C:\\CC\\src\\sandbox\\FallmentSoftRasterizer\\build\\case\\assert\\african_head_diffuse.tga";
 
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
 constexpr float FOV_INIT = 45.0f/180.0f * mth::PI;
 
-glm::vec3 CAM_POS_INIT = glm::vec3(0, 0, 300);
+glm::vec3 CAM_POS_INIT = glm::vec3(300, 300, 300);
 glm::vec3 CAM_TARGET_INIT = glm::vec3(0,0,0);
 glm::vec3 CAM_UP_INIT = glm::vec3(0,1,0);
 
@@ -53,7 +53,7 @@ bool AppPhong::onInit(){
     auto  ctx_model_matrix = glm::mat4{1.0f};
     auto  ctx_shader = std::make_unique<PhongShader>();
     auto  ctx_PhongShaderVertexIn = std::make_unique<VertexInDataPhong>(
-        glm::scale(ctx_model_matrix,glm::vec3(100,100,100)),
+        glm::scale(ctx_model_matrix,glm::vec3(300,300,300)),
         ctx_camera->getViewMatrix(),
         ctx_camera->getProjectionMatrix()
         //mth::orthographic(-2.0f,2.0f,-2.0f,2.0f,0.1f,3.0f)
@@ -80,7 +80,7 @@ bool AppPhong::onInit(){
                                     );
 
     auto ctx_PhongShaderFragmentIn = std::make_unique<FragmentInDataPhong>();
-    ctx_PhongShaderFragmentIn->texture = std::move(ctx_texture);
+    ctx_PhongShaderFragmentIn->texture = nullptr;//std::move(ctx_texture);
     ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light1));
     ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light2));
     ctx_PhongShaderFragmentIn->pointLights.emplace_back(std::move(p_light3));

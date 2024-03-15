@@ -342,7 +342,10 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
             // c.y = c1.y*bc.x + c2.y*bc.y + c3.y*bc.z;
             // c.z = c1.z*bc.x + c2.z*bc.y + c3.z*bc.z;
             // c.w = c1.w*bc.x + c2.w*bc.y + c3.w*bc.z;
-
+            glm::vec3 vv;
+            vv.x = z_* (bc.x*(vv1.x/vv1.z) + bc.y*(vv2.x/vv2.z) + bc.z*(vv3.x/vv3.z));
+            vv.y = z_* (bc.x*(vv1.y/vv1.z) + bc.y*(vv2.y/vv2.z) + bc.z*(vv3.y/vv3.z));
+            vv.z = z_* (bc.x*(vv1.z/vv1.z) + bc.y*(vv2.z/vv2.z) + bc.z*(vv3.z/vv3.z));
 
             glm::vec3 vw;
             vw.x = z_* (bc.x*(vw1.x/vv1.z) + bc.y*(vw2.x/vv2.z) + bc.z*(vw3.x/vv3.z));
@@ -375,11 +378,11 @@ void RasterizerPhong::drawTriangle(Triangle &tri,Shader& sh,Framebuffer& fb){
             fb.setPixelColor(p.x,p.y,sh.gl_FragColor);
             //spdlog::info("drawTriangle 4 {} {} {} {}",sh.gl_FragColor.x, sh.gl_FragColor.y, sh.gl_FragColor.z,sh.gl_FragColor.w);
             
-            // float z0 = LinearizeDepth(p.z) / 400.0f;
+            // float z0 = LinearizeDepth(p.z) / 1000.0f;
             // fb.setPixelColor(p.x,p.y,{z0,z0,z0,1.0f});
-            // float z1 = (p.z+1000.0f)/1000.0f;
+            // float z1 = (vv.z + 700.0f)/500.0f;
             // fb.setPixelColor(p.x,p.y,{z1,z1,z1,1.0f});
-            // spdlog::info("drawTriangle 4 {}", z0);
+            // spdlog::info("drawTriangle 4 {}", (vv.z + 700.0f)/1000.0f);
         }
     }
     
